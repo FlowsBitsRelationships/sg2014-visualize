@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My AngularJS App</title>
+  <title>Visualize</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
@@ -15,28 +15,47 @@
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
-  <ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>
 
+<div class = "control_panel" >
+     <div class = "control_header" >
+        CONTROLS
+        <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;"/>
+        <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;"/>
+     </div>
+     <div class = "control_body" >
+        <ul class="menu">
+            <li><a href="#/view1">I</a></li>
+            <li><a href="#/view2">T</a></li>
+            <li><a href="#/view3">S</a></li>
+        </ul>
+        <textarea id = "query" cols="25" rows="5">start n = node:tweets_1('withinDistance:[22.280893, 114.173035,5.0]') return n</textarea>
+        <input id="query" type="submit" value="QUERY!" style = "display:block;"/>
+    </div>
+</div>
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
   <div ng-view></div>
 
-  <div>Angular seed app: v<span app-version></span></div>
+  <div>FlowsBitsRelationships app: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/jquery/jquery.min.js"></script>
+  <script src="bower_components/threejs/build/three.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
+ 
+  <script src="js/deprecated/controllers.js"></script> 
+  <script src="js/deprecated/utils_trackballcontrols.js"></script>
+  <script src="js/deprecated/visualize.js"></script>
+
 </body>
 </html>

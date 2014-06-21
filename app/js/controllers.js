@@ -2,13 +2,23 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', [])
-  .controller('MyCtrl1', ['$scope', function($scope) {
-
+angular.module('visualizeApp.controllers', [])
+  .controller('InteractionCtrl', ['$scope',  'threeService', 'neo4jService', function($scope, threeService, neo4jService) {
+    threeService.clear_scene();
   }])
-  .controller('MyCtrl2', ['$scope', function($scope) {
-
+  .controller('TemporalCtrl', ['$scope',  'threeService', 'neo4jService', function($scope, threeService, neo4jService) {
+        threeService.clear_scene();
   }])
-  .controller('MyCtrl3', ['$scope', function($scope) {
-
+  .controller('SpatialCtrl', ['$scope',  'threeService', 'neo4jService', function($scope, threeService, neo4jService) {
+        threeService.clear_scene();
+        
+        threeService.set_frame("spatial");
+        var query = $("#query").val();
+        
+        threeService.set_tracing_template("tweet_node");
+        
+        neo4jService.cypher_neo4j(query, function(json){ 
+            threeService.add_tracing(json);
+        });
+    
   }]);

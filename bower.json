@@ -11,8 +11,9 @@
     "angular-resource": "~1.2.x",
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
+    "angular-animate": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
-    "threejs"  : "#r66",
+    "threejs"  : "#r67",
     "jquery" : "git://github.com/components/jquery.git"
   }
 }

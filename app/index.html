@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="visualizeApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
   <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" href="css/animations.css">
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
@@ -19,10 +20,10 @@
 <div class = "control_panel" >
      <div class = "control_header" >
         CONTROLS
-        <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;"/>
-        <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;"/>
+        <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
+        <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
      </div>
-     <div class = "control_body" >
+     <div class = "control_body" ng-show="showMenu" >
         <ul class="menu">
             <li><a href="#/view1">I</a></li>
             <li><a href="#/view2">T</a></li>
@@ -43,19 +44,19 @@
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/jquery/jquery.min.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/threejs/build/three.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/directives.js"></script>
+  <script src="js/animations.js"></script>
  
-  <script src="js/deprecated/controllers.js"></script> 
-  <script src="js/deprecated/utils_trackballcontrols.js"></script>
-  <script src="js/deprecated/visualize.js"></script>
+  <script src="js/utils/utils_trackballcontrols.js"></script>
 
 </body>
 </html>

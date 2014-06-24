@@ -26,4 +26,4 @@ cd app
 ruby sinatra_app.rb
 ```
 
-Open Chrome and go to [http://localhost:1111/]
+Open Chrome and go to [/localhost:1111/](http://localhost:1111/)

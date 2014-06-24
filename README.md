@@ -25,3 +25,5 @@ Run the sinatra_app
 cd app
 ruby sinatra_app.rb
 ```
+
+Open Chrome and go to http://localhost:1111/

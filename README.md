@@ -22,5 +22,6 @@ Run the sinatra_app
 (ed note: Perhaps these routes could be moved to the node app that angular uses, removing the ruby dependency?)
 
 ```
-ruby app/sinatra_app.rb
+cd app
+ruby sinatra_app.rb
 ```

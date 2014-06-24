@@ -4,23 +4,21 @@
 
 var services = angular.module('visualizeApp.services', [])
 
-services.factory('minimizer', function(){
-    $("input#min").unbind("click");
-    $("input#min").click(function () {
-        $(".control_body").fadeOut();
-    });
-
-    $("input#max").unbind("click");
-        $("input#max").click(function () {
-    $(".control_body").fadeIn();
-    });
-})
 // Service for Querying Neo4j
+services.factory('neo4jREST', ['$resource', function($resource) {
+   return $resource("/cypher",  null,
+       {
+          get : {method:'get'},
+          post: {method:'post'}
+       });
+    }]);
+    
+// Placeholder Service loads test data
 services.factory('neo4jService', function ( ) {
     var neo4jService = {};
     
     neo4jService.cypher_neo4j = function (query, ext_callback){
-        $.get("../sample.json").done(function(data) { 
+        $.get("./sample.json").done(function(data) { 
             cypher_neo4j_callback(data, ext_callback);
         });
     }

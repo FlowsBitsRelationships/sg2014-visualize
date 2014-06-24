@@ -5,6 +5,7 @@
 angular.module('visualizeApp', [
   'ngRoute',
   'ngAnimate',
+  'ngResource',
   'visualizeApp.filters',
   'visualizeApp.services',
   'visualizeApp.directives',
@@ -12,8 +13,8 @@ angular.module('visualizeApp', [
   'visualizeApp.animations',
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: 'InteractionCtrl'});
-  $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'TemporalCtrl'});
-  $routeProvider.when('/view3', {templateUrl: 'partials/partial3.html', controller: 'SpatialCtrl'});
+  $routeProvider.when('/view1', {templateUrl: 'partials/interaction.html', controller: 'InteractionCtrl'});
+  $routeProvider.when('/view2', {templateUrl: 'partials/temporal.html', controller: 'TemporalCtrl'});
+  $routeProvider.when('/view3', {templateUrl: 'partials/spatial.html', controller: 'SpatialCtrl'});
   $routeProvider.otherwise({redirectTo: '/view3'});
 }]);

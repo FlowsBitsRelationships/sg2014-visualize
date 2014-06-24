@@ -1,0 +1,16 @@
+<div class = "control_panel" >
+     <div class = "control_header" >
+        CONTROLS
+        <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
+        <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
+     </div>
+     <div class = "control_body" ng-show="showMenu" >
+        <ul class="menu">
+            <li><a href="#/view1">I</a></li>
+            <li><a href="#/view2">T</a></li>
+            <li><a href="#/view3">S</a></li>
+        </ul>
+        <textarea id = "query" cols="25" rows="5">start n = node:tweets_1('withinDistance:[22.280893, 114.173035,5.0]') return n</textarea>
+        <input id="query" type="submit" value="QUERY!" style = "display:block;"/>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if lt IE 7]>      <html lang="en" ng-app="visualizeApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="visualizeApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="visualizeApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="visualizeApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<div class = "control_panel" >
+<div class = "control_panel" ng-controller="MenuCtrl" >
      <div class = "control_header" >
         CONTROLS
         <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
@@ -30,7 +30,7 @@
             <li><a href="#/view3">S</a></li>
         </ul>
         <textarea id = "query" cols="25" rows="5">start n = node:tweets_1('withinDistance:[22.280893, 114.173035,5.0]') return n</textarea>
-        <input id="query" type="submit" value="QUERY!" style = "display:block;"/>
+        <input id="query" type="submit" value="QUERY!" ng-click="query();" style = "display:block;"/>
     </div>
 </div>
   <!--[if lt IE 7]>
@@ -46,6 +46,7 @@
   -->
     <script src="bower_components/jquery/jquery.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/threejs/build/three.min.js"></script>

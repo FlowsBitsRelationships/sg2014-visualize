@@ -5,6 +5,7 @@ Angular app for data visualization.
 
 ### Install Dependencies
 ```
+cd sg2014-visualize
 npm install
 ```
 

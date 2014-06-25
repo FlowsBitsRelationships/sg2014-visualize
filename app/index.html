@@ -29,8 +29,8 @@
             <li><a href="#/view2">T</a></li>
             <li><a href="#/view3">S</a></li>
         </ul>
-        <textarea id = "query" cols="25" rows="5">start n = node:tweets_1('withinDistance:[22.280893, 114.173035,5.0]') return n</textarea>
-        <input id="query" type="submit" value="QUERY!" ng-click="query();" style = "display:block;"/>
+        <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" ></textarea>
+        <input id="query" type="submit" value="QUERY!" style = "display:block;" ng-click="query();"/>
     </div>
 </div>
   <!--[if lt IE 7]>

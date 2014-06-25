@@ -6,30 +6,12 @@ var services = angular.module('visualizeApp.services', [])
 
 // Service for Querying Neo4j
 services.factory('neo4jREST', ['$resource', function($resource) {
-   return $resource("/cypher",  null,
+   return $resource("/cypher",  
+        { querystring: '@querystring' },
        {
-          get : {method:'get'},
-          post: {method:'post'}
+          cypher: {method:'post', params:{ querystring: '@querystring' } }
        });
     }]);
-    
-// Placeholder Service loads test data
-services.factory('neo4jService', function ( ) {
-    var neo4jService = {};
-    
-    neo4jService.cypher_neo4j = function (query, ext_callback){
-        $.get("./sample.json").done(function(data) { 
-            cypher_neo4j_callback(data, ext_callback);
-        });
-    }
-    
-    var cypher_neo4j_callback = function (data, ext_callback) {
-        var json = data;
-        ext_callback(json);
-    }
-        
-    return neo4jService
-});
 
 // Service for interacting with threeJS
 services.factory('threeService', function ( ) {
@@ -71,7 +53,7 @@ services.factory('threeService', function ( ) {
 		renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor( color, 1);
 		container.appendChild(renderer.domElement);
-		camera.position.z = 100;
+		camera.position.z = 50;
         
         
         controls = new THREE.TrackballControls(camera, container);
@@ -100,29 +82,6 @@ services.factory('threeService', function ( ) {
         window.addEventListener('resize', onWindowResize, false);
 	}(this);
     
-    // TBD: Changes the active frame
-	threeService.set_frame = function (frame_name) {
-    
-		console.log("set_frame("+frame_name+")");
-        
-        switch (frame_name) {
-        
-			case "interaction":
-                console.log("interaction");
-            break
-            
-			case "temporal":
-                console.log("temporal");
-            break
-            
-			case "spatial":
-                console.log("spatial");
-            break
-            
-        };
-        
-	};
-    
     // Changes the active tracing template.
 	threeService.set_tracing_template = function (tracing_template_name) {
     
@@ -133,13 +92,14 @@ services.factory('threeService', function ( ) {
 	};
     
     // Adds a tracing to the scene by combining a set of data with a corresponding tracing template
-	threeService.add_tracing = function (json) {
-        json.data.forEach(function(trace_json){
-            var trace_properties = trace_json[0]["data"];
-            var trace = tracing_template(trace_properties);
-            objects.push(trace);
-            console.log(trace);
-            scene.add(trace);
+	threeService.add_tracing = function (queryresult) {
+         queryresult.data.forEach(function(result_chunk){
+            result_chunk.forEach(function(trace_chunk){
+                var trace_properties = trace_chunk.data;
+                var trace = tracing_template(trace_properties);
+                objects.push(trace);
+                scene.add(trace);
+            });
         });
         threeService.animate();
 	};

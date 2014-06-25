@@ -5,7 +5,7 @@ var template_constructor = function(trace_json){
      var x = (trace_json.lat-22.28)*1000;
      var y = (trace_json.lon-114.15)*1000;
      
-    geometry = new THREE.BoxGeometry(3, 3, 3);
+    geometry = new THREE.BoxGeometry(1, 1, 1);
     material = new THREE.MeshBasicMaterial({
             color : 0x00ff00,
             wireframe: true
@@ -20,7 +20,7 @@ var template_constructor = function(trace_json){
     }
     
     cube.get_metadata = function(){
-        return  trace_json.text;
+        return  trace_json.content;
     }
 
     return cube

@@ -3,25 +3,19 @@
 /* Directives */
 
 
-var app_directives = angular.module('visualizeApp.directives', [])//.
-// directive('appVersion', ['version', function(version) {
-// return function(scope, elm, attrs) {
-  // elm.text(version);
-// };
-// }]);
-  
-app_directives.directive('ngWebgl',function () {
+var app_directives = angular.module('visualizeApp.directives', []);//.
+
+// ngWebgl is a directive that updates the visualization in response to events
+// scope.$on('queryresult'... is the main callback it responds to
+app_directives.directive('ngWebgl', function () {
     return {
       restrict: 'A',
       scope: { 
-        'width': '=',
-        'height': '=',
-        'fillcontainer': '=',
-        'scale': '=',
-        'materialType': '='
+        'materialType': '=',
+        'tracingTemplate': '='
       },
-    link: function postLink(scope, element, attrs) {
-        
+      link: function postLink(scope, element, attrs) {
+      
         var container;
         var tooltip;
         
@@ -37,6 +31,7 @@ app_directives.directive('ngWebgl',function () {
         var tracing_template;
         var objects = [],plane;
         var color = new THREE.Color("rgb(42,42,42)");
+        var materials = {};
         
         var mouse = new THREE.Vector2(),
         offset = new THREE.Vector3(),
@@ -69,6 +64,34 @@ app_directives.directive('ngWebgl',function () {
             controls.staticMoving = true;
             controls.dynamicDampingFactor = 0.3;
             
+            // materials.lambert = new THREE.MeshLambertMaterial({ 
+                // color: 0xffffff, 
+                // shading: THREE.FlatShading, 
+                // vertexColors: THREE.VertexColors 
+            // });
+
+            // materials.phong = new THREE.MeshPhongMaterial({ 
+                // ambient: 0x030303, 
+                // color: 0xdddddd, 
+                // specular: 0x009900, 
+                // shininess: 30, 
+                // shading: THREE.FlatShading, 
+                // vertexColors: THREE.VertexColors  
+            // });
+
+            materials.wireframe1 = new THREE.MeshBasicMaterial({ 
+                color: "rgb(255,112,255)", 
+                shading: THREE.FlatShading, 
+                wireframe: true, 
+                transparent: true 
+            });
+  
+            materials.wireframe2 = new THREE.MeshBasicMaterial({ 
+                color:"rgb(255,120,50)", 
+                shading: THREE.FlatShading, 
+                wireframe: true, 
+                transparent: true 
+            });
             
             plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
                         color : 0x000000,
@@ -79,15 +102,15 @@ app_directives.directive('ngWebgl',function () {
             plane.visible = false;
             scene.add(plane);
         
-            renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-            renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-            renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+            renderer.domElement.addEventListener('mousemove', scope.onDocumentMouseMove, false);
+            renderer.domElement.addEventListener('mousedown', scope.onDocumentMouseDown, false);
+            renderer.domElement.addEventListener('mouseup', scope.onDocumentMouseUp, false);
 
-            window.addEventListener('resize', onWindowResize, false);
-        }(this);
+            window.addEventListener('resize', scope.onWindowResize, false);
+        }
         
         // Changes the active tracing template.
-        threeService.set_tracing_template = function (tracing_template_name) {
+        scope.set_tracing_template = function (tracing_template_name) {
         
              // Each template has a constructor function called template_constructor
             $.getScript( "js/tracing_templates/"+tracing_template_name+".js", function(script) {
@@ -96,40 +119,40 @@ app_directives.directive('ngWebgl',function () {
         };
         
         // Adds a tracing to the scene by combining a set of data with a corresponding tracing template
-        threeService.add_tracing = function (queryresult) {
+        scope.add_tracing = function (queryresult) {
              queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
                     var trace_properties = trace_chunk.data;
-                    var trace = tracing_template(trace_properties);
+                    var trace = tracing_template( trace_properties );
                     objects.push(trace);
                     scene.add(trace);
                 });
             });
-            threeService.animate();
+            scope.animate();
         };
         
         // **** Helper Functions***
             
         // Clear the scene geometry
-        threeService.clear_scene = function () {
+        scope.clear_scene = function () {
             objects.forEach(function(object){
                 scene.remove(object);
             });
         };
 
         // Animate the scene
-        threeService.animate = function () {
+        scope.animate = function () {
             controls.update();
-            requestAnimationFrame(threeService.animate);
+            requestAnimationFrame(scope.animate);
             
              objects.forEach(function(object){
                 object.animate();
             });
-
+            
             renderer.render(scene, camera);
         };
         
-        threeService.display_tooltip = function(text, location){
+        scope.display_tooltip = function(text, location){
             tooltip = document.createElement('div');
             tooltip.className = 'tooltip';
             tooltip.innerHTML = text;
@@ -138,7 +161,7 @@ app_directives.directive('ngWebgl',function () {
             document.body.appendChild(tooltip);
         }
         
-        threeService.hide_tooltip = function(){
+        scope.hide_tooltip = function(){
             if (tooltip != undefined){
                 document.body.removeChild(tooltip);
                 console.log("removed");
@@ -146,16 +169,17 @@ app_directives.directive('ngWebgl',function () {
         }
         
         // **** ThreeJS Helper Functions***
+        
         // BORROWED FROM: http://mrdoob.github.io/three.js/examples/webgl_interactive_draggablecubes.html
         
-        function onWindowResize() {
+        scope.onWindowResize = function() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
 
             renderer.setSize( window.innerWidth, window.innerHeight );
         }
         
-        function onDocumentMouseMove( event ) {
+         scope.onDocumentMouseMove = function( event ) {
             event.preventDefault();
 
             mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -194,7 +218,7 @@ app_directives.directive('ngWebgl',function () {
             }
         }
 
-        function onDocumentMouseDown( event ) {
+        scope.onDocumentMouseDown = function( event ) {
 
             event.preventDefault();
 
@@ -215,7 +239,7 @@ app_directives.directive('ngWebgl',function () {
             
         }
 
-        function onDocumentMouseUp( event ) {
+        scope.onDocumentMouseUp = function( event ) {
 
             event.preventDefault();
             controls.enabled = true;
@@ -225,22 +249,43 @@ app_directives.directive('ngWebgl',function () {
                 SELECTED = null;
                 
                 // Find location on canvas and show tweet as overlay
-                var pos = toXYCoords(INTERSECTED.position);
+                var pos = scope.toXYCoords(INTERSECTED.position);
                 var text = INTERSECTED.get_metadata();
-                threeService.hide_tooltip();
-                threeService.display_tooltip(text, pos);
+                scope.hide_tooltip();
+                scope.display_tooltip(text, pos);
             }
 
             container.style.cursor = 'auto';
         }
         
         // Projects 3D position to x,y position on canvas
-        var toXYCoords = function (pos) {
+        scope.toXYCoords = function (pos) {
             var vector = projector.projectVector(pos.clone(), camera);
             vector.x = (vector.x + 1)/2 * window.innerWidth;
             vector.y = -(vector.y - 1)/2 * window.innerHeight;
             return vector;
         }
-    
-    }
-});
+        
+        // ********************** Angular methods/event listeners **********************
+  
+        scope.$watch('tracingTemplate', function () {
+            scope.set_tracing_template(scope.tracingTemplate);
+            
+        });
+        
+        scope.$watch('materialType', function () {
+            objects.forEach(function(obj){
+                obj.material = materials[scope.materialType];
+            });
+        });
+        
+        scope.$on('queryresult', function(event, result) {
+             scope.clear_scene();
+             scope.add_tracing(result);
+        });
+        
+        // Begin
+        scope.init();
+      }
+    };
+  });

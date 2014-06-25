@@ -10,7 +10,9 @@ canvas { width: 100%; height: 100%;}
 /* UI Styles */
 .control_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; margin: -5px -5px -5px -5px; padding: 5px; font-weight:bold; min-width: 180px;}
 .control_body {margin-top: 10px;}
-.control_panel {position: absolute; top: 1.7em; color: white; background-color: rgba(0, 0, 0, 0.2); padding: 5px; }
+.control_panel {position: absolute; top: 4.7em; color: white; background-color: rgba(0, 0, 0, 0.2); padding: 5px; }
+
+.bottom_menu {position: absolute; bottom: 1em; color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; padding: 5px; min-width: 180px; float:right;}
 
 /* UI Widget Styles */
 
@@ -47,6 +49,17 @@ background-color :  rgb(95, 85, 80); /*make the background a little darker*/
 -webkit-box-shadow: 0 0 1px rgba(0,0,0, .75);
 -moz-box-shadow: 0 0 1px rgba(0,0,0, .75);
 box-shadow: 0 0 1px rgba(0,0,0, .75);
+}
+
+select{
+    color: white;
+    background-color: rgb(21,21,21);
+    margin-right:5px;
+}
+/* Select item background*/
+option { 
+    color: white;
+    background-color: rgb(42,42,42);
 }
 
 ::-webkit-scrollbar {

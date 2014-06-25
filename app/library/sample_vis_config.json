@@ -1,0 +1,44 @@
+{
+"title": "SG2014 Sample Visualization",
+"author": "Capt. James T. Kirk",
+"frame": "Spatial",
+
+"events" : [
+
+        {"description": "It is clear that the tweets of Hong Kong residents are devoid of any useful information ...",
+        "start": "10",
+        "end": "40",
+        "queries": [
+            {   "query" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.0]') return n",
+                "tracing_template" : "tweet_node",
+                "tracing_name": "remote nodes"},
+            {"query" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,0.5]') return n",
+                "tracing_template" : "sweet_node",
+                "tracing_name": "near nodes"}
+            ]
+        },
+        
+         {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": "30",
+        "end": "120",
+        "queries": [
+            {"query" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,3.0]') return n",
+                "tracing_template" : "tweet_node",
+                "tracing_name": "remote nodes"},
+            {"query" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.0]') return n",
+                "tracing_template" : "sweet_node",
+                "tracing_name": "near nodes"}
+            ]
+        },
+        
+         {"description": "if we expand our view even further to include...",
+        "start": "80",
+        "end": "240",
+        "queries": [
+            {"query" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,5.0]') return n",
+                "tracing_template" : "tweet_node",
+                "tracing_name": "very distant nodes"}
+            ]
+        }
+]
+}

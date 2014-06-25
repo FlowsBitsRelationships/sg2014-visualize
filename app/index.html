@@ -31,11 +31,11 @@
          </div>
          <div class = "control_body" ng-show="showMenu" >
             <ul class="menu">
-                <li><a href="#/view1">I</a></li>
-                <li><a href="#/view2">T</a></li>
-                <li><a href="#/view3">S</a></li>
+                <input id="I"  type="submit" value="I" style =  "display:inline; float: center; margin-bottom:10px;" />
+                <input id="T"  type="submit" value="T" style =  "display:inline; float: center; margin-bottom:10px;"/>
+                <input id="S"  type="submit" value="S" style = "display:inline; float: center; margin-bottom:10px;"/>
             </ul>
-            <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" ></textarea>
+            <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" style = "margin-bottom:10px;" ></textarea>
             <input id="query" type="submit" value="QUERY!" style = "display:block;" ng-click="query();"/>
         </div>
     </div>

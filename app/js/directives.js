@@ -113,7 +113,7 @@ app_directives.directive('ngWebgl', function () {
         scope.set_tracing_template = function (tracing_template_name) {
         
              // Each template has a constructor function called template_constructor
-            $.getScript( "js/tracing_templates/"+tracing_template_name+".js", function(script) {
+            $.getScript( "library/tracing_templates/"+tracing_template_name+".js", function(script) {
                tracing_template = template_constructor;
             });
         };

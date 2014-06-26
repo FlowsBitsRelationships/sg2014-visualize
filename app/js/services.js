@@ -12,3 +12,7 @@ services.factory('neo4jREST', ['$resource', function($resource) {
           cypher: {method:'post', params:{ querystring: '@querystring' } }
        });
     }]);
+    
+services.factory('vis_config', ['$resource', function($resource) {
+   return $resource("/vis_config",  { filename: '@filename' });
+    }]);

@@ -36,19 +36,22 @@
                 <input id="S"  type="submit" value="S" style = "display:inline; float: center; margin-bottom:10px;"/>
             </ul>
             <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" style = "margin-bottom:10px;" ></textarea>
-            <input id="query" type="submit" value="QUERY!" style = "display:block;" ng-click="query();"/>
+            <ul class="menu">
+                <input id="query" type="submit" value="QUERY!" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="query();"/>
+                <input id="run" type="submit" value="RUN!" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_vis_config();"/>
+            </ul>
         </div>
     </div>
 
+    <div id="webglContainer"  ng-webgl material-type="materialType"  tracing-template="tracingTemplate"></div>
     <div id="webglContainer"  ng-webgl material-type="materialType"  tracing-template="tracingTemplate"></div>
     
     <div class = "bottom_menu">
         <label for="materialsList">Material Type</label>
             <select id="materialsList" ng-model="materialType">
-    <!--         <option value="lambert">Lambert</option>
-            <option value="phong">Phong</option> -->
-            <option value="wireframe1">Wire Frame</option>
-            <option value="wireframe2">Wire Frame2</option>
+            <option value="wireframe">Wire Frame</option>
+            <option value="lambert">Lambert</option>
+            <option value="phong">Phong</option>
         </select>
         <label for="materialsList">Tracing Template</label>
             <select id="materialsList" ng-model="tracingTemplate">
@@ -69,6 +72,7 @@
     <script src="bower_components/threejs/build/three.min.js"></script>
 
     <script src="js/utils/utils_trackballcontrols.js"></script>
+    <script src="js/utils/utils_env.js"></script>
 
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>

@@ -6,10 +6,13 @@ var template_constructor = function(trace_json){
      var y = (trace_json.lon-114.15)*1000;
      
     geometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({
-            color : 0x00ff00,
-            wireframe: true
-        });
+    material = new THREE.MeshLambertMaterial({ 
+        color:  "rgb(255,112,255)", 
+        transparent: true, 
+        opacity: 0.5,
+        shading: THREE.FlatShading, 
+        vertexColors: THREE.VertexColors 
+    });
         
     cube = new THREE.Mesh(geometry, material);
     cube.position.set(x, y, 0);

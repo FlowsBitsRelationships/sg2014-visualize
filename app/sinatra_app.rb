@@ -14,6 +14,13 @@ get '/' do
 	end
 end
 
+get '/vis_config' do
+	response.headers['Access-Control-Allow-Origin'] = '*'
+	File.open( './library/sample_vis_config.json') do | f |
+		f.read
+	end
+end
+
 post '/cypher' do
     response.headers['Access-Control-Allow-Origin'] = '*'
     uri = URI( "http://#{ENV['DB_USERNAME']}:#{ENV['DB_PASSWORD']}@sg20142.sb02.stations.graphenedb.com:24789/db/data/cypher/" )

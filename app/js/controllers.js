@@ -5,7 +5,7 @@
 var app_controllers = angular.module('visualizeApp.controllers', [])
 
 // MenuCtrl is a controller for managing all Menu functionality
-app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($rootScope, neo4jREST) {
+app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , 'vis_config', function($rootScope, neo4jREST, vis_config) {
 
     
     // Model variable for current cypher query
@@ -16,18 +16,24 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
     $rootScope.query = function(){
         neo4jREST.cypher({ querystring :  $rootScope.querystring.value})
         .$promise.then(function (result) {
-            console.log("broadcast!");
            $rootScope.$broadcast('queryresult', result);
         });
     }
-        
+   
+    $rootScope.get_vis_config = function(){
+        vis_config.get()
+        .$promise.then(function (result) {
+           $rootScope.$broadcast('vis_config', result);
+        });
+    }
+    
 }]);
 
 // MenuCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', function ($scope) {
     
     // Model variables for visualization
-    $scope.materialType = 'wireframe1';
+    $scope.materialType = 'wireframe';
     $scope.tracingTemplate = 'tweet_node';
     
   }]);

@@ -139,8 +139,6 @@ THREE.Env = function (  ) {
     // Adds tracing objects and, after the duration has completed. removes them
     this.add_tracing_objects = function( trace_objects, tracing_name, start, duration){
     
-        // FIXME: push objects with timeout for removal
-        // change 'objects' to a hash that is keyed to each tracing by name
         // TODO: Check if there are already objects for this tracing name. if so, remove them
         setTimeout(function(){
             self.objects.tracing_name = trace_objects;
@@ -160,6 +158,7 @@ THREE.Env = function (  ) {
     // **** Helper Functions***
         
     // Clear the scene geometry
+    // TODO: FIXME to iterate over all tracings
     this.clear_scene = function () {
         self.objects.forEach(function(object){
             scene.remove(object);
@@ -205,6 +204,7 @@ THREE.Env = function (  ) {
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
     
+    // TODO: FIXME to iterate over all tracings, generalize to take a callback    
      this.onDocumentMouseMove = function( event ) {
         event.preventDefault();
 
@@ -221,7 +221,7 @@ THREE.Env = function (  ) {
             SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
             return;
         }
-        
+
         var intersects = raycaster.intersectObjects( self.objects );
 
         if ( intersects.length > 0 ) {
@@ -243,7 +243,8 @@ THREE.Env = function (  ) {
             container.style.cursor = 'auto';
         }
     }
-
+    
+    // TODO: FIXME to iterate over all tracings, generalize to take a callback
     this.onDocumentMouseDown = function( event ) {
 
         event.preventDefault();
@@ -252,7 +253,7 @@ THREE.Env = function (  ) {
         projector.unprojectVector( vector, camera );
 
         var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
-
+        
         var intersects = raycaster.intersectObjects( self.objects );
 
         if ( intersects.length > 0 ) {

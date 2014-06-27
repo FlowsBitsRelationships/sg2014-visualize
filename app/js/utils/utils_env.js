@@ -171,7 +171,8 @@ THREE.Env = function (  ) {
                 obj.animate();
             });
         }
-
+        
+        TWEEN.update(  );
         renderer.render(scene, camera);
     }
     

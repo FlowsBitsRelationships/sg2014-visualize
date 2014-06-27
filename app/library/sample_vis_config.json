@@ -21,7 +21,10 @@
         "queries": [
             {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.0]') return n",
                 "tracing_template_name" : "sweet_node",
-                "tracing_name": "near nodes"}
+                "tracing_name": "near nodes"},
+            {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.5]') return n",
+                "tracing_template_name" : "sweet_node",
+                "tracing_name": "remote nodes2"}
             ]
         },
         

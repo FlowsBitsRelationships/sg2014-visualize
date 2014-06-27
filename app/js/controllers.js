@@ -13,6 +13,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , 'vis_config'
     
     // Uses neo4jREST service to make a post request to the sinatra application
     // sends the current  $rootScope.querystring value as a 'querystring' parameter
+    // TODO: FIXME: Is this still needed? Doesn't the directive handle this now? 
     $rootScope.query = function(){
         neo4jREST.cypher({ querystring :  $rootScope.querystring.value})
         .$promise.then(function (result) {

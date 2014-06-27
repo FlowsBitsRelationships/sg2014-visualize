@@ -15,43 +15,32 @@ app_directives.directive('ngWebgl', function (neo4jREST) {
         'tracingTemplate': '='
       },
       link: function (scope, element, attrs) {
+            // Class to handle all threeJS scene transactions
             var env = new THREE.Env( );
             
-            // loop through keyframes and add_tracings.
-            // FIXME: As timing is important, we may want to preload the data...
+            // When a vis_config returns, the application inserts the database responses
+            // for each query. Preloading ensures that the visualization has no timing hiccups.
+            // We then loop through the json and add tracings, timed out to fire as specified
             scope.$on('vis_config', function(event, result) {
                  result.keyframes.forEach(function(keyframe){
-                     // Currently, queries are run sequentially and data is lazy loaded
-                    // This may throw off visualization timing. Alternatively, the sinatra application
-                    // could run all of the queries at once and return fully loaded JSON .
-                    // this would eliminate keyframe timing inaccuracies due to load time but add long wait time at the start
                     keyframe.queries.forEach(function(query){
-                         neo4jREST.cypher({ querystring :  query.querystring})
-                        .$promise.then(function (queryresult) {
-                            
-                           env.add_tracing(queryresult, query.tracing_template_name, query.tracing_name, keyframe.start, keyframe.duration);
+                        env.add_tracing(query, keyframe.start, keyframe.duration);
                        
                         });
                     });
-                    
                  });
-            });
             
-            scope.$on('queryresult', function(event, result) {
-                 env.add_tracing(result, scope.tracingTemplate, 'preview visualization', 2000, 5000);
+            // When the user executes a preview query in the UI, this method fires.
+            scope.$on('queryresult', function(event, queryresult) {
+                var preview_query = {"queryresult": queryresult, "tracing_template_name" : scope.tracingTemplate, "tracing_name":  "preview visualization" }
+                env.add_tracing( preview_query, 1000, 5000);
             });         
 
-            // FIXME; These methods to be deprecated in favor of add_tracing
-            // scope.$watch('tracingTemplate', function () {
-                // env.set_tracing_template(scope.tracingTemplate);
-            // });
-            
             // scope.$watch('materialType', function () {
                 // env.objects.forEach(function(obj){
                     // obj.material = env.materials[scope.materialType];
                 // });
             // });
-            
 
         }
     }

@@ -8,7 +8,6 @@ Angular app for data visualization.
 Install Ruby, then install the Sinatra gem
 ```
 gem install sinatra
-
 ```
 Run the node package manager to install the angular dependencies
 ```

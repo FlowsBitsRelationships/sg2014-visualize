@@ -5,32 +5,29 @@
 
 "keyframes" : [
 
-        {"description": "It is clear that the tweets of Hong Kong residents are devoid of any useful information ...",
-        "start": 5000,
-        "duration": 10000,
-        "queries": [
-            {   "querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,0.5]') return n",
-                "tracing_template_name" : "tweet_node",
-                "tracing_name": "remote nodes"},
-            {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,0.25]') return n",
-                "tracing_template_name" : "tweet_node",
-                "tracing_name": "near nodes"}
-            ]
-        },
-        
          {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
-        "start": 7000,
-        "duration": 12000,
+        "start": 1000,
+        "duration": 6000,
         "queries": [
-            {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.0]') return n",
+            {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.5]') return n",
                 "tracing_template_name" : "tweet_node",
                 "tracing_name": "remote nodes"}
             ]
         },
         
+         {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 4000,
+        "duration": 8000,
+        "queries": [
+            {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,1.0]') return n",
+                "tracing_template_name" : "sweet_node",
+                "tracing_name": "near nodes"}
+            ]
+        },
+        
          {"description": "if we expand our view even further to include...",
-        "start": 20000,
-        "duration": 24000,
+        "start": 8000,
+        "duration": 2000,
         "queries": [
             {"querystring" : "start n = node:points_hk('withinDistance:[22.280893, 114.173035,3.0]') return n",
                 "tracing_template_name" : "tweet_node",

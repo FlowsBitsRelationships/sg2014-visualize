@@ -1,7 +1,7 @@
 THREE.Env = function (  ) {
     var self = this;
     
-    self.objects = [];
+    self.objects = {};
     self.materials = {};
     
     var container;
@@ -113,69 +113,67 @@ THREE.Env = function (  ) {
         });
     };
     
-    // Adds a tracing to the scene by combining a set of data with a corresponding tracing template
-    this.add_tracing = function (queryresult, tracing_template_name, tracing_name, start, duration) {
-    
+    // Called externally, turns a query_response into threeJS geometry
+    this.add_tracing = function (query, start, duration) {
         var trace_objects = [];
         
-        $.getScript( "library/tracing_templates/"+tracing_template_name+".js", function(script) {
-            
+        $.getScript( "library/tracing_templates/"+query.tracing_template_name+".js", function(script) {
             
            tracing_template = template_constructor;
            
-            queryresult.data.forEach(function(result_chunk){
+            query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
                 
                     trace_objects.push(tracing_template( trace_chunk.data ));
-
+                
                 });
             });
-            
         });
         
-        self.add_tracing_objects( trace_objects, tracing_name, start, duration)
+        self.add_tracing_objects( trace_objects, query.tracing_name, start, duration)
     };
     
-    // Adds tracing objects and, after the duration has completed. removes them
+    // Called by add_tracing. Adds threeJS geometry at the appointed time and removes it
     this.add_tracing_objects = function( trace_objects, tracing_name, start, duration){
-    
-        // TODO: Check if there are already objects for this tracing name. if so, remove them
-        setTimeout(function(){
-            self.objects.tracing_name = trace_objects;
+        
+        window.setTimeout(function(){
+                
+            self.objects[tracing_name] = trace_objects;
+            console.log(self.objects);
             trace_objects.forEach(function(obj){ scene.add(obj); });
-            self.animate( tracing_name );
             
-            setTimeout(function(){
-                self.objects.tracing_name.forEach(function(obj){ scene.remove(obj);});
-                self.animate( tracing_name );
-                // TODO: Remove object from self.objects.tracing_name
+            window.setTimeout(function(){ 
+                self.objects[tracing_name].forEach(function(obj){ scene.remove(obj);});
             }, duration);
             
         }, start);
-
+        
     }
-    
+
     // **** Helper Functions***
         
     // Clear the scene geometry
-    // TODO: FIXME to iterate over all tracings
     this.clear_scene = function () {
-        self.objects.forEach(function(object){
-            scene.remove(object);
-        });
+        for (var tracing_name in self.objects) {
+            self.objects[tracing_name].forEach(function(obj){
+                 scene.remove(obj);
+            });
+        }
     };
 
     // Animate the scene
-    this.animate = function ( tracing_name ) {
+    this.animate = function ( ) {
         controls.update();
         requestAnimationFrame(self.animate);
         
-         self.objects.tracing_name.forEach(function(object){
-            object.animate();
-        });
-        
+        for (var tracing_name in self.objects) {
+            self.objects[tracing_name].forEach(function(obj){
+                obj.animate();
+            });
+        }
+
         renderer.render(scene, camera);
-    };
+    }
     
     this.display_tooltip = function(text, location){
         tooltip = document.createElement('div');
@@ -294,6 +292,7 @@ THREE.Env = function (  ) {
     }
     
     this.init();
+    this.animate( );
 }
 
 THREE.Env.prototype = Object.create( THREE.EventDispatcher.prototype );

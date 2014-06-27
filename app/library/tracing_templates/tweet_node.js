@@ -9,7 +9,7 @@ var template_constructor = function(trace_json){
     material = new THREE.MeshLambertMaterial({ 
         color:  "rgb(255,112,255)", 
         transparent: true, 
-        opacity: 0.5,
+        opacity: .5,
         shading: THREE.FlatShading, 
         vertexColors: THREE.VertexColors 
     });

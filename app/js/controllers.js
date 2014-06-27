@@ -24,7 +24,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , 'vis_config'
     $rootScope.get_vis_config = function(){
         vis_config.get()
         .$promise.then(function (result) {
-           $rootScope.$broadcast('vis_config', result);
+           $rootScope.$broadcast('vis_config_result', result);
         });
     }
     

@@ -104,15 +104,6 @@ THREE.Env = function (  ) {
         window.addEventListener('resize', this.onWindowResize, false);
     }
     
-    // Changes the active tracing template.
-    this.set_tracing_template = function (tracing_template_name) {
-    
-         // Each template has a constructor function called template_constructor
-        $.getScript( "library/tracing_templates/"+tracing_template_name+".js", function(script) {
-           tracing_template = template_constructor;
-        });
-    };
-    
     // Called externally, turns a query_response into threeJS geometry
     this.add_tracing = function (query, start, duration) {
         var trace_objects = [];
@@ -151,15 +142,6 @@ THREE.Env = function (  ) {
     }
 
     // **** Helper Functions***
-        
-    // Clear the scene geometry
-    this.clear_scene = function () {
-        for (var tracing_name in self.objects) {
-            self.objects[tracing_name].forEach(function(obj){
-                 scene.remove(obj);
-            });
-        }
-    };
 
     // Animate the scene
     this.animate = function ( ) {
@@ -176,6 +158,7 @@ THREE.Env = function (  ) {
         renderer.render(scene, camera);
     }
     
+    // FIXME: Onclick functionality should be defined by each tracing_template
     this.display_tooltip = function(text, location){
         tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
@@ -185,12 +168,23 @@ THREE.Env = function (  ) {
         document.body.appendChild(tooltip);
     }
     
+    // FIXME: Onclick functionality should be defined by each tracing_template
     this.hide_tooltip = function(){
         if (tooltip != undefined){
             document.body.removeChild(tooltip);
             console.log("removed");
         }
     }
+
+        
+    // Clear the scene geometry - NOT USED
+    this.clear_scene = function () {
+        for (var tracing_name in self.objects) {
+            self.objects[tracing_name].forEach(function(obj){
+                 scene.remove(obj);
+            });
+        }
+    };
     
     // **** ThreeJS Helper Functions***
     

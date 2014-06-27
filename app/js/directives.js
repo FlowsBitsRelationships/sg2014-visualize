@@ -21,7 +21,7 @@ app_directives.directive('ngWebgl', function (neo4jREST) {
             // When a vis_config returns, the application inserts the database responses
             // for each query. Preloading ensures that the visualization has no timing hiccups.
             // We then loop through the json and add tracings, timed out to fire as specified
-            scope.$on('vis_config', function(event, result) {
+            scope.$on('vis_config_result', function(event, result) {
                  result.keyframes.forEach(function(keyframe){
                     keyframe.queries.forEach(function(query){
                         env.add_tracing(query, keyframe.start, keyframe.duration);

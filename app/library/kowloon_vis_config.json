@@ -1,0 +1,72 @@
+ {
+"title": "SG2014 Sample Visualization",
+"author": "Capt. James T. Kirk",
+"frame": "Spatial",
+
+"keyframes" : [
+
+         {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 1000,
+        "duration": 6000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Kowloon' return n",
+                            "tracing_template_name" : "place_node",
+                            "tracing_name": "Kowloon"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return n as nodes",
+                            "tracing_template_name" : "user_node",
+                            "tracing_name": "Kowloon tweeters"}
+                            ]
+        },
+        {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 2000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Kowloon tweets"}
+                            ]
+        },
+        {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 7000,
+        "duration": 6000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Wan Chai' return n",
+                            "tracing_template_name" : "place_node",
+                            "tracing_name": "Wan Chai"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Wan Chai'}) return n as nodes",
+                            "tracing_template_name" : "user_node",
+                            "tracing_name": "Wan Chai tweeters"}
+                            ]
+        },
+        {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 8000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Wan Chai'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Wan Chai tweets"}
+                            ]
+        },
+        {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 13000,
+        "duration": 6000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Tsim Sha Tsui' return n",
+                            "tracing_template_name" : "place_node",
+                            "tracing_name": "Tsim Sha Tsui"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Tsim Sha Tsui'}) return n as nodes",
+                            "tracing_template_name" : "user_node",
+                            "tracing_name": "Tsim Sha Tsui tweeters"}
+                            ]
+        },
+        {"description": "that is until you see what people are tweeting about in the nursing homes at the outskirts of town!",
+        "start": 14000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Tsim Sha Tsui'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Tsim Sha Tsui tweets"}
+                            ]
+        }
+]
+}

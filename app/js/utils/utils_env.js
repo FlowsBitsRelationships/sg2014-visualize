@@ -2,6 +2,7 @@ THREE.Env = function (  ) {
     var self = this;
     
     self.objects = {};
+    self.object_lookup_table = { node: {}, relationship: {} };
     self.materials = {};
     
     var container;
@@ -110,17 +111,26 @@ THREE.Env = function (  ) {
         
         $.getScript( "library/tracing_templates/"+query.tracing_template_name+".js", function(script) {
             
+            // 'template_constructor' is the name of the main function in each tracing template that gets loaded
            tracing_template = template_constructor;
            
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
-                
-                    trace_objects.push(tracing_template( trace_chunk.data ));
-                
+                    var id_url = trace_chunk.self.split("/");
+                    var type = id_url[id_url.length-2]; // node or relationship
+                    var id = id_url[id_url.length-1]; // id
+                    
+                    // console.log(trace_chunk);
+                    // Generate the object from the template
+                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table )
+                    console.log(trace_object);
+                    
+                    self.object_lookup_table[type][id] = trace_object;
+                    trace_objects.push(trace_object);
                 });
             });
         });
-        
+        console.log(self.object_lookup_table);
         self.add_tracing_objects( trace_objects, query.tracing_name, start, duration)
     };
     
@@ -128,9 +138,9 @@ THREE.Env = function (  ) {
     this.add_tracing_objects = function( trace_objects, tracing_name, start, duration){
         
         window.setTimeout(function(){
-                
+
             self.objects[tracing_name] = trace_objects;
-            console.log(self.objects);
+            // console.log(self.objects);
             trace_objects.forEach(function(obj){ scene.add(obj); });
             
             window.setTimeout(function(){ 
@@ -148,11 +158,11 @@ THREE.Env = function (  ) {
         controls.update();
         requestAnimationFrame(self.animate);
         
-        for (var tracing_name in self.objects) {
-            self.objects[tracing_name].forEach(function(obj){
-                obj.animate();
-            });
-        }
+        // for (var tracing_name in self.objects) {
+            // self.objects[tracing_name].forEach(function(obj){
+                // obj.animate();
+            // });
+        // }
         
         TWEEN.update(  );
         renderer.render(scene, camera);

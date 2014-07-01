@@ -4,34 +4,41 @@ var template_constructor = function(trace_json){
      self.text = trace_json.data.text;
      var x = (trace_json.data.lat-22.28)*1000;
      var y = (trace_json.data.lon-114.15)*1000;
-     
-    geometry = new THREE.BoxGeometry(1, 12, 2);
-    material = new THREE.MeshLambertMaterial({ 
-        color: "rgb(255,112,255)", 
+
+    
+    var geometry = new THREE.BoxGeometry(1,1,1 );
+    
+    var material = new THREE.MeshLambertMaterial({ 
+        color:  "rgb(255,112,255)", 
         transparent: true, 
         opacity: 0.2,
         shading: THREE.FlatShading, 
         vertexColors: THREE.VertexColors 
     });
-        
-    cube = new THREE.Mesh(geometry, material);
+    
+    var cube = new THREE.Mesh(geometry, material);
     cube.position.set(x, y, 0);
     cube.renderDepth = 200;
     
-    cube.animate = function(){
-        this.rotation.x += 0.01;
-		this.rotation.y += 0.03;
-    }
-    var tween = new TWEEN.Tween({ opac:  0.2 }).to({ opac: 1 }, 1000)
+    // console.log (cube);
+     // Animation Methods/Tweens
+    var tween = new TWEEN.Tween({ x_size: 0.2, opac:  0.2 }).to({ x_size: 4, opac: 0.5 }, 9000)
     .delay(1000)
     .onUpdate(function(){ 
+            cube.scale.x = this.x_size;
             cube.material.opacity = this.opac;
         })
     .start();
+     
+    cube.animate = function(){
+        this.rotation.x += 0.001;
+		this.rotation.y += 0.003;
+    }
     
+    // Interaction Methods
     cube.get_metadata = function(){
         return  trace_json.data.content;
     }
-
+    
     return cube
 }

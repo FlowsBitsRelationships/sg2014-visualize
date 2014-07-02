@@ -1,4 +1,4 @@
-var template_constructor = function(trace_json){
+var template_constructor = function(trace_json, object_lookup_table, start, duration){
     var self = this;
     
      self.text = trace_json.data.text;
@@ -12,8 +12,8 @@ var template_constructor = function(trace_json){
 	{
 	    uniforms: 
 		{ 
-			"c":   { type: "f", value: .1 },
-			"p":   { type: "f", value: 6 },
+			"c":   { type: "f", value: .5 },
+			"p":   { type: "f", value: 4.5 },
 			glowColor: { type: "c", value: new THREE.Color("rgb(255,0,149)") },
 			viewVector: { type: "v3", value: new THREE.Vector3( 0, 0, 1 ) } //viewVector: { type: "v3", value: camera.position }
 		},
@@ -28,16 +28,27 @@ var template_constructor = function(trace_json){
     sphere.position.set(x, y, -10);
     sphere.renderDepth = 200;
     
-    
      // Animation Methods/Tweens
-    var tween = new TWEEN.Tween({  c:  .5 }).to({ c:  0 }, 4000)
-    .delay(1000)
-    .onUpdate(function(){ 
-            sphere.material.uniforms.c.value = this.c;
-        })
-    .start();
-     
+    // var tweenHead = new TWEEN.Tween({  c:  .5 }).to({ c:  0 }, 3000)
+     // .delay(start)
+     // .easing(TWEEN.Easing.Elastic.InOut)
+    // .onUpdate(function(){ 
+            // sphere.material.uniforms.c.value = this.c;
+        // });
+
+    // var tweenBack= new TWEEN.Tween({  c:  0 }).to({ c:  .5 }, 3000)
+    // .easing(TWEEN.Easing.Elastic.InOut)
+    // .onUpdate(function(){ 
+            // sphere.material.uniforms.c.value = this.c;
+        // });
+    
+    // tweenHead.chain(tweenBack);
+    // tweenBack.chain(tweenHead);
+    // tweenHead.start();
+    
     // sphere.animate = function(){
+        // this.rotation.x += 0.001;
+		// this.rotation.y += 0.003;
     // }
     
     // Interaction Methods

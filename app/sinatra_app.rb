@@ -36,11 +36,8 @@ end
 
 post '/cypher' do
     response.headers['Access-Control-Allow-Origin'] = '*'
-    status 403 if !verify_querystring(params[:querystring]) 
     
     queryresult = execute_query(params[:querystring])
-    
-    queryresult
 end
 
 def execute_query(q)

@@ -113,7 +113,7 @@ THREE.Env = function (  ) {
             
             // 'template_constructor' is the name of the main function in each tracing template that gets loaded
            tracing_template = template_constructor;
-           
+           var idx = 0;
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
                     var id_url = trace_chunk.self.split("/");
@@ -122,11 +122,12 @@ THREE.Env = function (  ) {
                     
                     // console.log(trace_chunk);
                     // Generate the object from the template
-                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table )
-                    console.log(trace_object);
+                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table, start, duration, idx)
+                    // console.log(trace_object);
                     
                     self.object_lookup_table[type][id] = trace_object;
                     trace_objects.push(trace_object);
+                    idx++
                 });
             });
         });
@@ -142,7 +143,7 @@ THREE.Env = function (  ) {
             self.objects[tracing_name] = trace_objects;
             // console.log(self.objects);
             trace_objects.forEach(function(obj){ scene.add(obj); });
-            
+
             window.setTimeout(function(){ 
                 self.objects[tracing_name].forEach(function(obj){ scene.remove(obj);});
             }, duration);
@@ -154,17 +155,21 @@ THREE.Env = function (  ) {
     // **** Helper Functions***
 
     // Animate the scene
-    this.animate = function ( ) {
+    this.animate = function (  ) {
         controls.update();
         requestAnimationFrame(self.animate);
+        
+        // NOTE: May eliminate 'obj.animate' entirely'  
+        // if we can rely on Tween.js for all animation...
         
         // for (var tracing_name in self.objects) {
             // self.objects[tracing_name].forEach(function(obj){
                 // obj.animate();
             // });
         // }
-        
+ 
         TWEEN.update(  );
+
         renderer.render(scene, camera);
     }
     

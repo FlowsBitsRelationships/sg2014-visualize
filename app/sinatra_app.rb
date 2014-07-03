@@ -16,11 +16,20 @@ get '/' do
 end
 
 
-get '/vis_config' do
+get '/neo4jGET' do
 	response.headers['Access-Control-Allow-Origin'] = '*'
-    # contents = JSON.parse(File.read( './library/sample_vis_config.json' ))
-    contents = JSON.parse(File.read( './library/kowloon_vis_config.json' ))
-     
+    
+    # If a filename parameter is sent, load the corresponding vis_config file
+    # If a JSON is sent, insert it as keyframe[0] of an empty vis_config
+    if params[:filename] != nil && params[:filename] != ""
+        contents = JSON.parse(File.read( './library/kowloon_vis_config.json' ))
+    elsif params[:testjson] != nil && params[:testjson] != ""
+        contents = JSON.parse(File.read( './library/empty_vis_config.json' ))
+        contents["keyframes"][0] = JSON.parse(params[:testjson])
+    else
+        return status 400 
+    end
+    
     # Requests and insert the database responses for each query in the vis_config file. 
     # Preloading ensures that the visualization has no timing hiccups
     contents["keyframes"].each_with_index do | keyframe, i |
@@ -31,13 +40,8 @@ get '/vis_config' do
                 contents["keyframes"][i]["queries"][j]["queryresult"] = JSON.parse(queryresult)
         end
     end
-    contents.to_json
-end
-
-post '/cypher' do
-    response.headers['Access-Control-Allow-Origin'] = '*'
     
-    queryresult = execute_query(params[:querystring])
+    contents.to_json
 end
 
 def execute_query(q)

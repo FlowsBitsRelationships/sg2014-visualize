@@ -30,10 +30,11 @@
             <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
          </div>
          <div class = "control_body" ng-show="showMenu" >
-            <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" style = "margin-bottom:10px;" ></textarea>
+            <textarea id = "query" cols="85" rows="12" ng-model="testjson" style = "margin-bottom:10px;" ></textarea>
             <ul class="menu">
-                <input id="query" type="submit" value="QUERY!" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="query();"/>
-                <input id="run" type="submit" value="RUN!" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_vis_config();"/>
+                <input id="query" type="submit" value="RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>
+                <input id="load" type="submit" value="LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( 'kowloon_vis_config', null );"/>
+                <span id="loading" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-show="loading">loading...</span>
             </ul>
         </div>
     </div>

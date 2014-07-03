@@ -14,28 +14,21 @@ app_directives.directive('ngWebgl', function (neo4jREST) {
         'materialType': '=',
         'tracingTemplate': '='
       },
-      link: function (scope, element, attrs) {
+        link: function (scope, element, attrs) {
             // Class to handle all threeJS scene transactions
             var env = new THREE.Env( );
-            
-            // When a vis_config returns, the application inserts the database responses
-            // for each query. Preloading ensures that the visualization has no timing hiccups.
-            // We then loop through the json and add tracings, timed out to fire as specified
-            scope.$on('vis_config_result', function(event, result) {
+
+            // When a the API returns a populated JSON result, this function gets called
+            scope.$on('neo4j_result', function(event, result) {
                  result.keyframes.forEach(function(keyframe){
                     keyframe.queries.forEach(function(query){
+                    
                         env.add_tracing(query, keyframe.start, keyframe.duration);
                        
-                        });
                     });
-                 });
-            
-            // When the user executes a preview query in the UI, this method fires.
-            scope.$on('queryresult', function(event, queryresult) {
-                var preview_query = {"queryresult": queryresult, "tracing_template_name" : scope.tracingTemplate, "tracing_name":  "preview visualization" }
-                env.add_tracing( preview_query, 1000, 5000);
-            });         
-
+                });
+             });
+         
         }
     }
 });

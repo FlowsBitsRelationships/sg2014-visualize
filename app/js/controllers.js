@@ -27,14 +27,44 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , 'vis_config'
            $rootScope.$broadcast('vis_config_result', result);
         });
     }
-    
+
 }]);
 
 // MenuCtrl is a controller for managing visualization functionality
-app_controllers.controller('AppCtrl', ['$scope', function ($scope) {
+app_controllers.controller('AppCtrl', ['$scope', '$interval', function ($scope, $interval) {
     
     // Model variables for visualization
-    $scope.materialType = 'wireframe';
+    $scope.vis_config
     $scope.tracingTemplate = 'tweet_node';
+    
+    // Timer Functionality
+    $scope.time =0;
+    $scope.startTime = 0;
+    $scope.endTime = 240000;
+    
+    var timer = null;
+    var stop;
+    $scope.resetInterval = function(){
+       $interval.cancel(timer);
+        $scope.time=0;
+    }
+    
+    $scope.startInterval = function(){
+    console.log( $scope.time);
+    timer = $interval(function(){
+        $scope.time=  parseInt($scope.time)+1;
+        $scope.updateSlider();
+        }, 1);
+    }
+    
+    $scope.stopInterval = function(){
+        $interval.cancel(timer);
+    }
+	
+    $scope.updateSlider = function() {
+        var timePercentage =  (($scope.time - $scope.startTime)/($scope.endTime - $scope.startTime)*100)+"%"
+        $scope.sliderStyle = { 'margin-left' :timePercentage};
+    };
+	
     
   }]);

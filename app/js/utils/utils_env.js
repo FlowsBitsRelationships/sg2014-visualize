@@ -78,13 +78,13 @@ THREE.Env = function (  ) {
             transparent: true 
         });
         
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000, 8, 8), new THREE.MeshBasicMaterial({
+        plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 8, 8), new THREE.MeshBasicMaterial({
                     color : 0x000000,
                     opacity : 0.25,
                     transparent : true,
                     wireframe : true
                 }));
-        plane.visible = false;
+        plane.visible = true;
         scene.add(plane);
         
         // create a point light

@@ -36,12 +36,6 @@ app_directives.directive('ngWebgl', function (neo4jREST) {
                 env.add_tracing( preview_query, 1000, 5000);
             });         
 
-            // scope.$watch('materialType', function () {
-                // env.objects.forEach(function(obj){
-                    // obj.material = env.materials[scope.materialType];
-                // });
-            // });
-
         }
     }
 });

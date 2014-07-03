@@ -30,11 +30,6 @@
             <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
          </div>
          <div class = "control_body" ng-show="showMenu" >
-            <ul class="menu">
-                <input id="I"  type="submit" value="I" style =  "display:inline; float: center; margin-bottom:10px;" />
-                <input id="T"  type="submit" value="T" style =  "display:inline; float: center; margin-bottom:10px;"/>
-                <input id="S"  type="submit" value="S" style = "display:inline; float: center; margin-bottom:10px;"/>
-            </ul>
             <textarea id = "query" cols="25" rows="5" ng-model="querystring.value" style = "margin-bottom:10px;" ></textarea>
             <ul class="menu">
                 <input id="query" type="submit" value="QUERY!" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="query();"/>
@@ -45,20 +40,16 @@
 
     <div id="webglContainer"  ng-webgl material-type="materialType"  tracing-template="tracingTemplate"></div>
     
-    <div class = "bottom_menu">
-        <label for="materialsList">Material Type</label>
-            <select id="materialsList" ng-model="materialType">
-            <option value="wireframe">Wire Frame</option>
-            <option value="lambert">Lambert</option>
-            <option value="phong">Phong</option>
-        </select>
-        <label for="materialsList">Tracing Template</label>
-            <select id="materialsList" ng-model="tracingTemplate">
-            <option value="tweet_node">tweet_node</option>
-            <option value="sweet_node">sweet_node</option>
-        </select>
-    </div>
-    
+        <div class='player'>            
+            <ul class="menu">
+                <input id="play"  type="submit" value=">" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="startInterval();"/>
+                <input id="pause"  type="submit" value="| |" style =  "display:inline; float: center; margin-bottom:10px;"  ng-click="stopInterval();"/>
+                <input id="loop"  type="submit" value="O" style = "display:inline; float: center; margin-bottom:10px;"  ng-click="resetInterval();"/>
+            </ul>
+            
+            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1" class="ng-pristine ng-valid" ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
+        </div>
+
 </div>
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>

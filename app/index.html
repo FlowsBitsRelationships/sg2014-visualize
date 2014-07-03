@@ -33,13 +33,14 @@
             <textarea id = "query" cols="85" rows="12" ng-model="testjson" style = "margin-bottom:10px;" ></textarea>
             <ul class="menu">
                 <input id="query" type="submit" value="RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>
-                <input id="load" type="submit" value="LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( 'kowloon_vis_config', null );"/>
+                <input id="load" type="submit" value="LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( vis_config, null );"/>
+                 <input id="load" type="text" ng-model="vis_config">
                 <span id="loading" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-show="loading">loading...</span>
             </ul>
         </div>
     </div>
 
-    <div id="webglContainer"  ng-webgl material-type="materialType"  tracing-template="tracingTemplate"></div>
+    <div id="webglContainer" material-type="materialType"  tracing-template="tracingTemplate"></div>
     
         <div class='player'>            
             <ul class="menu">

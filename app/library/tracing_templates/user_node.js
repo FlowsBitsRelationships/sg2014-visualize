@@ -1,4 +1,4 @@
-var template_constructor = function(trace_json, object_lookup_table, start, duration, idx){
+var template_constructor = function(trace_json, object_lookup_table, duration, idx){
 
     var self = this;
     
@@ -27,37 +27,32 @@ var template_constructor = function(trace_json, object_lookup_table, start, dura
     .onUpdate(function(){ 
             sphere.position.z = this.z;
         })
-        .onComplete(function() {
-           this.z = 0; // reset tweening variable
-        });
+    .onComplete(function() {
+       this.z = 0; // reset tweening variable
+    });
 
-    var tweenBack = new TWEEN.Tween({ z:  8 }).to({ z:  -8 }, 3000)
+    var tweenBack = new TWEEN.Tween({ z:  8 }).to({ z:  -16 }, 3000)
     .easing(TWEEN.Easing.Elastic.InOut)
     .onUpdate(function(){ 
            sphere.position.z = this.z;
         })
-         .onComplete(function() {
-           this.z = 8; // reset tweening variable
-        });
+     .onComplete(function() {
+       this.z = 8; // reset tweening variable
+    });
     
-    var tweenLast = new TWEEN.Tween({ z:  -8 }).to({ z:  0 }, 3000)
+    var tweenLast = new TWEEN.Tween({ z:  -16 }).to({ z:  0 }, 3000)
     .easing(TWEEN.Easing.Elastic.InOut)
     .onUpdate(function(){ 
            sphere.position.z = this.z;
         })
-         .onComplete(function() {
-           this.z = -8; // reset tweening variable
-        });
+     .onComplete(function() {
+       this.z = -16; // reset tweening variable
+    });
         
     tweenHead.chain(tweenBack);
     tweenBack.chain(tweenLast);
     tweenLast.chain(tweenHead);
     tweenHead.start();
-    
-    // sphere.animate = function(){
-        // this.rotation.x += 0.001;
-		// this.rotation.y += 0.003;
-    // }
     
     // Interaction Methods
     sphere.get_metadata = function(){

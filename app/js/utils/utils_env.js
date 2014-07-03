@@ -104,9 +104,9 @@ THREE.Env = function (  ) {
 
         window.addEventListener('resize', this.onWindowResize, false);
     }
-    
-    // Called externally, turns a query_response into threeJS geometry
-    this.add_tracing = function (query, start, duration) {
+
+        // Called externally, turns a query_response into threeJS geometry
+    this.add_tracing = function (query, duration) {
         var trace_objects = [];
         
         $.getScript( "library/tracing_templates/"+query.tracing_template_name+".js", function(script) {
@@ -116,14 +116,13 @@ THREE.Env = function (  ) {
            var idx = 0;
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
+                
                     var id_url = trace_chunk.self.split("/");
                     var type = id_url[id_url.length-2]; // node or relationship
                     var id = id_url[id_url.length-1]; // id
                     
-                    // console.log(trace_chunk);
                     // Generate the object from the template
-                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table, start, duration, idx)
-                    // console.log(trace_object);
+                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table, duration, idx)
                     
                     self.object_lookup_table[type][id] = trace_object;
                     trace_objects.push(trace_object);
@@ -132,11 +131,11 @@ THREE.Env = function (  ) {
             });
         });
         console.log(self.object_lookup_table);
-        self.add_tracing_objects( trace_objects, query.tracing_name, start, duration)
+        self.add_tracing_objects( trace_objects, query.tracing_name, duration)
     };
     
     // Called by add_tracing. Adds threeJS geometry at the appointed time and removes it
-    this.add_tracing_objects = function( trace_objects, tracing_name, start, duration){
+    this.add_tracing_objects = function( trace_objects, tracing_name, duration){
         
         window.setTimeout(function(){
 
@@ -148,29 +147,30 @@ THREE.Env = function (  ) {
                 self.objects[tracing_name].forEach(function(obj){ scene.remove(obj);});
             }, duration);
             
-        }, start);
+        }, 100);
         
     }
-
+    
     // **** Helper Functions***
 
     // Animate the scene
-    this.animate = function (  ) {
+    this.animate = function () {
         controls.update();
         requestAnimationFrame(self.animate);
         
-        // NOTE: May eliminate 'obj.animate' entirely'  
-        // if we can rely on Tween.js for all animation...
-        
-        // for (var tracing_name in self.objects) {
-            // self.objects[tracing_name].forEach(function(obj){
-                // obj.animate();
-            // });
-        // }
- 
-        TWEEN.update(  );
+        TWEEN.update();
 
         renderer.render(scene, camera);
+    }
+    
+    // Clear the scene geometry - NOT USED
+    this.clear_scene = function () {
+        for (var tracing_name in self.objects) {
+            self.objects[tracing_name].forEach(function(obj){
+                 scene.remove(obj);
+            });
+        }
+        self.object_lookup_table
     }
     
     // FIXME: Onclick functionality should be defined by each tracing_template
@@ -190,16 +190,6 @@ THREE.Env = function (  ) {
             console.log("removed");
         }
     }
-
-        
-    // Clear the scene geometry - NOT USED
-    this.clear_scene = function () {
-        for (var tracing_name in self.objects) {
-            self.objects[tracing_name].forEach(function(obj){
-                 scene.remove(obj);
-            });
-        }
-    };
     
     // **** ThreeJS Helper Functions***
     

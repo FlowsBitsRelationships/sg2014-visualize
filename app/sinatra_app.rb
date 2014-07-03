@@ -22,7 +22,7 @@ get '/neo4jGET' do
     # If a filename parameter is sent, load the corresponding vis_config file
     # If a JSON is sent, insert it as keyframe[0] of an empty vis_config
     if params[:filename] != nil && params[:filename] != ""
-        contents = JSON.parse(File.read( './library/kowloon_vis_config.json' ))
+        contents = JSON.parse(File.read( "./library/#{params[:filename]}.json" ))
     elsif params[:testjson] != nil && params[:testjson] != ""
         contents = JSON.parse(File.read( './library/empty_vis_config.json' ))
         contents["keyframes"][0] = JSON.parse(params[:testjson])

@@ -1,4 +1,4 @@
-var template_constructor = function(trace_json, object_lookup_table, start, duration){
+var template_constructor = function(trace_json, object_lookup_table, duration){
     var self = this;
     
      self.text = trace_json.data.text;
@@ -27,29 +27,6 @@ var template_constructor = function(trace_json, object_lookup_table, start, dura
     var sphere = new THREE.Mesh(geometry, customMaterial);
     sphere.position.set(x, y, -10);
     sphere.renderDepth = 200;
-    
-     // Animation Methods/Tweens
-    // var tweenHead = new TWEEN.Tween({  c:  .5 }).to({ c:  0 }, 3000)
-     // .delay(start)
-     // .easing(TWEEN.Easing.Elastic.InOut)
-    // .onUpdate(function(){ 
-            // sphere.material.uniforms.c.value = this.c;
-        // });
-
-    // var tweenBack= new TWEEN.Tween({  c:  0 }).to({ c:  .5 }, 3000)
-    // .easing(TWEEN.Easing.Elastic.InOut)
-    // .onUpdate(function(){ 
-            // sphere.material.uniforms.c.value = this.c;
-        // });
-    
-    // tweenHead.chain(tweenBack);
-    // tweenBack.chain(tweenHead);
-    // tweenHead.start();
-    
-    // sphere.animate = function(){
-        // this.rotation.x += 0.001;
-		// this.rotation.y += 0.003;
-    // }
     
     // Interaction Methods
     sphere.get_metadata = function(){

@@ -3,6 +3,9 @@ sg2014-visualize
 
 Angular app for data visualization.
 
+### Set the Environment Variables
+Set environment variables DB_USERNAME and DB_PASSWORD
+
 ### Install Dependencies
 
 Install [/Ruby 2.X.X/](https://www.ruby-lang.org/en/downloads/). then install the Sinatra gem

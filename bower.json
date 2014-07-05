@@ -15,6 +15,7 @@
     "html5-boilerplate": "~4.3.0",
     "threejs"  : "#r67",
     "jquery" : "git://github.com/components/jquery.git",
-    "tween.js" :  "git@github.com:sole/tween.js.git"
+    "tween.js" :  "git@github.com:sole/tween.js.git",
+     "osmthree" :  "git@github.com:johnvf/osmthree.git#274c33cf3ad537ab8830895ad893958f4cd97e0a"
   }
-}
+} 

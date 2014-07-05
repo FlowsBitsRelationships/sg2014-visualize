@@ -1,4 +1,4 @@
-var template_constructor = function(trace_json, object_lookup_table, duration, idx){
+var tracing_template = function(trace_json, object_lookup_table, duration, idx){
 
     var self = this;
     

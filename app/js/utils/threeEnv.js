@@ -2,13 +2,14 @@ THREE.Env = function (  ) {
     var self = this;
     
     self.objects = {};
-    self.object_lookup_table = { node: {}, relationship: {} };
+    object_lookup_table = { node: {}, relationship: {} };
     self.materials = {};
     
     var container;
     var tooltip;
     
     var controls,
+    origin,
     scene,
     camera,
     renderer,
@@ -17,7 +18,7 @@ THREE.Env = function (  ) {
     material,
     cube;
     
-    var tracing_template;
+    var cur_tracing_template;
     var plane;
     var color = new THREE.Color("rgb(42,42,42)");
     
@@ -29,7 +30,8 @@ THREE.Env = function (  ) {
     this.init = function ( ) {
     
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000);
+        
         renderer = new THREE.WebGLRenderer( {alpha: true,  antialias: true});
         projector = new THREE.Projector();
         
@@ -40,17 +42,13 @@ THREE.Env = function (  ) {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor( color, 1);
         container.appendChild(renderer.domElement);
-        camera.position.z = 50;
         
+		camera.position.z = 400;
+		camera.position.x = -400;
+		camera.position.y = 400;
         
-        controls = new THREE.TrackballControls(camera, container);
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.panSpeed = 0.8;
-        controls.noZoom = false;
-        controls.noPan = false;
-        controls.staticMoving = true;
-        controls.dynamicDampingFactor = 0.3;
+        controls = new THREE.OrbitControls(camera, container);
+        
         
         self.materials.lambert = new THREE.MeshLambertMaterial({ 
             color:"rgb(255,112,255)", 
@@ -78,13 +76,16 @@ THREE.Env = function (  ) {
             transparent: true 
         });
         
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 8, 8), new THREE.MeshBasicMaterial({
+        plane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000, 100, 100), new THREE.MeshBasicMaterial({
                     color : 0x000000,
                     opacity : 0.25,
                     transparent : true,
                     wireframe : true
                 }));
         plane.visible = true;
+        plane.position.x = 10000/2;
+        plane.position.z = -10000/2;
+        plane.rotation.x = Math.PI / 2;
         scene.add(plane);
         
         // create a point light
@@ -97,40 +98,56 @@ THREE.Env = function (  ) {
 
         // add to the scene
         scene.add(pointLight);
-
+        
         renderer.domElement.addEventListener('mousemove', this.onDocumentMouseMove, false);
         renderer.domElement.addEventListener('mousedown', this.onDocumentMouseDown, false);
         renderer.domElement.addEventListener('mouseup', this.onDocumentMouseUp, false);
 
         window.addEventListener('resize', this.onWindowResize, false);
     }
-
-        // Called externally, turns a query_response into threeJS geometry
+    
+    // Called externally, adds context buildings and sets origin
+    this.add_context = function(bbox, callback){
+        origin = [bbox[0] , bbox[1] ];
+        OSM3.makeBuildings( scene, bbox, { scale: 1, onComplete: callback } );
+        // TODO: Keep track of building objects + clear them when a new visualization starts
+    }
+    
+    // Called externally, turns a query_response into threeJS geometry
     this.add_tracing = function (query, duration) {
         var trace_objects = [];
         
         $.getScript( "library/tracing_templates/"+query.tracing_template_name+".js", function(script) {
             
             // 'template_constructor' is the name of the main function in each tracing template that gets loaded
-           tracing_template = template_constructor;
+            
+           cur_tracing_template = new tracing_template( );
+           
+           //  Mix in globals and common functions shared by tracing templates
+           as_tracing_template.call(cur_tracing_template); 
+           cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
+           cur_tracing_template.object_lookup_table = object_lookup_table; //  Set lookup table
+            
            var idx = 0;
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
-                
+
+                    // Generate the object from the template
+                    var trace_object = cur_tracing_template.get_trace( trace_chunk, duration, idx);
+                    
+                    // split up id property into 'type' and 'id'
                     var id_url = trace_chunk.self.split("/");
                     var type = id_url[id_url.length-2]; // node or relationship
                     var id = id_url[id_url.length-1]; // id
                     
-                    // Generate the object from the template
-                    var trace_object = tracing_template( trace_chunk, self.object_lookup_table, duration, idx)
-                    
-                    self.object_lookup_table[type][id] = trace_object;
+                    // Add the object to the lookup table to future reference by other tracings,
+                    object_lookup_table[type][id] = trace_object; 
+                     // Keep track of this tracing's objects, for removal later
                     trace_objects.push(trace_object);
                     idx++
                 });
             });
         });
-        console.log(self.object_lookup_table);
         self.add_tracing_objects( trace_objects, query.tracing_name, duration)
     };
     
@@ -140,7 +157,7 @@ THREE.Env = function (  ) {
         window.setTimeout(function(){
 
             self.objects[tracing_name] = trace_objects;
-            // console.log(self.objects);
+
             trace_objects.forEach(function(obj){ scene.add(obj); });
 
             window.setTimeout(function(){ 
@@ -163,17 +180,17 @@ THREE.Env = function (  ) {
         renderer.render(scene, camera);
     }
     
-    // Clear the scene geometry - NOT USED
+    // Clear the scene geometry
     this.clear_scene = function () {
         for (var tracing_name in self.objects) {
             self.objects[tracing_name].forEach(function(obj){
                  scene.remove(obj);
             });
         }
-        self.object_lookup_table
+        // object_lookup_table
     }
     
-    // FIXME: Onclick functionality should be defined by each tracing_template
+    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
     this.display_tooltip = function(text, location){
         tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
@@ -183,7 +200,7 @@ THREE.Env = function (  ) {
         document.body.appendChild(tooltip);
     }
     
-    // FIXME: Onclick functionality should be defined by each tracing_template
+    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
     this.hide_tooltip = function(){
         if (tooltip != undefined){
             document.body.removeChild(tooltip);
@@ -202,7 +219,7 @@ THREE.Env = function (  ) {
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
     
-    // TODO: FIXME to iterate over all tracings, generalize to take a callback    
+    // TODO: FIXME to iterate over all tracings, generalize to take a callback - NOT USED
      this.onDocumentMouseMove = function( event ) {
         event.preventDefault();
 
@@ -242,7 +259,7 @@ THREE.Env = function (  ) {
         }
     }
     
-    // TODO: FIXME to iterate over all tracings, generalize to take a callback
+    // TODO: FIXME to iterate over all tracings, generalize to take a callback - NOT USED
     this.onDocumentMouseDown = function( event ) {
 
         event.preventDefault();

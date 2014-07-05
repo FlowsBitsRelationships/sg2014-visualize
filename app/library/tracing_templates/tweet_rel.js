@@ -1,5 +1,5 @@
-var template_constructor = function(trace_json, object_lookup_table, duration){
-
+var tracing_template = function(trace_json, object_lookup_table, duration){
+    
     var start_id_url = trace_json["start"].split("/");
     var start_id = start_id_url[start_id_url.length-1];
     var start = object_lookup_table.node[start_id];

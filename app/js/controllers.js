@@ -32,7 +32,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
         
         .$promise.then(function (result) {
            $rootScope.$broadcast('neo4j_result', result);
-           $rootScope.loading = false;
+           // $rootScope.loading = false;
         });
     }
     
@@ -42,8 +42,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
 app_controllers.controller('AppCtrl', ['$scope', '$interval', function ($scope, $interval) {
     
     // Class for managing ThreeJS interaction
-     var env = new THREE.Env( );
-    
+    var env = new THREE.Env( );
     var keyframe_hash = {};
     
     // Triggered when neo4j_result is returned
@@ -54,16 +53,23 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', function ($scope, 
         keyframe_hash = {};
         $scope.endTime = 0;
         
-        // Generate a hash that timer can call as needed to trigger events
-         result.keyframes.forEach(function(keyframe){
+        // Generate context buildings and set origin:
+        // execute callback to commence visualization when buildings have loaded
+        env.add_context(result.bbox,  function(){$scope.begin_keyframes(  result.keyframes );} );
+     });
+     
+     $scope.begin_keyframes = function( keyframes ){
+     
+    // Generate a hash that timer can call as needed to trigger events
+      keyframes.forEach(function(keyframe){
             keyframe_hash[keyframe.start] = keyframe;
         });
-  
+        $scope.loading = false;
         // Initialize timer  
         $scope.endTime = $scope.get_endTime(keyframe_hash);
         $scope.resetInterval();
         $scope.startInterval();
-     });
+     }
      
      // Utility function that sends a keyframe to env 
      $scope.execute_keyframe = function ( keyframe ) {

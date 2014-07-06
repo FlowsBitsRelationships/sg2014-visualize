@@ -1,9 +1,10 @@
-THREE.Env = function (  ) {
+THREE.Env = function ( ) {
     var self = this;
     
     self.objects = {};
     object_lookup_table = { node: {}, relationship: {} };
     self.materials = {};
+    
     var cur_tracing_template;
     
     var container;
@@ -130,6 +131,7 @@ THREE.Env = function (  ) {
             cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
             cur_tracing_template.object_lookup_table = object_lookup_table; //  Set lookup table
             
+
            var idx = 0;
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
@@ -150,7 +152,9 @@ THREE.Env = function (  ) {
                 });
             });
         });
-        self.add_tracing_objects( trace_objects, query.tracing_name, duration)
+        
+       self.add_tracing_objects( trace_objects, query.tracing_name, duration);
+        
     };
     
     // Called by add_tracing. Adds threeJS geometry at the appointed time and removes it

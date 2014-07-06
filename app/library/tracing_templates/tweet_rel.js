@@ -21,7 +21,7 @@ var tracing_template = function(){
         geometry.vertices.push( end.position );
 
         var line = new THREE.Line( geometry, material );
-        line.renderDepth = 200;
+        line.renderDepth = 20000;
         
         // Looking up the position on each frame may get choppy...
         var tween = new TWEEN.Tween()

@@ -31,7 +31,7 @@ var tracing_template = function(){
         
         var sphere = new THREE.Mesh(geometry, material);
         sphere.position.set(x, 0, z);
-        sphere.renderDepth = 200;
+        sphere.renderDepth = 20000;
 
          // Animation Methods/Tweens
          

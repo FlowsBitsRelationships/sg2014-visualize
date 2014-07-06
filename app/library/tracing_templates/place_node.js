@@ -38,7 +38,7 @@ var tracing_template = function( ){
         
         sphere = new THREE.Mesh(geometry, self.customMaterial);
         sphere.position.set(x, 0, z);
-        sphere.renderDepth = 200;
+        sphere.renderDepth = 20000;
         
         return sphere;
     }

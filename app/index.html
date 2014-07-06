@@ -49,7 +49,7 @@
                 <input id="loop"  type="submit" value="O" style = "display:inline; float: center; margin-bottom:10px;"  ng-click="resetTimer();"/>
             </ul>
             
-            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1" class="ng-pristine ng-valid" ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
+            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1000" class="ng-pristine ng-valid" ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
         </div>
 
 </div>

@@ -36,16 +36,16 @@ var Timer = function($scope, $interval){
         if ( $scope.time in _keyframe_hash ){
             _keyframe_callback(_keyframe_hash[$scope.time]);
         }
-        var next_time = parseInt($scope.time)+100;
+        var next_time = parseInt($scope.time)+1000;
         // If there is time remaining, update
-        if (next_time < $scope.endTime+1){
-            $scope.time =  parseInt($scope.time)+100;
+        if (next_time < $scope.endTime+1000){
+            $scope.time =  parseInt($scope.time)+1000;
             $scope.updateSlider();
         }
         else{
         $scope.stopTimer();
         }
-        }, 1);
+        }, 1000);
     }
     
     // Pauses _timer_step

@@ -29,7 +29,6 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
     
         $rootScope.loading = true;
         neo4jREST.get({ filename : filename_req , testjson: testjson_req })
-        
         .$promise.then(function (result) {
            $rootScope.$broadcast('neo4j_result', result);
            // $rootScope.loading = false;
@@ -39,14 +38,24 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
 }]);
 
 // AppCtrl is a controller for managing visualization functionality
-app_controllers.controller('AppCtrl', ['$scope', '$interval', function ($scope, $interval) {
+app_controllers.controller('AppCtrl', ['$scope', '$interval',  'elevationService', function ($scope, $interval, elevationService) {
      
-    var env = new THREE.Env(); // Class for managing ThreeJS interaction
+    var env = new THREE.Env( ); // Class for managing ThreeJS interaction
     var timer = new Timer($scope, $interval); // Class for timing visualization
     $scope.time =0;
     $scope.startTime = 0;
     $scope.endTime = 240000;
-    // $scope.sliderStyle is also modified by timer...
+    
+    // Elevation demo - Started implementing this, then realized it belonged on the backend
+    // var set_elevation = function (result){
+        // var heights = [];
+        // for (var key in result.elevationProfile){
+           // heights.push(result.elevationProfile[key]["height"]);
+        // }
+        // console.log(heights);
+    // }
+    // var latLngs = [39.74012,-104.9849,39.7995,-105.7237,39.6404,-106.3736]
+    // elevationService.get({latLngCollection: latLngs.join(",")}).$promise.then(set_elevation);
     
     // Triggered when neo4j_result is returned
     $scope.$on('neo4j_result', function(event, result) {

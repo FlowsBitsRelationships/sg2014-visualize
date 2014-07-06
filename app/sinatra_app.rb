@@ -15,6 +15,16 @@ get '/' do
 	end
 end
 
+get '/elevation' do
+    uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{params[:latLngCollection]}" )
+    req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
+    
+    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+        http.request(req)
+    }
+    
+    return  res.body
+end
 
 get '/neo4jGET' do
 	response.headers['Access-Control-Allow-Origin'] = '*'

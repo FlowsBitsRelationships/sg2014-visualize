@@ -44,9 +44,9 @@
     
         <div class='player'>            
             <ul class="menu">
-                <input id="play"  type="submit" value=">" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="startInterval();"/>
-                <input id="pause"  type="submit" value="| |" style =  "display:inline; float: center; margin-bottom:10px;"  ng-click="stopInterval();"/>
-                <input id="loop"  type="submit" value="O" style = "display:inline; float: center; margin-bottom:10px;"  ng-click="resetInterval();"/>
+                <input id="play"  type="submit" value=">" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="startTimer();"/>
+                <input id="pause"  type="submit" value="| |" style =  "display:inline; float: center; margin-bottom:10px;"  ng-click="stopTimer();"/>
+                <input id="loop"  type="submit" value="O" style = "display:inline; float: center; margin-bottom:10px;"  ng-click="resetTimer();"/>
             </ul>
             
             <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1" class="ng-pristine ng-valid" ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
@@ -65,11 +65,12 @@
     <script src="bower_components/tween.js/src/Tween.js"></script>
     <script src="bower_components/osmthree/bin/osmthree.js"></script>
     
+      <script src="library/tracing_templates/as_tracing_template.js"></script>
+      
     <script src="js/utils/orbitControls.js"></script>
     <script src="js/utils/threeEnv.js"></script>
+    <script src="js/utils/timer.js"></script>
     
-    <script src="library/tracing_templates/as_tracing_template.js"></script>
-
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>

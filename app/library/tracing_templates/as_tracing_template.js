@@ -8,8 +8,6 @@ var as_tracing_template = function() {
     
     this.set_origin = function(lon, lat){
         self.origin = self.lonLatToScene(lon, lat);
-        console.log("origin set to:");
-        console.log(self.origin);
     }
     
 	this.lonLatToWorld = function ( lon, lat ) {
@@ -28,8 +26,6 @@ var as_tracing_template = function() {
 
     this.lonLatToScene = function( lon, lat ) {
 		var point = self.lonLatToWorld( lon, lat );
-        console.log("");
-         console.log(point);
 		return new THREE.Vector2( point[0] - self.origin.x, point[1] - self.origin.y );
 	}
   

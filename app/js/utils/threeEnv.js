@@ -4,6 +4,7 @@ THREE.Env = function (  ) {
     self.objects = {};
     object_lookup_table = { node: {}, relationship: {} };
     self.materials = {};
+    var cur_tracing_template;
     
     var container;
     var tooltip;
@@ -18,7 +19,7 @@ THREE.Env = function (  ) {
     material,
     cube;
     
-    var cur_tracing_template;
+    // var cur_tracing_template;
     var plane;
     var color = new THREE.Color("rgb(42,42,42)");
     
@@ -45,10 +46,11 @@ THREE.Env = function (  ) {
         
 		camera.position.z = 400;
 		camera.position.x = -400;
-		camera.position.y = 400;
+		camera.position.y = 800;
+       
         
         controls = new THREE.OrbitControls(camera, container);
-        
+        controls.target = new THREE.Vector3(2500,0,-2500);
         
         self.materials.lambert = new THREE.MeshLambertMaterial({ 
             color:"rgb(255,112,255)", 
@@ -76,15 +78,15 @@ THREE.Env = function (  ) {
             transparent: true 
         });
         
-        plane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000, 100, 100), new THREE.MeshBasicMaterial({
+        plane = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000, 100, 100), new THREE.MeshBasicMaterial({
                     color : 0x000000,
                     opacity : 0.25,
                     transparent : true,
                     wireframe : true
                 }));
         plane.visible = true;
-        plane.position.x = 10000/2;
-        plane.position.z = -10000/2;
+        plane.position.x = 5000/2;
+        plane.position.z = -5000/2;
         plane.rotation.x = Math.PI / 2;
         scene.add(plane);
         
@@ -119,14 +121,14 @@ THREE.Env = function (  ) {
         
         $.getScript( "library/tracing_templates/"+query.tracing_template_name+".js", function(script) {
             
-            // 'template_constructor' is the name of the main function in each tracing template that gets loaded
-            
+            // 'tracing_template' is the name of the main function in each tracing template that gets loaded
+            // 'as_tracing_template' is a mixin of functionality shared by multiple templates
+            as_tracing_template.call(tracing_template.prototype); 
            cur_tracing_template = new tracing_template( );
            
-           //  Mix in globals and common functions shared by tracing templates
-           as_tracing_template.call(cur_tracing_template); 
-           cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
-           cur_tracing_template.object_lookup_table = object_lookup_table; //  Set lookup table
+           //  Set 'class variables'
+            cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
+            cur_tracing_template.object_lookup_table = object_lookup_table; //  Set lookup table
             
            var idx = 0;
             query.queryresult.data.forEach(function(result_chunk){
@@ -187,8 +189,18 @@ THREE.Env = function (  ) {
                  scene.remove(obj);
             });
         }
-        // object_lookup_table
+        var children = scene.children;
+        for(var i = children.length-1;i>=0;i--){
+            var child = children[i];
+            if (child.geometry instanceof  THREE.PlaneGeometry || child instanceof THREE.PointLight){
+            }
+            else{
+                    scene.remove(child);
+                } 
+            };
+        // object_lookup_table = {};
     }
+    
     
     // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
     this.display_tooltip = function(text, location){

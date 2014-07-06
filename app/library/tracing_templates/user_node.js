@@ -1,63 +1,74 @@
-var tracing_template = function(trace_json, object_lookup_table, duration, idx){
-
+var tracing_template = function(){
+    
     var self = this;
     
-     self.text = trace_json.data.text;
-     var x = (trace_json.data.lat-22.28)*1000;
-     var y = (trace_json.data.lon-114.15)*1000;
+    var lon,
+    lat,
+    location,
+    x,
+    z,
+    geometry,
+    material;
     
-    var geometry = new THREE.SphereGeometry(1,1,1 );
-    
-    var material = new THREE.MeshLambertMaterial({ 
+    geometry = new THREE.SphereGeometry(50,50,50 );
+
+    material = new THREE.MeshLambertMaterial({ 
         color:  "rgb(255,112,255)", 
         transparent: true, 
-        opacity: 0.2,
+        opacity: 1,
         shading: THREE.FlatShading, 
         vertexColors: THREE.VertexColors 
     });
-    
-    var sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(x, y, 0);
-    sphere.renderDepth = 200;
-
-     // Animation Methods/Tweens
-     
-    var tweenHead = new TWEEN.Tween({  z:  0 }).to({ z:  8 }, 3000)
-     .easing(TWEEN.Easing.Elastic.InOut)
-    .onUpdate(function(){ 
-            sphere.position.z = this.z;
-        })
-    .onComplete(function() {
-       this.z = 0; // reset tweening variable
-    });
-
-    var tweenBack = new TWEEN.Tween({ z:  8 }).to({ z:  -16 }, 3000)
-    .easing(TWEEN.Easing.Elastic.InOut)
-    .onUpdate(function(){ 
-           sphere.position.z = this.z;
-        })
-     .onComplete(function() {
-       this.z = 8; // reset tweening variable
-    });
-    
-    var tweenLast = new TWEEN.Tween({ z:  -16 }).to({ z:  0 }, 3000)
-    .easing(TWEEN.Easing.Elastic.InOut)
-    .onUpdate(function(){ 
-           sphere.position.z = this.z;
-        })
-     .onComplete(function() {
-       this.z = -16; // reset tweening variable
-    });
         
-    tweenHead.chain(tweenBack);
-    tweenBack.chain(tweenLast);
-    tweenLast.chain(tweenHead);
-    tweenHead.start();
-    
-    // Interaction Methods
-    sphere.get_metadata = function(){
-        return  trace_json.data.content;
+    this.get_trace = function(trace_json, duration, idx){
+            
+        lon = Number(trace_json.data.lon);
+        lat = Number(trace_json.data.lat);
+        
+        location = self.lonLatToScene( lon, lat );
+        x = location.x;
+        z = location.y;
+        
+        var sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(x, 0, z);
+        sphere.renderDepth = 200;
+
+         // Animation Methods/Tweens
+         
+        var tweenHead = new TWEEN.Tween({  y:  0 }).to({ y:  80 }, 2000)
+         .easing(TWEEN.Easing.Elastic.InOut)
+        .onUpdate(function(){ 
+                sphere.position.y = this.y;
+            })
+        .onComplete(function() {
+           this.y = 0; // reset tweening variable
+        });
+
+        var tweenBack = new TWEEN.Tween({ y:  80 }).to({ y:  -160 }, 2000)
+        .easing(TWEEN.Easing.Elastic.InOut)
+        .onUpdate(function(){ 
+               sphere.position.y = this.y;
+            })
+         .onComplete(function() {
+           this.y = 80; // reset tweening variable
+        });
+        
+        var tweenLast = new TWEEN.Tween({ y:  -160 }).to({ y:  0 }, 2000)
+        .easing(TWEEN.Easing.Elastic.InOut)
+        .onUpdate(function(){ 
+               sphere.position.y = this.y;
+            })
+         .onComplete(function() {
+           this.y = -160; // reset tweening variable
+        });
+            
+        tweenHead.chain(tweenBack);
+        tweenBack.chain(tweenLast);
+        tweenLast.chain(tweenHead);
+        tweenHead.start();
+        
+        return sphere;
     }
     
-    return sphere
+    return this;
 }

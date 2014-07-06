@@ -40,97 +40,38 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
 
 // AppCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', '$interval', function ($scope, $interval) {
-    
-    // Class for managing ThreeJS interaction
-    var env = new THREE.Env( );
-    var keyframe_hash = {};
+     
+    var env = new THREE.Env(); // Class for managing ThreeJS interaction
+    var timer = new Timer($scope, $interval); // Class for timing visualization
+    $scope.time =0;
+    $scope.startTime = 0;
+    $scope.endTime = 240000;
+    // $scope.sliderStyle is also modified by timer...
     
     // Triggered when neo4j_result is returned
     $scope.$on('neo4j_result', function(event, result) {
     
-        // Reset
+        // Reset scene, clear keyframes
         env.clear_scene();
-        keyframe_hash = {};
-        $scope.endTime = 0;
-        
-        // Generate context buildings and set origin:
-        // execute callback to commence visualization when buildings have loaded
+        // Generate context buildings and set origin, then call callback:
         env.add_context(result.bbox,  function(){$scope.begin_keyframes(  result.keyframes );} );
+        
      });
      
+     // Starts visualization
      $scope.begin_keyframes = function( keyframes ){
-     
-    // Generate a hash that timer can call as needed to trigger events
-      keyframes.forEach(function(keyframe){
-            keyframe_hash[keyframe.start] = keyframe;
-        });
-        $scope.loading = false;
-        // Initialize timer  
-        $scope.endTime = $scope.get_endTime(keyframe_hash);
-        $scope.resetInterval();
-        $scope.startInterval();
-     }
-     
-     // Utility function that sends a keyframe to env 
-     $scope.execute_keyframe = function ( keyframe ) {
+        
+         // Callback called by Timer when a keyframe occurs
+         // TODO: Add a separate keyframe for the removal of the objects.
+        var keyframe_callback = function ( keyframe ) {
              keyframe.queries.forEach(function(query){
                 env.add_tracing(query, keyframe.duration);
             });
-     }
-     
-    // *****************Timer Functionality****************
-    $scope.time =0;
-    $scope.startTime = 0;
-    $scope.endTime = 240000;
-    
-    var timer = null;
-    
-    // Resets timer to beginning
-    $scope.resetInterval = function(){
-       $interval.cancel(timer);
-        $scope.time=0;
+        }
         
-    }
-    
-     // Begins/Resumes advancing timer
-    $scope.startInterval = function(){
-    env.clear_scene();
-    timer = $interval(function(){
-        // If there is a keyframe set to occur at this time, fire it off
-        if ( $scope.time in keyframe_hash ){
-            $scope.execute_keyframe(keyframe_hash[$scope.time]);
-        }
-        var next_time = parseInt($scope.time)+10;
-        // If there is time remaining, update
-        if (next_time < $scope.endTime+1){
-            $scope.time =  parseInt($scope.time)+10;
-            $scope.updateSlider();
-        }
-        else{
-        $scope.stopInterval();
-        env.clear_scene();
-        }
-        }, 1);
-    }
-    
-    // Pauses timer
-    $scope.stopInterval = function(){
-        $interval.cancel(timer);
-    }
-	
-    // Updates millisecond readout on timer
-    $scope.updateSlider = function() {
-        var timePercentage =  (($scope.time - $scope.startTime)/($scope.endTime - $scope.startTime)*100)+"%"
-        $scope.sliderStyle = { 'margin-left' :timePercentage};
-    };
-	
-    $scope.get_endTime = function (keyframe_hash){
-        var endTime = 0;
-        for ( var key in  keyframe_hash){
-            var time = keyframe_hash[key].start+keyframe_hash[key].duration;
-            if( time > endTime ){ endTime = time;}
-        }
-        return endTime
-    }
+        $scope.loading = false; // Hide 'loading'' text
+        timer.start( keyframes, keyframe_callback );// Run visualization
+        
+     }
     
   }]);

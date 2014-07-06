@@ -2,6 +2,13 @@ var tracing_template = function( ){
     
     var self = this;
     
+    var lon,
+    lat,
+    location,
+    x,
+    z,
+    geometry;
+    
     this.customMaterial = new THREE.ShaderMaterial( 
         {
             uniforms: 
@@ -16,18 +23,18 @@ var tracing_template = function( ){
             side: THREE.FrontSide,
             blending: THREE.AdditiveBlending,
             transparent: true
-        }   );
+        });
         
     this.get_trace = function(trace_json, duration){
-        var lon = Number(trace_json.data.lon);
-        var lat = Number(trace_json.data.lat);
+        lon = Number(trace_json.data.lon);
+        lat = Number(trace_json.data.lat);
         
-        var location = self.lonLatToScene( lon, lat );
-         var x = location.x;
-         var z = location.y;
+        location = self.lonLatToScene( lon, lat );
+        x = location.x;
+        z = location.y;
 
         
-        var geometry = new THREE.SphereGeometry( 780, 32, 32 );
+        geometry = new THREE.SphereGeometry( 380, 32, 32 );
         
         sphere = new THREE.Mesh(geometry, self.customMaterial);
         sphere.position.set(x, 0, z);
@@ -36,5 +43,5 @@ var tracing_template = function( ){
         return sphere;
     }
     
-    return this
+    return this;
 }

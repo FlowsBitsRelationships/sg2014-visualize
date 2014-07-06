@@ -19,7 +19,7 @@
                             ]
         },
         {"description": "who mentioned Kowloon.",
-        "start": 2000,
+        "start": 4000,
         "duration": 4000,
         "queries": [
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return r as rels",

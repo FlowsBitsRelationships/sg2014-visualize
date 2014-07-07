@@ -19,8 +19,8 @@ app
 
 This is a framework for keyframed, interactive urban visualization. It is also intended to provide a straightforward mechanism for modifying the geometry, sequencing, and interactivity of the visualization that abstracts any of the complexity of events/api interaction in javascript.
 
-Workshop participants will develop vis_config files, which define keyframes and include some additional general info about the visualization (including the geographical scope of the visualization).
-Workshop participants will also develop tracing_templats, which are the nouns/verbs of the visualization.
+Workshop participants will develop vis_config .JSON files, which define keyframes and include some additional general info about the visualization (including the geographical scope of the visualization).
+Workshop participants will also develop tracing_templates, short .JS scripts that generate and animate threejs geometry, and also include methods for interaction.
 
 A vis_config file is mostly a list of keyframes. Each keyframe tells the app to take the ouput of a given neo4j query and visualize each entry using the specified tracing_template.
  it looks like this:

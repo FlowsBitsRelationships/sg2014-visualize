@@ -60,3 +60,4 @@ A vis_config file is mostly a list of keyframes. Each keyframe tells the app to 
      ]
  }
 ```
+In the UI, when the user hits 'run', the keyframe displayed in the console will be inserted into an empty vis_config file and then visualized. When the user hits 'load', the vis_config file named in the text box is visualized.

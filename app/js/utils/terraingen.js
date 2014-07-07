@@ -1,6 +1,6 @@
 var TerrainGen = function(){
+
     var self = this;
-    
     
     this.origin = new THREE.Vector2( 0, 0 );
     
@@ -14,19 +14,21 @@ var TerrainGen = function(){
         });
     
     this.generate = function( x_step, z_step, bbox, scene, callback ){
-    
-        self.origin = self.lonLatToScene(bbox[0], bbox[1]);
-         
+             
          var min,
             max,
             geometry;
             
+        // Get the origin XY coordinates
+        self.origin = self.lonLatToScene(bbox[0], bbox[1]);
+            
+        // Get the bounds XY coordinates    
         min = self.lonLatToScene(bbox[0], bbox[1]);
         max = self.lonLatToScene(bbox[2], bbox[3]);
 
         geometry = new THREE.PlaneGeometry(max.x, max.y, x_step, z_step);
         
-        // add_plane
+        // Add plane
         plane = new THREE.Mesh( geometry,  this.material );
         plane.visible = true;
         plane.position.x = -max.y/2;
@@ -34,18 +36,16 @@ var TerrainGen = function(){
         plane.rotation.x = -Math.PI / 2;
         plane.rotation.z= -Math.PI / 2;
         
-        
         self.set_Elevations( plane, scene, callback );
-        
-        self.origin = new THREE.Vector2( 0, 0 );
     }
     
     //  ******************** Helpers ********************
     
+    // Calls the elevation API to get heights of terrain vertices, sets them and adds the object to the scene
     this.set_Elevations = function( plane, scene, callback ){
-        // Array of longitudes and latitudes to be sent to mapquest elevation API
+
         var vertex_latLons = [];  
-        
+
         // Convert all geometry vertices to longitude and latitude
         for (var i = 0; i < plane.geometry.vertices.length; i++) { 
             var lonLat = self.sceneToLonLat(plane.geometry.vertices[i]);
@@ -64,6 +64,9 @@ var TerrainGen = function(){
             }
             
             scene.add(plane);
+            
+            // Cleanup
+            self.origin = new THREE.Vector2( 0, 0 );
             callback.call();
         });
         

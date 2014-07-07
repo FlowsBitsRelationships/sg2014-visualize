@@ -116,8 +116,9 @@ THREE.Env = function ( ) {
     }
     
     // Called externally, adds terrain
-    this.add_terrain = function(bbox){
+    this.add_terrain = function(bbox, callback){
         console.log('adding terrain!');
+        callback.call();
     }
     
     // Called externally, turns a query_response into threeJS geometry

@@ -3,6 +3,18 @@ var TerrainGen = function($scope, $interval){
     
     this.origin = new THREE.Vector2( 0, 0 );
     
+    plane = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000, 100, 100), new THREE.MeshBasicMaterial({
+            color : 0x000000,
+            opacity : 0.25,
+            transparent : true,
+            wireframe : true
+        }));
+    plane.visible = true;
+    plane.position.x = 5000/2;
+    plane.position.z = -5000/2;
+    plane.rotation.x = Math.PI / 2;
+    scene.add(plane);
+        
     this.set_origin = function(lon, lat){
         self.origin = self.lonLatToScene(lon, lat);
     }

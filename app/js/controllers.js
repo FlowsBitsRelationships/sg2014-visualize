@@ -49,10 +49,6 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         
         env = new THREE.Env( ), // Class for managing ThreeJS interaction
         timer = new Timer($scope, $interval); // Class for timing visualization
-
-        $scope.time =0;
-        $scope.startTime = 0;
-        $scope.endTime = 240000;
         
     // Triggered when neo4j_result is returned (must be blocking, as it contains bbox and other config info)
     // TO-DO: If we split up the request for the vis_config and the request to neo4J, 
@@ -64,9 +60,9 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         // Resolve neo4j promise
         deferred_neo4J.resolve(result);
         
-       env.add_context( bbox, function(){ deferred_osmthree.resolve('buildings added'); });
+       env.add_context( result.bbox, function(){ deferred_osmthree.resolve('buildings added'); });
         
-        env.add_terrain( bbox , function(){ deferred_terraingen.resolve('terrain added'); });
+        env.add_terrain( result.bbox , function(){ deferred_terraingen.resolve('terrain added'); });
              
          // When all promises are resolved
         $q.all({ first: deferred_neo4J.promise , second: deferred_osmthree.promise, third: deferred_terraingen.promise })

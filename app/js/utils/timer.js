@@ -1,9 +1,16 @@
+// FIXME: Timer needs to be more self contained (too dependent on external variables assigned outside the constructor)
+// Timer should generate the correct timer html and assign all variables to the scope when it is constructed.
+// In case multiple timers are desired...this may at some point benefit from redesign as an angular service that can be passed around
 var Timer = function($scope, $interval){
     var _self = this;
     var _keyframe_hash,
      _keyframe_callback,
     _timer_step = null;
     
+    $scope.time =0;
+    $scope.startTime = 0;
+    $scope.endTime = 240000;
+        
     this.start = function( keyframes, keyframe_callback){
         _self = this;
         _keyframe_hash = _self.hashify_keyframes( keyframes );

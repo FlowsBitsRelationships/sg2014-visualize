@@ -3,12 +3,17 @@ app
 
 ### Organization
 
-/css - styles (and angular css animations)                                        
-/img - not used
-/js - standard angular js files (some not used). most business logic is in 'controllers.js' (and some of this should probably be moved to a directive)
-/js/utils - various scripts used by the controllers. (should probably be externalized into node modules that are installed with bower)
-/library - contains vis_config files
-/library/tracing_templates - contains tracing_templates
+- **/css** styles (and angular css animations)                                        
+- **/img** not used
+- **/js** standard angular js files (some not used)
+- **/js/utils** various scripts used by the controllers
+- **/library** contains vis_config files
+- **/library/tracing_templates** contains tracing_templates
+
+### TODO: 
+
+- most business logic is in 'controllers.js' and some of this should probably be moved to a directive
+- the packages in utils should probably be externalized into node modules that are installed with bower
 
 ### Usage
 

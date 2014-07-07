@@ -12,6 +12,7 @@ THREE.Env = function ( ) {
     
     var controls,
     origin,
+    terraingen,
     scene,
     camera,
     renderer,
@@ -89,14 +90,18 @@ THREE.Env = function ( ) {
         plane.position.x = 5000/2;
         plane.position.z = -5000/2;
         plane.rotation.x = Math.PI / 2;
+        plane.name = "xz-plane";
         scene.add(plane);
+        
+        // create terrain generator
+        terraingen = new TerrainGen();
         
         // create a point light
         var pointLight = new THREE.PointLight(0xFFFFFF);
 
         // set its position
         pointLight.position.x = 10;
-        pointLight.position.y = 50;
+        pointLight.position.y = 150;
         pointLight.position.z = 130;
 
         // add to the scene
@@ -117,8 +122,7 @@ THREE.Env = function ( ) {
     
     // Called externally, adds terrain
     this.add_terrain = function(bbox, callback){
-        console.log('adding terrain!');
-        callback.call();
+        var terrain = terraingen.generate( 18, 18, bbox, scene, callback ) // x_step, z_step, bbox of latLons, callback on completion
     }
     
     // Called externally, turns a query_response into threeJS geometry
@@ -201,7 +205,7 @@ THREE.Env = function ( ) {
         var children = scene.children;
         for(var i = children.length-1;i>=0;i--){
             var child = children[i];
-            if (child.geometry instanceof  THREE.PlaneGeometry || child instanceof THREE.PointLight){
+            if (child.name === "xz-plane" || child instanceof THREE.PointLight){
             }
             else{
                     scene.remove(child);

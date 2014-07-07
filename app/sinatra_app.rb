@@ -15,7 +15,7 @@ get '/' do
 	end
 end
 
-get '/elevation' do
+post '/elevation' do
     uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{params[:latLngCollection]}" )
     req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
     

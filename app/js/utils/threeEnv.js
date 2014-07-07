@@ -113,7 +113,11 @@ THREE.Env = function ( ) {
     this.add_context = function(bbox, callback){
         origin = [bbox[0] , bbox[1] ];
         OSM3.makeBuildings( scene, bbox, { scale: 1, onComplete: callback } );
-        // TODO: Keep track of building objects + clear them when a new visualization starts
+    }
+    
+    // Called externally, adds terrain
+    this.add_terrain = function(bbox){
+        console.log('adding terrain!');
     }
     
     // Called externally, turns a query_response into threeJS geometry

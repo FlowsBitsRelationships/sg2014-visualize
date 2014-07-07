@@ -52,4 +52,15 @@ var TerrainGen = function($scope, $interval){
         // <<PSEUDOCODE
     }
     
+    // Elevation demo - Started implementing this, then realized it belonged on the backend
+    // var set_elevation = function (result){
+        // var heights = [];
+        // for (var key in result.elevationProfile){
+           // heights.push(result.elevationProfile[key]["height"]);
+        // }
+        // console.log(heights);
+    // }
+    // var latLngs = [39.74012,-104.9849,39.7995,-105.7237,39.6404,-106.3736]
+    // elevationService.get({latLngCollection: latLngs.join(",")}).$promise.then(set_elevation);
+    
 }

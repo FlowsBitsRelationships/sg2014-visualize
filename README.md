@@ -4,7 +4,7 @@ sg2014-visualize
 Angular app for data visualization.
 
 ### Set the Environment Variables
-Set environment variables DB_USERNAME and DB_PASSWORD
+Set environment variables DB_USERNAME, DB_PASSWORD, and MQ_PASSWORD
 
 ### Install Dependencies
 

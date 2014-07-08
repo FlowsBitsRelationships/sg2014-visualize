@@ -32,9 +32,9 @@
          <div class = "control_body" ng-show="showMenu" >
             <textarea id = "query" cols="85" rows="12" ng-model="testjson" style = "margin-bottom:10px;" ></textarea>
             <ul class="menu">
-                <input id="query" type="submit" value="RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>
-                <input id="load" type="submit" value="LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( vis_config, null );"/>
-                 <input id="load" type="text" ng-model="vis_config">
+                <input id="query" type="submit" value="&#x21B3; RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>
+                <input id="load" type="text" ng-model="vis_config">
+                <input id="load" type="submit" value="&#x2192; LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( vis_config, null );"/>
                 <span id="loading" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-show="loading">loading...</span>
             </ul>
         </div>
@@ -47,9 +47,10 @@
                 <input id="play"  type="submit" value=">" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="startTimer();"/>
                 <input id="pause"  type="submit" value="| |" style =  "display:inline; float: center; margin-bottom:10px;"  ng-click="stopTimer();"/>
                 <input id="loop"  type="submit" value="O" style = "display:inline; float: center; margin-bottom:10px;"  ng-click="resetTimer();"/>
+               <span id="description" class="caption" style = "float: right;margin-bottom:10px;" ng-bind="description"></span>
             </ul>
             
-            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1000" class="ng-pristine ng-valid" ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
+            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1000"  ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
         </div>
 
 </div>

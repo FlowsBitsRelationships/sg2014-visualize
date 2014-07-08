@@ -12,7 +12,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
     // Model variable for test json
    $rootScope.testjson = JSON.stringify(
         
-         {"description": "Show Kowloon",
+         {"description": "This is Kowloon...",
         "start": 1000,
         "duration": 5000,
         "queries": [
@@ -50,6 +50,8 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         env = new THREE.Env( ), // Class for managing ThreeJS interaction
         timer = new Timer($scope, $interval); // Class for timing visualization
         
+        $scope.description = "[ Hit run to begin trying things out! ]";
+        
     // Triggered when neo4j_result is returned (must be blocking, as it contains bbox and other config info)
     // TO-DO: If we split up the request for the vis_config and the request to neo4J, 
     // the queries to neo4j could happen concurrently with the terrain and building generation. This would reduce the loading time....
@@ -60,7 +62,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         // Resolve neo4j promise
         deferred_neo4J.resolve(result);
         
-       env.add_context( result.bbox, function(){ deferred_osmthree.resolve('buildings added'); });
+       env.add_buildings( result.bbox, function(){ deferred_osmthree.resolve('buildings added'); });
         
         env.add_terrain( result.bbox , function(){ deferred_terraingen.resolve('terrain added'); });
              
@@ -82,6 +84,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
      $scope.begin_keyframes = function( keyframes ){
          // Callback called by Timer when a keyframe occurs
         var keyframe_callback = function ( keyframe ) {
+            $scope.description = "[ "+keyframe.description+" ]";
              keyframe.queries.forEach(function(query){
                 env.add_tracing(query, keyframe.duration);
             });

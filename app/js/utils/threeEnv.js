@@ -25,10 +25,6 @@ THREE.Env = function ( ) {
     var plane;
     var color = new THREE.Color("rgb(42,42,42)");
     
-    var mouse = new THREE.Vector2(),
-    offset = new THREE.Vector3(),
-    INTERSECTED, SELECTED;
-            
     // Initializes threeJS stuff
     this.init = function ( ) {
     
@@ -215,83 +211,12 @@ THREE.Env = function ( ) {
         // object_lookup_table = {};
     }
     
-    
-    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
-    this.display_tooltip = function(text, location){
-        tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerHTML = text;
-        tooltip.style.top = location.y + 'px';
-        tooltip.style.left = location.x + 'px';
-        document.body.appendChild(tooltip);
-    }
-    
-    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
-    this.hide_tooltip = function(){
-        if (tooltip != undefined){
-            document.body.removeChild(tooltip);
-            console.log("removed");
-        }
-    }
-    
     // **** ThreeJS Helper Functions***
-    
-    // BORROWED FROM: http://mrdoob.github.io/three.js/examples/webgl_interactive_draggablecubes.html
-    
     this.onWindowResize = function() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
 
         renderer.setSize( window.innerWidth, window.innerHeight );
-    }
-    
-    // TODO: FIXME to iterate over all tracings, generalize to take a callback - NOT USED
-    this.onDocumentMouseDown = function( event ) {
-
-        event.preventDefault();
-
-        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
-        projector.unprojectVector( vector, camera );
-
-        var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
-        
-        var intersects = raycaster.intersectObjects( self.objects );
-
-        if ( intersects.length > 0 ) {
-            controls.enabled = false;
-            SELECTED = intersects[ 0 ].object;
-            var intersects = raycaster.intersectObject( plane );
-            offset.copy( intersects[ 0 ].point ).sub( plane.position );
-            container.style.cursor = 'move';
-        }
-        
-    }
-
-    this.onDocumentMouseUp = function( event ) {
-
-        event.preventDefault();
-        controls.enabled = true;
-
-        if ( INTERSECTED ) {
-            plane.position.copy( INTERSECTED.position );
-            SELECTED = null;
-            
-            // Find location on canvas and show tweet as overlay
-            var pos = this.toXYCoords(INTERSECTED.position);
-            var text = INTERSECTED.get_metadata();
-            this.hide_tooltip();
-            this.display_tooltip(text, pos);
-        }
-
-        container.style.cursor = 'auto';
-    }
-    
-    // Projects 3D position to x,y position on canvas
-    this.toXYCoords = function (pos) {
-        var vector = projector.projectVector(pos.clone(), camera);
-        vector.x = (vector.x + 1)/2 * window.innerWidth;
-        vector.y = -(vector.y - 1)/2 * window.innerHeight;
-        return vector;
     }
     
     this.init();

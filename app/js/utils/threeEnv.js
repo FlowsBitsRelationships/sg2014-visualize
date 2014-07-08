@@ -1,28 +1,24 @@
 THREE.Env = function ( ) {
-    var self = this;
-    
-    self.objects = {};
-    object_lookup_table = { node: {}, relationship: {} };
-    self.materials = {};
-    
-    var cur_tracing_template;
-    
-    var container;
-    var tooltip;
-    
-    var controls,
+
+    var self = this,
+    cur_tracing_template,
+    container,
+    controls,
     origin,
     terraingen,
+    selection_manager,
     scene,
     camera,
     renderer,
-    projector,
     geometry,
     material,
+    plane,
     cube;
     
-    // var cur_tracing_template;
-    var plane;
+    self.objects = {};
+    self.object_lookup_table = { node: {}, relationship: {} };
+    self.materials = {};
+    
     var color = new THREE.Color("rgb(42,42,42)");
     
     // Initializes threeJS stuff
@@ -30,12 +26,9 @@ THREE.Env = function ( ) {
     
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000);
-        
         renderer = new THREE.WebGLRenderer( {alpha: true,  antialias: true});
-        projector = new THREE.Projector();
         
         container = document.createElement('div');
-        
         document.body.appendChild(container);
     
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -91,6 +84,9 @@ THREE.Env = function ( ) {
         
         // create terrain generator
         terraingen = new TerrainGen();
+
+        // create selection manager
+        selection_manager = new THREE.SelectionManager( camera, controls, plane, scene, self.object_lookup_table );
         
         // create a point light
         var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -103,9 +99,9 @@ THREE.Env = function ( ) {
         // add to the scene
         scene.add(pointLight);
         
-        renderer.domElement.addEventListener('mousemove', this.onDocumentMouseMove, false);
-        renderer.domElement.addEventListener('mousedown', this.onDocumentMouseDown, false);
-        renderer.domElement.addEventListener('mouseup', this.onDocumentMouseUp, false);
+        renderer.domElement.addEventListener('mousemove', selection_manager.onDocumentMouseMove, false);
+        renderer.domElement.addEventListener('mousedown', selection_manager.onDocumentMouseDown, false);
+        renderer.domElement.addEventListener('mouseup', selection_manager.onDocumentMouseUp, false);
 
         window.addEventListener('resize', this.onWindowResize, false);
     }
@@ -134,26 +130,27 @@ THREE.Env = function ( ) {
            
            //  Set 'class variables'
             cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
-            cur_tracing_template.object_lookup_table = object_lookup_table; //  Set lookup table
-            
-
-           var idx = 0;
+            cur_tracing_template.object_lookup_table = self.object_lookup_table; //  Set lookup table
+    
             query.queryresult.data.forEach(function(result_chunk){
                 result_chunk.forEach(function(trace_chunk){
 
-                    // Generate the object from the template
-                    var trace_object = cur_tracing_template.get_trace( trace_chunk, duration, idx);
-                    
                     // split up id property into 'type' and 'id'
                     var id_url = trace_chunk.self.split("/");
                     var type = id_url[id_url.length-2]; // node or relationship
-                    var id = id_url[id_url.length-1]; // id
+                    var neoid = id_url[id_url.length-1]; // id
                     
-                    // Add the object to the lookup table to future reference by other tracings,
-                    object_lookup_table[type][id] = trace_object; 
+                    // Generate the object from the template
+                    var trace_object = cur_tracing_template.get_trace( trace_chunk, duration);
+                    
+                    //  Add the neoid and type to the object and add the object to the lookup table for future reference by other tracings,
+                    trace_object.neoid = neoid;
+                    trace_object.type = type;
+                    self.object_lookup_table[type][neoid] = trace_object; 
+                    
                      // Keep track of this tracing's objects, for removal later
                     trace_objects.push(trace_object);
-                    idx++
+                    
                 });
             });
         });

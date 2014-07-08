@@ -39,9 +39,14 @@ var tracing_template = function( ){
         sphere = new THREE.Mesh(geometry, self.customMaterial);
         sphere.position.set(x, 0, z);
         sphere.renderDepth = 20000;
+            
+        sphere.callback = function( screenpos ){
+            tooltip = self.display_tooltip(trace_json.data.raw_tags, screenpos);
+        }
         
         return sphere;
     }
+
     
     return this;
 }

@@ -5,6 +5,7 @@ var as_tracing_template = function() {
     var self = this;
     this.origin = new THREE.Vector2( 0, 0 );
     this.object_lookup_table;
+    // var tooltip;
     
     this.set_origin = function(lon, lat){
         self.origin = self.lonLatToScene(lon, lat);
@@ -23,28 +24,23 @@ var as_tracing_template = function() {
 		return [ x, y ]
 	}
 
-
     this.lonLatToScene = function( lon, lat ) {
 		var point = self.lonLatToWorld( lon, lat );
 		return new THREE.Vector2( point[0] - self.origin.x, point[1] - self.origin.y );
 	}
     
-    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
     this.display_tooltip = function(text, location){
+        var tooltip;
         tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
         tooltip.innerHTML = text;
         tooltip.style.top = location.y + 'px';
         tooltip.style.left = location.x + 'px';
-        document.body.appendChild(tooltip);
-    }
-    
-    // FIXME: Onclick functionality should be defined by each tracing_template - NOT USED
-    this.hide_tooltip = function(){
-        if (tooltip != undefined){
-            document.body.removeChild(tooltip);
-            console.log("removed");
-        }
+        
+        $('body').append(tooltip);
+        setTimeout(function(){
+            $(tooltip).remove();
+        }, 3000);
     }
     
 };

@@ -4,13 +4,13 @@ var tracing_template = function(){
     
     this.get_trace = function(trace_json, duration){
     
-        var start_id_url = trace_json["start"].split("/");
-        var start_id = start_id_url[start_id_url.length-1];
-        var start = self.object_lookup_table.node[start_id];
+        var start_neoid_url = trace_json["start"].split("/");
+        var start_neoid = start_neoid_url[start_neoid_url.length-1];
+        var start = self.object_lookup_table.node[start_neoid];
         
-        var end_id_url = trace_json['end'].split("/");
-        var end_id = end_id_url[end_id_url.length-1];
-        var end = self.object_lookup_table.node[end_id];
+        var end_neoid_url = trace_json['end'].split("/");
+        var end_neoid = end_neoid_url[end_neoid_url.length-1];
+        var end = self.object_lookup_table.node[end_neoid];
         
         var material = new THREE.LineBasicMaterial({
                 color: "rgb(255,0,149)"

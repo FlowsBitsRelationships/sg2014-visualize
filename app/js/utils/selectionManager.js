@@ -1,14 +1,52 @@
-var SelectionManager = function(){
+THREE.SelectionManager = function( camera, controls, plane, scene, object_lookup_table ){
 
-    var self = this;
+    var self = this,
+    tooltip,
+    projector,
+    INTERSECTED, 
+    SELECTED;
     
     var mouse = new THREE.Vector2(),
     offset = new THREE.Vector3(),
-    INTERSECTED, SELECTED;
+    projector = new THREE.Projector();
     
-    // TODO: FIXME to iterate over all tracings, generalize to take a callback - NOT USED
-    this.onDocumentMouseDown = function( event ) {
+    // As the mouse moves across the canvas....
+    this.onDocumentMouseMove = function( event ) {
+        event.preventDefault();
 
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+        var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+        projector.unprojectVector( vector, camera );
+        var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+        if ( SELECTED ) {
+
+            var intersects = raycaster.intersectObject( plane );
+            SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+            return;
+        }
+
+        var intersects = raycaster.intersectObjects( scene.children );
+        
+        if ( intersects.length > 0 ) {
+            if ( INTERSECTED != intersects[ 0 ].object ) {
+
+                INTERSECTED = intersects[ 0 ].object;
+            }
+
+            container.style.cursor = 'pointer';
+        } else {
+
+            INTERSECTED = null;
+            container.style.cursor = 'auto';
+        }
+        
+    }
+    
+   // When clicking starts 
+    this.onDocumentMouseDown = function( event ) {
         event.preventDefault();
 
         var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
@@ -16,31 +54,30 @@ var SelectionManager = function(){
 
         var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
         
-        var intersects = raycaster.intersectObjects( self.objects );
+        var intersects = raycaster.intersectObjects( scene.children );
 
         if ( intersects.length > 0 ) {
             controls.enabled = false;
             SELECTED = intersects[ 0 ].object;
-            var intersects = raycaster.intersectObject( plane );
-            offset.copy( intersects[ 0 ].point ).sub( plane.position );
         }
         
     }
-
+    
+    // When clicking completes - EXECUTE CALLBACK
     this.onDocumentMouseUp = function( event ) {
-
         event.preventDefault();
         controls.enabled = true;
-
+        
         if ( INTERSECTED ) {
-            plane.position.copy( INTERSECTED.position );
             SELECTED = null;
-            
-            // Find location on canvas and show tweet as overlay
-            var pos = this.toXYCoords(INTERSECTED.position);
-            var text = INTERSECTED.get_metadata();
-            this.hide_tooltip();
-            this.display_tooltip(text, pos);
+
+            // Look up the clicked object and execute the callback if it exists!
+            if(INTERSECTED.neoid ) {
+                var object = object_lookup_table[ INTERSECTED.type ][ INTERSECTED.neoid ];
+                var screen_pos = self.toXYCoords(INTERSECTED.position);
+                
+                object.callback( screen_pos );
+            }
         }
 
         container.style.cursor = 'auto';
@@ -56,3 +93,5 @@ var SelectionManager = function(){
     
     return this
 }
+
+THREE.SelectionManager.prototype = Object.create( THREE.EventDispatcher.prototype );

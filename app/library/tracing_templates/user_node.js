@@ -20,7 +20,7 @@ var tracing_template = function(){
         vertexColors: THREE.VertexColors 
     });
         
-    this.get_trace = function(trace_json, duration, idx){
+    this.get_trace = function(trace_json, duration){
             
         lon = Number(trace_json.data.lon);
         lat = Number(trace_json.data.lat);

@@ -24,14 +24,25 @@ before do
 end
 
 post '/elevation' do
-    uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{params[:latLngCollection]}" )
-    req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
+   req_chunks = params[:latLngCollection].split(",").each_slice(300).to_a
+    elevations = []
     
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-        http.request(req)
-    }
+    req_chunks.each do | chunk |
+        
+        uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{chunk.join(",")}" )
+        req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
+        
+        res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+            http.request(req)
+        }
+        
+        res_chunk = JSON.parse(res.body)["elevationProfile"].each do | record |
+            elevations<<record["height"]
+        end
+        
+    end
     
-    return  res.body
+    return  elevations.to_json
 end
 
 post '/vis_config' do

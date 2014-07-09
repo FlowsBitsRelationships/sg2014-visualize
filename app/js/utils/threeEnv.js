@@ -113,8 +113,8 @@ THREE.Env = function ( ) {
     }
     
     // Called externally, adds terrain
-    this.add_terrain = function(bbox, callback){
-        var terrain = terraingen.generate( 18, 18, bbox, scene, callback ) // x_step, z_step, bbox of latLons, callback on completion
+    this.add_terrain = function(bbox, x_step, z_step, callback){
+        var terrain = terraingen.generate( bbox, x_step, z_step, callback ,  scene) // x_step, z_step, bbox of latLons, callback on completion
     }
     
     // Called externally, turns a query_response into threeJS geometry

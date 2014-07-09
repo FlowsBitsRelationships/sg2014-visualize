@@ -61,7 +61,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         // Reset scene
         env.clear_scene();
         env.add_buildings( result.bbox, function(){ deferred_osmthree.resolve('buildings added'); });
-        env.add_terrain( result.bbox , function(){ deferred_terraingen.resolve('terrain added'); });
+        env.add_terrain( result.bbox , 50, 50, function(){ deferred_terraingen.resolve('terrain added'); });
     });
     
     $scope.$on('neo4j_result', function(event, result) {   

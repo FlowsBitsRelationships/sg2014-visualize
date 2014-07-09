@@ -13,7 +13,7 @@ var TerrainGen = function(){
             shading: THREE.FlatShading
         });
     
-    this.generate = function( x_step, z_step, bbox, scene, callback ){
+    this.generate = function(  bbox, x_step, z_step,  callback, scene ){
              
          var min,
             max,
@@ -64,9 +64,10 @@ var TerrainGen = function(){
             }) )
         .then(function( data, textStatus, jqXHR ) {
             elevationJSON = JSON.parse(data);
-
+            console.log(elevationJSON);
+            
             for (var i = 0; i < plane.geometry.vertices.length; i++) { 
-                var elevation = elevationJSON.elevationProfile[i]['height'];
+                var elevation = elevationJSON[i];
                 plane.geometry.vertices[i].setZ(elevation);
             }
             

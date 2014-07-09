@@ -15,6 +15,14 @@ get '/' do
 	end
 end
 
+# Workaround because post request body isn't immediately accessible in Sinatra routes...
+before do
+  if request.request_method == "POST"
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+  end
+end
+
 post '/elevation' do
     uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{params[:latLngCollection]}" )
     req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
@@ -26,20 +34,30 @@ post '/elevation' do
     return  res.body
 end
 
-get '/neo4jGET' do
+post '/vis_config' do
 	response.headers['Access-Control-Allow-Origin'] = '*'
     
     # If a filename parameter is sent, load the corresponding vis_config file
     # If a JSON is sent, insert it as keyframe[0] of an empty vis_config
     if params[:filename] != nil && params[:filename] != ""
         contents = JSON.parse(File.read( "./library/#{params[:filename]}.json" ))
-    elsif params[:testjson] != nil && params[:testjson] != ""
+    elsif params[:json] != nil && params[:json] != ""
         contents = JSON.parse(File.read( './library/empty_vis_config.json' ))
-        contents["keyframes"][0] = JSON.parse(params[:testjson])
+        contents["keyframes"][0] = JSON.parse(params[:json])
     else
         return status 400 
     end
     
+    contents.to_json
+end
+
+post '/neo4j' do
+	response.headers['Access-Control-Allow-Origin'] = '*'
+    
+    contents = params[:json]
+    
+    return status 400 if contents.nil? || contents == ""
+
     # Requests and insert the database responses for each query in the vis_config file. 
     # Preloading ensures that the visualization has no timing hiccups
     contents["keyframes"].each_with_index do | keyframe, i |

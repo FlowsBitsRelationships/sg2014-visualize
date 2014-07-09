@@ -55,7 +55,14 @@ var TerrainGen = function(){
          // Call elevation API via sinatra app, modify mesh when heights are returned
          // FIXME: There are currently limits to the # of elevation points returned.
          // Figure out why/develop a workaround.
-         $.when( $.post("/elevation",  {latLngCollection: vertex_latLons.join(",")} ) ).then(function( data, textStatus, jqXHR ) {
+
+         $.when(  $.ajax('/elevation',{
+            'data': JSON.stringify({latLngCollection: vertex_latLons.join(",")}), //{action:'x',params:['a','b','c']}
+            'type': 'POST',
+            'processData': false,
+            'contentType': 'application/json' 
+            }) )
+        .then(function( data, textStatus, jqXHR ) {
             elevationJSON = JSON.parse(data);
 
             for (var i = 0; i < plane.geometry.vertices.length; i++) { 

@@ -36,13 +36,16 @@ var TerrainGen = function(){
         // Add plane
         plane = new THREE.Mesh( geometry,  self.terrain_material ); // this.material
         plane.visible = true;
-        plane.position.x = -max.y/2;
-        plane.position.z = -max.x /2;
-        plane.rotation.x = -Math.PI / 2;
-        plane.rotation.z= Math.PI ;
-        
-        self.set_Elevations( plane, scene, x_step, callback );
-    }
+       var trans = new THREE.Matrix4().makeTranslation( max.x/2, max.y/2, 0 );
+
+       for ( var i = 0, len = plane.geometry.vertices.length; i < len; i++ ) {
+          plane.geometry.vertices[i].applyMatrix4( trans );
+          plane.geometry.vertices[i].z = plane.geometry.vertices[i].y;
+          plane.geometry.vertices[i].y = 0;
+       }
+       
+       self.set_Elevations( plane, scene, x_step, callback );
+   }
     
     //  ******************** Helpers ********************
     
@@ -70,7 +73,7 @@ var TerrainGen = function(){
             
             for (var i = 0; i < plane.geometry.vertices.length; i++) { 
                 var elevation = elevationJSON[i];
-                plane.geometry.vertices[i].setZ(elevation);
+                plane.geometry.vertices[i].setY(elevation);
             }
             plane.geometry.computeFaceNormals();
             plane.geometry.computeVertexNormals();  
@@ -119,7 +122,7 @@ var TerrainGen = function(){
     
      // Vector2 is transformed by origin and passed to worldToLonLat
     this.sceneToLonLat = function( vector ) {
-        var world_vector = new THREE.Vector2( vector.x + self.origin.x,  vector.y + self.origin.y );
+       var world_vector = new THREE.Vector2( vector.x + self.origin.x,  vector.z + self.origin.y );
         var lonLat = self.worldToLonLat( world_vector )
         return lonLat
     }

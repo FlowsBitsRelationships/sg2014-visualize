@@ -69,11 +69,11 @@ var TerrainGen = function(){
                 plane.geometry.vertices[i].setZ(elevation);
             }
             
-            scene.add(plane);
             
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
-            callback.call( );
+            scene.add(plane);
+            callback.call( this, plane );
         });
         
     }

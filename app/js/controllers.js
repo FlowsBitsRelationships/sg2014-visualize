@@ -59,7 +59,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     $scope.$on('vis_config_result', function(event, result) {  
         // Reset scene
         env.clear_scene();
-        env.add_context( result.bbox , 20, 20, deferred_context );
+        env.add_context( result.bbox , 20, 20, function(){deferred_context.resolve({ status: "OK", data: result});} );
     });
     
     $scope.$on('neo4j_result', function(event, result) {   

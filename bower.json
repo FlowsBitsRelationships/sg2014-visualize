@@ -16,6 +16,6 @@
     "threejs"  : "#r67",
     "jquery" : "git://github.com/components/jquery.git",
     "tween.js" :  "git@github.com:sole/tween.js.git",
-     "osmthree" :  "git@github.com:johnvf/osmthree.git"
+     "osmthree" :  "git@github.com:skewart/osmthree.git"
   }
 } 

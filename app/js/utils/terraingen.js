@@ -26,7 +26,7 @@ var TerrainGen = function(){
         min = self.lonLatToScene(bbox[0], bbox[1]);
         max = self.lonLatToScene(bbox[2], bbox[3]);
 
-        geometry = new THREE.PlaneGeometry(max.x, max.y, x_step, z_step);
+        geometry = new THREE.PlaneGeometry(max.x, max.y, x_step-1, z_step-1);
         
         // Add plane
         plane = new THREE.Mesh( geometry,  this.material );
@@ -36,16 +36,16 @@ var TerrainGen = function(){
         plane.rotation.x = -Math.PI / 2;
         plane.rotation.z= Math.PI ;
         
-        self.set_Elevations( plane, scene, callback );
+        self.set_Elevations( plane, scene, x_step, callback );
     }
     
     //  ******************** Helpers ********************
     
     // Calls the elevation API to get heights of terrain vertices, sets them and adds the object to the scene
-    this.set_Elevations = function( plane, scene, callback ){
+    this.set_Elevations = function( plane, scene, x_step, callback ){
 
         var vertex_latLons = [];  
-
+        console.log(plane);
         // Convert all geometry vertices to longitude and latitude
         for (var i = 0; i < plane.geometry.vertices.length; i++) { 
             var lonLat = self.sceneToLonLat(plane.geometry.vertices[i]);
@@ -62,7 +62,7 @@ var TerrainGen = function(){
         .then(function( data, textStatus, jqXHR ) {
             elevationJSON = JSON.parse(data);
             
-            elevationJSON = self.lintElevations(elevationJSON, 80);
+            elevationJSON = self.lintElevations(elevationJSON, x_step);
             
             for (var i = 0; i < plane.geometry.vertices.length; i++) { 
                 var elevation = elevationJSON[i];
@@ -78,16 +78,39 @@ var TerrainGen = function(){
         
     }
     // Remove unreasonable outliers and patch up holes in the elevation data
-    this.lintElevations = function(elevationJSON, tol){
+    this.lintElevations = function(elevationJSON, x_step){
         var lintedJSON = elevationJSON;
+        var rough_patch = false;
+        var stack = [];
         
-       // for (var i = 1; i < elevationJSON.length-1; i++) { 
-            // var avg = (elevationJSON[i-1]+elevationJSON[i+1])/2
-            // if (elevationJSON[i] - avg > tol){
-                // lintedJSON[i] = avg;
-            // }
-        // } 
+       for (var i = 0; i < elevationJSON.length; i++) { 
+            if (lintedJSON[i]  < 0 ){
+               //  beginning of  rough patch
+                if( rough_patch === false ){
+                      rough_patch = true;
+                }
+                stack.push(i);
+            }
+            else {
+                // Mark ending of rough patch
+                if( rough_patch === true ){
+                    rough_patch = false;
+                    
+                    // interpolate values for stack indices
+                    var last = lintedJSON[stack[stack.length-1]+1];
+                    var first = lintedJSON[stack[0]-1];
+                    var  increment = (last-first)/stack.length;
+                    stack.forEach(function(i){
+                        lintedJSON[i] = lintedJSON[i-1] + increment;
+                    });
+                    stack = [];
+                }
+                
+                
+            }
+        } 
         
+        console.log(lintedJSON);
         return lintedJSON
     }
     

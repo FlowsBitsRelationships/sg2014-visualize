@@ -13,7 +13,7 @@ var TerrainGen = function(){
             shading: THREE.FlatShading
         });
     
-    this.generate = function(  bbox, x_step, z_step,  callback, scene ){
+    this.generate = function(  bbox, x_step, z_step,  promise, scene ){
              
          var min,
             max,
@@ -36,13 +36,13 @@ var TerrainGen = function(){
         plane.rotation.x = -Math.PI / 2;
         plane.rotation.z= -Math.PI / 2;
         
-        self.set_Elevations( plane, scene, callback );
+        self.set_Elevations( plane, scene, promise );
     }
     
     //  ******************** Helpers ********************
     
     // Calls the elevation API to get heights of terrain vertices, sets them and adds the object to the scene
-    this.set_Elevations = function( plane, scene, callback ){
+    this.set_Elevations = function( plane, scene, promise ){
 
         var vertex_latLons = [];  
 
@@ -62,6 +62,8 @@ var TerrainGen = function(){
         .then(function( data, textStatus, jqXHR ) {
             elevationJSON = JSON.parse(data);
             
+            elevationJSON = self.lintElevations(elevationJSON, 80);
+            
             for (var i = 0; i < plane.geometry.vertices.length; i++) { 
                 var elevation = elevationJSON[i];
                 plane.geometry.vertices[i].setZ(elevation);
@@ -71,9 +73,26 @@ var TerrainGen = function(){
             
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
-            callback.call();
+            promise.resolve( { status: "OK"} );
+        })
+        .fail(function( data, textStatus, jqXHR ){
+            promise.resolve( { status: "failed" } ); // Resolve, but report the failure
         });
         
+    }
+    // Remove unreasonable outliers and patch up holes in the elevation data
+    this.lintElevations = function(elevationJSON, tol){
+        var lintedJSON = elevationJSON;
+        
+      elevationJSON.
+       for (var i = 1; i < elevationJSON.length-1; i++) { 
+            var avg = (elevationJSON[i-1]+elevationJSON[i+1])/2
+            if (elevationJSON[i] - avg > tol){
+                lintedJSON[i] = avg;
+            }
+        } 
+        
+        return lintedJSON
     }
     
      // Vector2 is transformed by origin and passed to worldToLonLat

@@ -46,7 +46,6 @@ var tracing_template = function( ){
         
         return sphere;
     }
-
-    
+        
     return this;
 }

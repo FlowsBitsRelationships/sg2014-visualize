@@ -11,10 +11,10 @@
         "duration": 29000,
         "queries": [
                          {"querystring" : " MATCH (n:Place) WHERE n.name = 'Kowloon' return n",
-                            "tracing_template_name" : "place_node",
+                            "tracing_template_name" : "place_node_slick",
                             "tracing_name": "Kowloon"},
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return n as nodes",
-                            "tracing_template_name" : "user_node",
+                            "tracing_template_name" : "user_node_slick",
                             "tracing_name": "Kowloon tweeters"}
                             ]
         },
@@ -32,10 +32,10 @@
         "duration": 23000,
         "queries": [
                          {"querystring" : " MATCH (n:Place) WHERE n.name = 'Wan Chai' return n",
-                            "tracing_template_name" : "place_node",
+                            "tracing_template_name" : "place_node_slick",
                             "tracing_name": "Wan Chai"},
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Wan Chai'}) return n as nodes",
-                            "tracing_template_name" : "user_node",
+                            "tracing_template_name" : "user_node_slick",
                             "tracing_name": "Wan Chai tweeters"}
                             ]
         },
@@ -53,10 +53,10 @@
         "duration": 17000,
         "queries": [
                          {"querystring" : " MATCH (n:Place) WHERE n.name = 'Tsim Sha Tsui' return n",
-                            "tracing_template_name" : "place_node",
+                            "tracing_template_name" : "place_node_slick",
                             "tracing_name": "Tsim Sha Tsui"},
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Tsim Sha Tsui'}) return n as nodes",
-                            "tracing_template_name" : "user_node",
+                            "tracing_template_name" : "user_node_slick",
                             "tracing_name": "Tsim Sha Tsui tweeters"}
                             ]
         },
@@ -74,10 +74,10 @@
         "duration": 15000,
         "queries": [
                          {"querystring" : " MATCH (n:Place) WHERE n.name = 'Mong Kok' return n",
-                            "tracing_template_name" : "place_node",
+                            "tracing_template_name" : "place_node_slick",
                             "tracing_name": "Mong Kok"},
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Mong Kok'}) return n as nodes",
-                            "tracing_template_name" : "user_node",
+                            "tracing_template_name" : "user_node_slick",
                             "tracing_name": "Mong Kok tweeters"}
                             ]
         },
@@ -95,10 +95,10 @@
         "duration": 7000,
         "queries": [
                          {"querystring" : " MATCH (n:Place) WHERE n.name = 'Causeway Bay' return n",
-                            "tracing_template_name" : "place_node",
+                            "tracing_template_name" : "place_node_slick",
                             "tracing_name": "Causeway Bay"},
                          {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Causeway Bay'}) return n as nodes",
-                            "tracing_template_name" : "user_node",
+                            "tracing_template_name" : "user_node_slick",
                             "tracing_name": "Causeway Bay tweeters"}
                             ]
         },

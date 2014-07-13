@@ -5,9 +5,8 @@
 var app_controllers = angular.module('visualizeApp.controllers', [])
 
 // MenuCtrl is a controller for managing all Menu functionality - Handles requests to API
-app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($rootScope, neo4jREST) {
+app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootScope, visAPI) {
     
-    $rootScope.loading = false;
     $rootScope.vis_config = "kowloon_vis_config";
     // Model variable for test json
    $rootScope.testjson = JSON.stringify(
@@ -24,17 +23,17 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
 
         , undefined, 2);
 
-    // Uses neo4jREST service to make a get request to the sinatra application
+    // Uses visAPI service to make a get request to the sinatra application
     $rootScope.get_from_neo4j = function(filename_req, json_req){
     
-        $rootScope.loading = true;
+        $rootScope.status = "loading";
         
-        neo4jREST.vis_config.save({ filename : filename_req , json: json_req })
+        visAPI.vis_config.save({ filename : filename_req , json: json_req })
         .$promise.then(function (result) {
         
            $rootScope.$broadcast('vis_config_result', result);
            
-           neo4jREST.neo4j.save({ json : result }) 
+           visAPI.neo4j.save({ json : result }) 
             .$promise.then(function (result) {
                 $rootScope.$broadcast('neo4j_result', result);
             });
@@ -44,7 +43,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'neo4jREST' , function($ro
 }]);
 
 // AppCtrl is a controller for managing visualization functionality
-app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationService', function ($scope, $interval, $q, elevationService) {
+app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($scope, $interval, $q, elevationService) {
     
     var         
         deferred_neo4J = $q.defer(),
@@ -55,29 +54,33 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  'elevationS
         timer = new Timer($scope, $interval); // Class for timing visualization
         
         $scope.description = "[ Hit run to begin trying things out! ]";
+        $scope.status = "ready";
         
     // Triggered when neo4j_result is returned (must be blocking, as it contains bbox and other config info)
     $scope.$on('vis_config_result', function(event, result) {  
         // Reset scene
         env.clear_scene();
-        env.add_buildings( result.bbox, function(){ deferred_osmthree.resolve('buildings added'); });
-        env.add_terrain( result.bbox , 50, 50, function(){ deferred_terraingen.resolve('terrain added'); });
+        env.add_buildings( result.bbox, deferred_osmthree );
+        env.add_terrain( result.bbox , 50, 50, deferred_terraingen );
     });
     
     $scope.$on('neo4j_result', function(event, result) {   
-        deferred_neo4J.resolve(result);
+     console.log(deferred_neo4J);
+        deferred_neo4J.resolve({ status: "OK", data: result});
      });;
 
     // When all promises are resolved 
     $q.all({ first: deferred_neo4J.promise , second: deferred_osmthree.promise, third: deferred_terraingen.promise })
       .then(function(results) {
+      
+        $scope.status = "neo4j : "+results.first.status+" | osm3 : "+results.second.status+" | mq : "+results.third.status;
+        
         // Reset promises (is there a better way to do this?):
         deferred_neo4J = $q.defer();
         deferred_osmthree = $q.defer();
         deferred_terraingen = $q.defer();
         
-        $scope.loading = false;
-        $scope.begin_keyframes(  results.first.keyframes );  // Start!
+        $scope.begin_keyframes(  results.first.data.keyframes );  // Start!
       });
           
      // Starts visualization

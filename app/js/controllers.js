@@ -16,7 +16,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootS
         "duration": 5000,
         "queries": [
              {"querystring" : " MATCH (n:Place) WHERE n.name = 'Kowloon' return n",
-                "tracing_template_name" : "place_node",
+                "tracing_template_name" : "place_node_slick",
                 "tracing_name": "Kowloon"}
             ]
         }
@@ -49,8 +49,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
         deferred_neo4J = $q.defer(),
         deferred_context = $q.defer(),
         
-        env = new THREE.Env( ), // Class for managing ThreeJS interaction
-        timer = new Timer($scope, $interval); // Class for timing visualization
+        env = new THREE.Env( ); // Class for managing ThreeJS interaction
         
         $scope.description = "[ Hit run to begin trying things out! ]";
         $scope.status = "ready";
@@ -59,7 +58,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     $scope.$on('vis_config_result', function(event, result) {  
         // Reset scene
         env.clear_scene();
-        env.add_context( result.bbox , 40, 40, function(){deferred_context.resolve({ status: "OK", data: result});} );
+        env.add_context( result.bbox , 30, 30, function(){deferred_context.resolve({ status: "OK", data: result});} );
     });
     
     $scope.$on('neo4j_result', function(event, result) {   
@@ -81,6 +80,9 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
           
      // Starts visualization
      $scope.begin_keyframes = function( keyframes ){
+     
+        var timer = new Timer($scope, $interval, function(){ env.clear_traces();}); // Class for timing visualization
+         
          // Callback called by Timer when a keyframe occurs
         var keyframe_callback = function ( keyframe ) {
             $scope.description = "[ "+keyframe.description+" ]";

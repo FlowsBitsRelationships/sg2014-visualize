@@ -203,19 +203,23 @@ THREE.Env = function () {
 			query.queryresult.data.forEach(function (result_chunk) {
 				result_chunk.forEach(function (trace_chunk) {
 
-					// split up id property into 'type' and 'id'
-					var id_url = trace_chunk.self.split("/");
-					var type = id_url[id_url.length - 2]; // node or relationship
-					var neoid = id_url[id_url.length - 1]; // id
-
 					// Generate the object from the template
 					var trace_object = cur_tracing_template.get_trace(trace_chunk, duration);
-
-					//  Add the neoid and type to the object and add the object to the lookup table for future reference by other tracings,
-					trace_object.neoid = neoid;
-					trace_object.type = type;
-					self.object_lookup_table[type][neoid] = trace_object;
-
+                    
+                    // FIXME: How to track ids of objects in trace_chunks as arrays
+                    // This is a  messy way to handle this exception...
+                    // split up id property into 'type' and 'id'
+                    if ( trace_chunk.self != undefined ){
+                        var id_url = trace_chunk.self.split("/");
+                        var type = id_url[id_url.length - 2]; // node or relationship
+                        var neoid = id_url[id_url.length - 1]; // id
+                        
+                        //  Add the neoid and type to the object and add the object to the lookup table for future reference by other tracings,
+                        trace_object.neoid = neoid;
+                        trace_object.type = type;
+                        self.object_lookup_table[type][neoid] = trace_object;
+                    }
+                    
 					// Keep track of this tracing's objects, for removal later
 					trace_objects.push(trace_object);
 
@@ -260,13 +264,19 @@ THREE.Env = function () {
 		renderer.render(scene, camera);
 	}
 
-	// Clear the scene geometry
-	this.clear_scene = function () {
+    	// Clear the scene geometry
+	this.clear_traces = function () {
 		for (var tracing_name in self.objects) {
 			self.objects[tracing_name].forEach(function (obj) {
 				scene.remove(obj);
 			});
 		}
+	}
+    
+	// Clear the scene geometry
+	this.clear_scene = function () {
+        
+        self.clear_traces();
 		var children = scene.children;
 		for (var i = children.length - 1; i >= 0; i--) {
 			var child = children[i];

@@ -1,0 +1,115 @@
+ {
+"title": "SG2014 Sample Visualization",
+"author": "Capt. James T. Kirk",
+"frame": "Spatial",
+"bbox": [114.147620 , 22.295800,  114.219031, 22.368048 ],
+
+"keyframes" : [
+
+         {"description": "Twitter users",
+        "start": 1000,
+        "duration": 29000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Kowloon' return n",
+                            "tracing_template_name" : "place_node_slick",
+                            "tracing_name": "Kowloon"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return n as nodes",
+                            "tracing_template_name" : "user_node_slick",
+                            "tracing_name": "Kowloon tweeters"}
+                            ]
+        },
+        {"description": "who mentioned Kowloon.",
+        "start": 4000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Kowloon'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Kowloon tweets"}
+                            ]
+        },
+        {"description": "Twitter users",
+        "start": 7000,
+        "duration": 23000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Wan Chai' return n",
+                            "tracing_template_name" : "place_node_slick",
+                            "tracing_name": "Wan Chai"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Wan Chai'}) return n as nodes",
+                            "tracing_template_name" : "user_node_slick",
+                            "tracing_name": "Wan Chai tweeters"}
+                            ]
+        },
+        {"description": "who mentioned Wan Chai.",
+        "start": 8000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Wan Chai'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Wan Chai tweets"}
+                            ]
+        },
+        {"description": "Twitter users",
+        "start": 13000,
+        "duration": 17000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Tsim Sha Tsui' return n",
+                            "tracing_template_name" : "place_node_slick",
+                            "tracing_name": "Tsim Sha Tsui"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Tsim Sha Tsui'}) return n as nodes",
+                            "tracing_template_name" : "user_node_slick",
+                            "tracing_name": "Tsim Sha Tsui tweeters"}
+                            ]
+        },
+        {"description": "who mentioned Tsim Sha Tsui.",
+        "start": 14000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Tsim Sha Tsui'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Tsim Sha Tsui tweets"}
+                            ]
+        },
+        {"description": "Twitter users",
+        "start": 15000,
+        "duration": 15000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Mong Kok' return n",
+                            "tracing_template_name" : "place_node_slick",
+                            "tracing_name": "Mong Kok"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Mong Kok'}) return n as nodes",
+                            "tracing_template_name" : "user_node_slick",
+                            "tracing_name": "Mong Kok tweeters"}
+                            ]
+        },
+        {"description": "who mentioned Mong Kok.",
+        "start": 16000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Mong Kok'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Mong Kok tweets"}
+                            ]
+        },
+        {"description": "Twitter users",
+        "start": 23000,
+        "duration": 7000,
+        "queries": [
+                         {"querystring" : " MATCH (n:Place) WHERE n.name = 'Causeway Bay' return n",
+                            "tracing_template_name" : "place_node_slick",
+                            "tracing_name": "Causeway Bay"},
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Causeway Bay'}) return n as nodes",
+                            "tracing_template_name" : "user_node_slick",
+                            "tracing_name": "Causeway Bay tweeters"}
+                            ]
+        },
+        {"description": "who mentioned Causeway Bay.",
+        "start": 24000,
+        "duration": 4000,
+        "queries": [
+                         {"querystring" : "MATCH (n:Social)-[r]->(m:Place{name:'Causeway Bay'}) return r as rels",
+                            "tracing_template_name" : "tweet_rel",
+                            "tracing_name": "Causeway Bay tweets"}
+                            ]
+        }
+]
+}

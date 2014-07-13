@@ -1,7 +1,7 @@
 // FIXME: Timer needs to be more self contained (too dependent on external variables assigned outside the constructor)
 // Timer should generate the correct timer html and assign all variables to the scope when it is constructed.
 // In case multiple timers are desired...this may at some point benefit from redesign as an angular service that can be passed around
-var Timer = function($scope, $interval){
+var Timer = function($scope, $interval, startup_callback){
     var _self = this;
     var _keyframe_hash,
      _keyframe_callback,
@@ -16,10 +16,10 @@ var Timer = function($scope, $interval){
         _keyframe_hash = _self.hashify_keyframes( keyframes );
         _keyframe_callback = keyframe_callback;
         
-        _timer_step = null;
-        $scope.get_endTime() 
+        var _timer_step = null;
+        $scope.get_endTime() ;
         $scope.resetTimer();
-        $scope.startTimer() 
+        $scope.startTimer() ;
     }
     
     this.hashify_keyframes = function (keyframes){        // Generate keyframe_hash that the Timer can call as needed to trigger events
@@ -32,12 +32,13 @@ var Timer = function($scope, $interval){
     
     // Resets _timer_step to beginning
     $scope.resetTimer = function(){
-       $interval.cancel(_timer_step);
         $scope.time=0;
+       $interval.cancel(_timer_step);
     }
     
      // Begins/Resumes advancing _timer_step
     $scope.startTimer = function(){
+    startup_callback.call();
     _timer_step = $interval(function(){
         // If there is a keyframe set to occur at this $scope.time, fire it off
         if ( $scope.time in _keyframe_hash ){
@@ -50,6 +51,7 @@ var Timer = function($scope, $interval){
             $scope.updateSlider();
         }
         else{
+        startup_callback.call();
         $scope.stopTimer();
         }
         }, 1000);

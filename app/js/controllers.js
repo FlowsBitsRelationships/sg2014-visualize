@@ -23,7 +23,7 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootS
 
         , undefined, 2);
 
-    // Uses visAPI service to make a get request to the sinatra application
+    // Uses visAPI service to make get the vis_config, then to get the neo4j data
     $rootScope.get_from_neo4j = function(filename_req, json_req){
     
         $rootScope.status = "loading";
@@ -47,8 +47,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     
     var         
         deferred_neo4J = $q.defer(),
-        deferred_osmthree = $q.defer(),
-        deferred_terraingen = $q.defer(),
+        deferred_context = $q.defer(),
         
         env = new THREE.Env( ), // Class for managing ThreeJS interaction
         timer = new Timer($scope, $interval); // Class for timing visualization
@@ -60,25 +59,22 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     $scope.$on('vis_config_result', function(event, result) {  
         // Reset scene
         env.clear_scene();
-        env.add_buildings( result.bbox, deferred_osmthree );
-        env.add_terrain( result.bbox , 50, 50, deferred_terraingen );
+        env.add_context( result.bbox , 20, 20, deferred_context );
     });
     
     $scope.$on('neo4j_result', function(event, result) {   
-     console.log(deferred_neo4J);
         deferred_neo4J.resolve({ status: "OK", data: result});
      });;
 
     // When all promises are resolved 
-    $q.all({ first: deferred_neo4J.promise , second: deferred_osmthree.promise, third: deferred_terraingen.promise })
+    $q.all({ first: deferred_neo4J.promise , second: deferred_context.promise })
       .then(function(results) {
       
-        $scope.status = "neo4j : "+results.first.status+" | osm3 : "+results.second.status+" | mq : "+results.third.status;
+        $scope.status = "neo4j : "+results.first.status+" | context : "+results.second.status;
         
         // Reset promises (is there a better way to do this?):
         deferred_neo4J = $q.defer();
-        deferred_osmthree = $q.defer();
-        deferred_terraingen = $q.defer();
+        deferred_context = $q.defer();
         
         $scope.begin_keyframes(  results.first.data.keyframes );  // Start!
       });

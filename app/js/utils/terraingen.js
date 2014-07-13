@@ -13,7 +13,7 @@ var TerrainGen = function(){
             shading: THREE.FlatShading
         });
     
-    this.generate = function(  bbox, x_step, z_step,  promise, scene ){
+    this.generate = function(  bbox, x_step, z_step,  scene, callback ){
              
          var min,
             max,
@@ -34,15 +34,15 @@ var TerrainGen = function(){
         plane.position.x = -max.y/2;
         plane.position.z = -max.x /2;
         plane.rotation.x = -Math.PI / 2;
-        plane.rotation.z= -Math.PI / 2;
+        plane.rotation.z= Math.PI ;
         
-        self.set_Elevations( plane, scene, promise );
+        self.set_Elevations( plane, scene, callback );
     }
     
     //  ******************** Helpers ********************
     
     // Calls the elevation API to get heights of terrain vertices, sets them and adds the object to the scene
-    this.set_Elevations = function( plane, scene, promise ){
+    this.set_Elevations = function( plane, scene, callback ){
 
         var vertex_latLons = [];  
 
@@ -73,10 +73,7 @@ var TerrainGen = function(){
             
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
-            promise.resolve( { status: "OK"} );
-        })
-        .fail(function( data, textStatus, jqXHR ){
-            promise.resolve( { status: "failed" } ); // Resolve, but report the failure
+            callback.call( );
         });
         
     }

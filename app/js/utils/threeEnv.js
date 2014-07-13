@@ -106,15 +106,45 @@ THREE.Env = function ( ) {
         window.addEventListener('resize', this.onWindowResize, false);
     }
     
-    // Called externally, adds context buildings and sets origin
-    this.add_buildings = function(bbox, callback){
-        origin = [bbox[0] , bbox[1] ];
-        OSM3.makeBuildings( scene, bbox, { scale: 1, onComplete: callback } );
-    }
+    this.add_context = function ( bbox, x_step, z_step, ng_promise){
     
-    // Called externally, adds terrain
-    this.add_terrain = function(bbox, x_step, z_step, callback){
-        var terrain = terraingen.generate( bbox, x_step, z_step, callback ,  scene) // x_step, z_step, bbox of latLons, callback on completion
+        origin = [bbox[0] , bbox[1] ];
+        // OSM3.makeBuildings( scene, bbox, { scale: 1, onComplete: callback } );
+        // terraingen.generate( bbox, x_step, z_step, callback ,  scene);
+
+        var tP = new Promise( function( resolve, reject ) {
+        // TerrainGen stuff
+        var tg = new TerrainGen();
+        tg.generate( bbox, x_step, z_step, scene, function( plane ) {
+            var vert;
+            // 	Create reference geohash data structure for the plane before resolving.
+            //	This way the function called to add the bldg meshes to the three.js scene
+            //	will be able to reference this data structure.
+            for ( var i = 0, len = plane.geometry.vertices.length; i < len; i++ ) {
+                vert = plane.geometry.vertices[i];
+                eleDict[ ngeo.encode( vert.x, vert.y, 10 ) ] = vert.z;
+            }
+            resolve( plane );
+        });
+    });
+
+    // fetch building data
+    var bP = new Promise( function( resolve, reject ) {
+        OSM3.fetchBldgData( function( bldgData ) {
+            resolve( bldgData );
+        }, bbox, { scale: 1 });
+    });
+
+    // do stuff when both have arrived
+    Promise.all([tP, bP]).then( function( resp ) {
+        var plane = resp[0],
+            bldgs = resp[1];
+        OSM3.buildBldgs( function( mesh ) {
+            mesh.position.y = getElevation( mesh.geometry.vertices );
+            scene.add( mesh );
+        }, bldgs, { scale: 1.0, origin: origin } );
+        ng_promise.resolve({ status: "OK"});
+    });
     }
     
     // Called externally, turns a query_response into threeJS geometry

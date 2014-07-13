@@ -145,7 +145,8 @@ THREE.Env = function () {
 			var plane = resp[0],
 			bldgs = resp[1];
 			OSM3.buildBldgs(function (mesh) {
-				// mesh.position.y = getElevation(mesh.geometry.vertices);
+				var rayEl = self.getElevationRay( mesh.geometry.vertices, plane )
+				mesh.position.y = ( rayEl < 10000 ) ? rayEl : mesh.position.y;
 				scene.add(mesh);
                 final_callback.call();
 			}, bldgs, {
@@ -154,7 +155,36 @@ THREE.Env = function () {
 			});
 		});
 	}
+    
+    this.getMinEl = function( intersections, vertices ) {
+            var face, 
+                min = 1000000;
+            for ( var i = 0, len = intersections.length; i < len; i++ ) {
+                face = intersections[i].face;
+                ( vertices[ face.a ].y < min ) ? min = vertices[ face.a ].y :
+                ( vertices[ face.b ].y < min ) ? min = vertices[ face.b ].y :
+                ( vertices[ face.c ].y < min ) ? min = vertices[ face.c ].y :
+                min = min;
+            }
+            return min;
+    }
 
+
+    this.getElevationRay = function ( vertices, terrainMesh ) {
+        var el, ray, ints,
+            up = new THREE.Vector3( 0, 1, 0 ),
+            minEl = 100000000;
+        for ( var i = 0, len = vertices.length; i < len; i++ ) {
+            ray = new THREE.Raycaster( vertices[i], up );
+            ints = ray.intersectObject( terrainMesh );
+            el = self.getMinEl( ints, terrainMesh.geometry.vertices );
+            if ( el < minEl ) {
+                minEl = el;
+            }
+        }
+        return minEl;
+    }
+    
 	// Called externally, turns a query_response into threeJS geometry
 	this.add_tracing = function (query, duration) {
 		var trace_objects = [];

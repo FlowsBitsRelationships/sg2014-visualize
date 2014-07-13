@@ -137,7 +137,7 @@ var TerrainGen = function(){
         
         return lintedJSON
     }
-    
+        
      // Vector2 is transformed by origin and passed to worldToLonLat
     this.sceneToLonLat = function( vector ) {
        var world_vector = new THREE.Vector2( vector.x + self.origin.x,  vector.z + self.origin.y );

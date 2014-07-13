@@ -84,13 +84,12 @@ var TerrainGen = function(){
     this.lintElevations = function(elevationJSON, tol){
         var lintedJSON = elevationJSON;
         
-      elevationJSON.
-       for (var i = 1; i < elevationJSON.length-1; i++) { 
-            var avg = (elevationJSON[i-1]+elevationJSON[i+1])/2
-            if (elevationJSON[i] - avg > tol){
-                lintedJSON[i] = avg;
-            }
-        } 
+       // for (var i = 1; i < elevationJSON.length-1; i++) { 
+            // var avg = (elevationJSON[i-1]+elevationJSON[i+1])/2
+            // if (elevationJSON[i] - avg > tol){
+                // lintedJSON[i] = avg;
+            // }
+        // } 
         
         return lintedJSON
     }

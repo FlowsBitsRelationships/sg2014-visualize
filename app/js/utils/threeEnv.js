@@ -19,12 +19,11 @@ THREE.Env = function () {
 	self.object_lookup_table = {
 		node : {},
 		relationship : {}
-
 	};
 	self.materials = {};
-
+    
 	var color = new THREE.Color("rgb(42,42,42)");
-
+    
 	// Initializes threeJS stuff
 	this.init = function () {
 
@@ -83,6 +82,7 @@ THREE.Env = function () {
 				}));
 		plane.visible = true;
 		plane.position.x = 5000 / 2;
+        plane.position.y = -10;
 		plane.position.z = -5000 / 2;
 		plane.rotation.x = Math.PI / 2;
 		plane.name = "xz-plane";
@@ -94,16 +94,32 @@ THREE.Env = function () {
 		// create selection manager
 		selection_manager = new THREE.SelectionManager(camera, controls, plane, scene, self.object_lookup_table);
 
-		// create a point light
-		var pointLight = new THREE.PointLight(0xFFFFFF);
+        // // create a point light
+		// var pointLight = new THREE.PointLight(0xFFFFFF);
 
-		// set its position
-		pointLight.position.x = 10;
-		pointLight.position.y = 150;
-		pointLight.position.z = 130;
+		// // set its position
+		// pointLight.position.x = 500;
+		// pointLight.position.y = 1150;
+		// pointLight.position.z = 130;
+        
+        // scene.add(pointLight);
+        
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+        
+        var light = new THREE.DirectionalLight(0xffffff, 1);
+        light.castShadow = true;
+        // light.shadowCameraVisible = true;
+        // light.shadowCameraNear = 100;
+        // light.shadowCameraFar = 200;
+        // light.shadowCameraLeft = -20; 
+        // light.shadowCameraRight = 20; 
+        // light.shadowCameraTop = 20;
+        // light.shadowCameraBottom = -20; 
 
-		// add to the scene
-		scene.add(pointLight);
+        light.position.set(500, 1000, -500); 
+        scene.add(light);
+        // scene.add( new THREE.DirectionalLightHelper(light, 0.2) );
 
 		renderer.domElement.addEventListener('mousemove', selection_manager.onDocumentMouseMove, false);
 		renderer.domElement.addEventListener('mousedown', selection_manager.onDocumentMouseDown, false);
@@ -242,7 +258,8 @@ THREE.Env = function () {
 		var children = scene.children;
 		for (var i = children.length - 1; i >= 0; i--) {
 			var child = children[i];
-			if (child.name === "xz-plane" || child instanceof THREE.PointLight) {}
+            var dont_clear = self.dont_clear(child);
+			if (child.name === "xz-plane" || dont_clear ){}
 			else {
 				scene.remove(child);
 			}
@@ -250,7 +267,26 @@ THREE.Env = function () {
 		// FIXME: Does this need to be cleared?
 		// object_lookup_table = {};
 	}
-
+    
+    this.dont_clear = function(child){
+        var status = false;
+        
+        var whitelist = [
+        THREE.AmbientLight,
+        THREE.PointLight,
+        THREE.DirectionalLight,
+        THREE.DirectionalLightHelper
+        ]
+        
+        whitelist.forEach(function(type){
+            if (child instanceof type){
+                status =  true;
+            }
+        });
+        
+        return status
+    }
+    
 	// **** ThreeJS Helper Functions***
 	this.onWindowResize = function () {
 		camera.aspect = window.innerWidth / window.innerHeight;

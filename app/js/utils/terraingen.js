@@ -3,16 +3,21 @@ var TerrainGen = function(){
     var self = this;
     
     this.origin = new THREE.Vector2( 0, 0 );
-    
-    this.material = new THREE.MeshBasicMaterial({
-            color : 0xffffff,
-            opacity : 0.75,
-            transparent : true,
-            wireframe : true,
-            side: THREE.BackSide,
-            shading: THREE.FlatShading
-        });
-    
+
+    this.terrain_material = new THREE.MeshLambertMaterial({
+        color: "rgb(202,232,121)",
+        side: THREE.DoubleSide,
+        shading : THREE.FlatShading,
+        vertexColors : THREE.VertexColors
+    });
+   
+    this.water_material = new THREE.MeshLambertMaterial({
+        color:  "rgb(151 , 121 , 232)",
+        side: THREE.DoubleSide,
+        shading : THREE.FlatShading,
+        vertexColors : THREE.VertexColors
+    });
+
     this.generate = function(  bbox, x_step, z_step,  scene, callback ){
              
          var min,
@@ -29,7 +34,7 @@ var TerrainGen = function(){
         geometry = new THREE.PlaneGeometry(max.x, max.y, x_step-1, z_step-1);
         
         // Add plane
-        plane = new THREE.Mesh( geometry,  this.material );
+        plane = new THREE.Mesh( geometry,  self.terrain_material ); // this.material
         plane.visible = true;
         plane.position.x = -max.y/2;
         plane.position.z = -max.x /2;
@@ -45,7 +50,6 @@ var TerrainGen = function(){
     this.set_Elevations = function( plane, scene, x_step, callback ){
 
         var vertex_latLons = [];  
-        console.log(plane);
         // Convert all geometry vertices to longitude and latitude
         for (var i = 0; i < plane.geometry.vertices.length; i++) { 
             var lonLat = self.sceneToLonLat(plane.geometry.vertices[i]);
@@ -68,8 +72,8 @@ var TerrainGen = function(){
                 var elevation = elevationJSON[i];
                 plane.geometry.vertices[i].setZ(elevation);
             }
-            
-            
+            plane.geometry.computeFaceNormals();
+            plane.geometry.computeVertexNormals();  
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
             scene.add(plane);
@@ -77,7 +81,9 @@ var TerrainGen = function(){
         });
         
     }
-    // Remove unreasonable outliers and patch up holes in the elevation data
+    
+    // For some reason, holes in the elevation data come in as huge, negative elevations. 
+    // This function interpolates to fill the gaps
     this.lintElevations = function(elevationJSON, x_step){
         var lintedJSON = elevationJSON;
         var rough_patch = false;
@@ -105,12 +111,9 @@ var TerrainGen = function(){
                     });
                     stack = [];
                 }
-                
-                
             }
         } 
         
-        console.log(lintedJSON);
         return lintedJSON
     }
     

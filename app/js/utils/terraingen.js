@@ -4,20 +4,38 @@ var TerrainGen = function(){
     
     this.origin = new THREE.Vector2( 0, 0 );
 
-    this.terrain_material = new THREE.MeshLambertMaterial({
-        color: "rgb(202,232,121)",
-        side: THREE.DoubleSide,
-        shading : THREE.FlatShading,
-        vertexColors : THREE.VertexColors
-    });
+    // this.terrain_material = new THREE.MeshLambertMaterial({
+        // color: "rgb(202,232,121)",
+        // side: THREE.DoubleSide,
+        // shading : THREE.FlatShading,
+        // vertexColors : THREE.VertexColors
+    // });
    
-    this.water_material = new THREE.MeshLambertMaterial({
-        color:  "rgb(151 , 121 , 232)",
-        side: THREE.DoubleSide,
-        shading : THREE.FlatShading,
-        vertexColors : THREE.VertexColors
-    });
+    // this.water_material = new THREE.MeshLambertMaterial({
+        // color:  "rgb(151 , 121 , 232)",
+        // side: THREE.DoubleSide,
+        // shading : THREE.FlatShading,
+        // vertexColors : THREE.VertexColors
+    // });
 
+    this.terrain_material = new THREE.MeshBasicMaterial({
+            color :  "rgb(202,232,121)",
+            opacity : 0.75,
+            transparent : true,
+            wireframe : true,
+            side: THREE.BackSide,
+            shading: THREE.FlatShading
+        });
+   
+    this.water_material = new THREE.MeshBasicMaterial({
+            color :  "rgb(151 , 121 , 232)",
+            opacity : 0.75,
+            transparent : true,
+            wireframe : true,
+            side: THREE.BackSide,
+            shading: THREE.FlatShading
+        });
+    
     this.generate = function(  bbox, x_step, z_step,  scene, callback ){
              
          var min,

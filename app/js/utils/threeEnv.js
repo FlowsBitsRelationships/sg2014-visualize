@@ -93,30 +93,12 @@ THREE.Env = function () {
 
 		// create selection manager
 		selection_manager = new THREE.SelectionManager(camera, controls, plane, scene, self.object_lookup_table);
-
-        // // create a point light
-		// var pointLight = new THREE.PointLight(0xFFFFFF);
-
-		// // set its position
-		// pointLight.position.x = 500;
-		// pointLight.position.y = 1150;
-		// pointLight.position.z = 130;
-        
-        // scene.add(pointLight);
         
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
         
         var light = new THREE.DirectionalLight(0xffffff, 1);
         light.castShadow = true;
-        // light.shadowCameraVisible = true;
-        // light.shadowCameraNear = 100;
-        // light.shadowCameraFar = 200;
-        // light.shadowCameraLeft = -20; 
-        // light.shadowCameraRight = 20; 
-        // light.shadowCameraTop = 20;
-        // light.shadowCameraBottom = -20; 
-
         light.position.set(500, 1000, -500); 
         scene.add(light);
         // scene.add( new THREE.DirectionalLightHelper(light, 0.2) );

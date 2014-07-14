@@ -75,22 +75,40 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
         deferred_neo4J = $q.defer();
         deferred_context = $q.defer();
         
-        $scope.begin_keyframes(  results.first.data.keyframes );  // Start!
+        env.add_tracings(results.first.data,function(){
+            
+            $scope.begin_keyframes(  results.first.data.keyframes );  // Start!
+            
+        });
+        
+
       });
           
      // Starts visualization
      $scope.begin_keyframes = function( keyframes ){
      
-        var timer = new Timer($scope, $interval, function(){ env.clear_traces();}); // Class for timing visualization
+             
+        var update_callback = function( current_state ) {
+            
+            env.update_state(current_state);
+            
+        }
+     
+        var timer = new Timer($scope, $interval, function(){ env.clear_traces();},update_callback); // Class for timing visualization
          
          // Callback called by Timer when a keyframe occurs
-        var keyframe_callback = function ( keyframe ) {
+      /*  var keyframe_callback = function ( keyframe ) {
+            console.log(keyframe);
             $scope.description = "[ "+keyframe.description+" ]";
              keyframe.queries.forEach(function(query){
-                env.add_tracing(query, keyframe.duration);
+                 env.show_tracings(query);
+               // env.add_tracing(query, keyframe.duration);
             });
-        }
-        timer.start( keyframes, keyframe_callback );// Run visualization
+        } */
+
+        
+        
+        timer.start( keyframes );// Run visualization
      }
       
   }]);

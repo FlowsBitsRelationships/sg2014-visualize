@@ -19,6 +19,7 @@ var tracing_template = function(){
         
         var line = new THREE.Line( geometry,  self.material );
         
+
         return line;
     }
     

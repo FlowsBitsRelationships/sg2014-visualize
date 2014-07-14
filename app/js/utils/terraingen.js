@@ -98,6 +98,7 @@ var TerrainGen = function(){
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
             scene.add(plane);
+            panObjects.push(plane);
             callback.call( this, plane );
         });
         

@@ -24,7 +24,8 @@ THREE.SelectionManager = function( camera, controls, plane, scene, object_lookup
         if ( SELECTED ) {
 
             var intersects = raycaster.intersectObject( plane );
-            SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+      try{      SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) ); }
+      catch(err){}
             return;
         }
 
@@ -57,7 +58,7 @@ THREE.SelectionManager = function( camera, controls, plane, scene, object_lookup
         var intersects = raycaster.intersectObjects( scene.children );
 
         if ( intersects.length > 0 ) {
-            controls.enabled = false;
+         //   controls.enabled = false;
             SELECTED = intersects[ 0 ].object;
         }
         
@@ -66,7 +67,8 @@ THREE.SelectionManager = function( camera, controls, plane, scene, object_lookup
     // When clicking completes - EXECUTE CALLBACK
     this.onDocumentMouseUp = function( event ) {
         event.preventDefault();
-        controls.enabled = true;
+       
+       // controls.enabled = true;
         
         if ( INTERSECTED ) {
             SELECTED = null;

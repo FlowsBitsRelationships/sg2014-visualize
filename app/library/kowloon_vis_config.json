@@ -2,7 +2,8 @@
 "title": "SG2014 Sample Visualization",
 "author": "Capt. James T. Kirk",
 "frame": "Spatial",
-"bbox": [114.16 , 22.30,  114.20, 22.36 ],
+
+"bbox": [ 114.146084, 22.280332, 114.154821, 22.289405 ],
 
 "keyframes" : [
 

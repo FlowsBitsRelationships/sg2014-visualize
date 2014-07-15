@@ -31,7 +31,7 @@ var tracing_template = function( ){
 
         for (var p = 0; p < queryresult.length; p++) {
 
-            traceStart=queryresult[p][0][0];
+            traceStart=queryresult[p][0][1];
             traceEnd=queryresult[p][0][2];
             
             lonS = Number(traceStart.data.lon);

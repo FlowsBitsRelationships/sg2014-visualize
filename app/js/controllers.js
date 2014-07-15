@@ -165,21 +165,18 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
          $rootScope.search_pieces[i]
     }
     
+    // Generate a query from the UI search_pieces
     $rootScope.search = function(search_pieces){
         
         $rootScope.vis_config["keyframes"] = [];
         
         console.log(search_pieces)
 
-        // TODO: Placeholder to return a single esgfsdfsfgd
         var start = 0;
         var end = 5000;
         
         console.log(rel);
-        // Make this:
-        // START n=node(*) WHERE (n:Supermarket) MATCH path = n RETURN path
-        // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c return path
-        // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c -[:MENTIONED]->z return path
+        // Makes this:
         
         var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         var return_ids = ['path', 'a'];
@@ -210,9 +207,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
                 "tracing_name": "Test Query"}
                 ]
         }
-         
-         console.log( $rootScope.vis_config)
-         
+
         $rootScope.vis_config["keyframes"].push(keyframe);
         $rootScope.$broadcast('search', $rootScope.vis_config);
     }

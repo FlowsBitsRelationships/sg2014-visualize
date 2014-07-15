@@ -101,7 +101,11 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     "keyframes" : []
     };
     
-    $rootScope.search_pieces = [
+    $rootScope.start = 0;
+    $rootScope.duration = 5000;
+    $rootScope.template = "social_place";
+     
+    $rootScope.query_pieces = [
         { type: "Place", label: "City" }
         ];
     
@@ -153,9 +157,9 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         };
         
      $rootScope.get_relationship = function(i){
-         if (i<$rootScope.search_pieces.length-1){
-             var key = $rootScope.search_pieces[i].type;
-             var next_key = $rootScope.search_pieces[i+1].type;
+         if (i<$rootScope.query_pieces.length-1){
+             var key = $rootScope.query_pieces[i].type;
+             var next_key = $rootScope.query_pieces[i+1].type;
              console.log($rootScope.node_rels[key][next_key]);
              return $rootScope.node_rels[key][next_key]
          }
@@ -165,57 +169,49 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     }
     
     $rootScope.addItem = function(){
-         $rootScope.search_pieces[i]
+         $rootScope.query_pieces[i]
     }
     
-    // Generate a query from the UI search_pieces
-    $rootScope.search = function(search_pieces){
-        
-        $rootScope.vis_config["keyframes"] = [];
-        
-        console.log(search_pieces)
+    $rootScope.run = function(){
+        $rootScope.$broadcast('run', $rootScope.vis_config);
+    }
+    
+    // Generate a query from the UI query_pieces
+    $rootScope.add = function(query_pieces){
 
-        var start = 0;
-        var end = 5000;
-        
-        console.log(rel);
-        // Makes this:
-        
         var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
         var return_ids = ['path', 'a'];
         
-        var a = search_pieces[0].label;
+        var a = query_pieces[0].label;
         var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a ", a );
         
-        for (var i = 1; i<search_pieces.length; i++){
+        for (var i = 1; i<query_pieces.length; i++){
 
             var rel = $rootScope.get_relationship(i-1);
             var id = alphabet[i];
-            var b = search_pieces[i].label;
+            var b = query_pieces[i].label;
             
             return_ids.push(id);
             query += String.format(" {0} {1}  WHERE ({1}:{2})", rel, id, b );
         }
         query += (" RETURN ["+return_ids.join(",")+"]");
         
-        // var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = n RETURN path", a, rel, b )
-        // var query = String.format( "Match (a:{0}){1}(b:{2}) return [a,b]", a, rel, b );
-        //var template = "traffic";
-        var template = "social_place";
+        // TODO: Right now, name is just the query 
+        // .... provide a better way of generating descriptive name
+        var name = query; 
         
         var keyframe =  {
             "description": "Test Query Displaying",
-            "start": start,
-            "duration": end,
+            "start": $rootScope.start,
+            "duration": $rootScope.duration,
             "queries": [
              {"querystring" : query,
-                "tracing_template_name" : template,
-                "tracing_name": "Test Query"}
+                "tracing_template_name" : $rootScope.template,
+                "tracing_name": name}
                 ]
         }
-
+        $rootScope.start += $rootScope.duration
         $rootScope.vis_config["keyframes"].push(keyframe);
-        $rootScope.$broadcast('search', $rootScope.vis_config);
     }
     
     if (!String.format) {
@@ -270,8 +266,8 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI',  f
     //     deferred_neo4J.resolve({ status: "OK", data: result});
     //  });
 
-    $scope.$on('search', function(event, vis_config) {   
-        
+    $scope.$on('run', function(event, vis_config) {   
+        console.log("RUNNING!");
     
         $scope.status = "loading";
            

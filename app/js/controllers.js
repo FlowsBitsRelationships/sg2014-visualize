@@ -6,8 +6,7 @@ var app_controllers = angular.module('visualizeApp.controllers', [])
 
 // MenuCtrl is a controller for managing all Menu functionality - Handles requests to API
 app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootScope, visAPI) {
-    
-    $rootScope.vis_config = "kowloon_vis_config";
+
     // Model variable for test json
    $rootScope.testjson = JSON.stringify(
         
@@ -96,10 +95,14 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     
     $rootScope.status_search = "ready";
     
+    $rootScope.vis_config =  {
+    "title": "SG2014 Sample Visualization",
+    "author": "Capt. James T. Kirk",
+    "keyframes" : []
+    };
+    
     $rootScope.search_pieces = [
-        { type: "Place", label: "City" }, 
-        { type: "Tweets", label: "Social" },
-        { type: "Users", label: "TwitterUsers"}
+        { type: "Place", label: "City" }
         ];
     
     $rootScope.node_types = 
@@ -164,6 +167,29 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         // String.format('{0} is dead, but {1} is alive! {0} {2}', 'ASP', 'ASP.NET');
         // Update 
         
+        console.log(search_pieces)
+        
+        // TODO: Placeholder to return a single esgfsdfsfgd
+        var start = 0;
+        var end = 5000;
+        var query = String.format("Match (n:{0}) RETURN n", search_pieces[0].label );
+        var template = "place_node_slick";
+        
+        var keyframe =  {
+            "description": "Tweets that mention Kowloon and some place else:",
+            "start": start,
+            "duration": end,
+            "queries": [
+             {"querystring" : query,
+                "tracing_template_name" : template,
+                "tracing_name": "Kowloon connections"}
+                ]
+        }
+         
+         console.log( $rootScope.vis_config)
+         
+        $rootScope.vis_config["keyframes"].push(keyframe);
+        $rootScope.$broadcast('search', $rootScope.vis_config);
     }
     
     if (!String.format) {
@@ -181,13 +207,13 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
 }]);
 
 // AppCtrl is a controller for managing visualization functionality
-app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($scope, $interval, $q, elevationService) {
+app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI',  function ($scope, $interval, $q, visAPI) {
     
     
     keyDrag($scope);
     
     $scope.bbox=[114.16 , 22.30,  114.20, 22.36 ];
-    
+
     
     $scope.generateContext=function(){
         
@@ -214,10 +240,25 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     //    env.add_context( result.bbox , 30, 30, function(){deferred_context.resolve({ status: "OK", data: result});} );
     });
     
-    $scope.$on('neo4j_result', function(event, result) {   
-        deferred_neo4J.resolve({ status: "OK", data: result});
-     });;
+    // $scope.$on('neo4j_result', function(event, result) {   
+    //     deferred_neo4J.resolve({ status: "OK", data: result});
+    //  });
 
+    $scope.$on('search', function(event, vis_config) {   
+        
+    
+        $scope.status = "loading";
+           
+       visAPI.neo4j.save({ json : vis_config }) 
+        .$promise.then(function (result) {
+            env.add_tracings(result,function(){
+            
+            $scope.begin_keyframes(  result.keyframes );  // Start!
+            
+            });
+        });
+     });
+     
     // When all promises are resolved 
     $q.all({ first: deferred_neo4J.promise , second: deferred_context.promise })
       .then(function(results) {

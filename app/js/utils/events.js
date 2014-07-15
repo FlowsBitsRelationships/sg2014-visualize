@@ -191,21 +191,19 @@
             }
 */
 
-
+/*
 console.log(selectNodes);
 
   for (i = 0; i < selectObjects.length; i++) {
    
         for (j=0;j<selectNodes.length;j++){
-            
-            
-        
+
         
         }
         
-        
   }
-        
+  */
+ 
    /*
 
    console.log(indexOf.call(selectNodes, selectObjects[i]));

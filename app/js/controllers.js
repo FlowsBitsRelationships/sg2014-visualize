@@ -42,6 +42,45 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootS
     
 }]);
 
+
+app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI' , function($rootScope, visAPI) {
+    
+    $rootScope.vis_config = "kowloon_vis_config";
+    // Model variable for test json
+   $rootScope.testjson = JSON.stringify(
+        
+         {"description": "This is Kowloon...",
+        "start": 1000,
+        "duration": 5000,
+        "queries": [
+             {"querystring" : " MATCH (n:Place) WHERE n.name = 'Kowloon' return n",
+                "tracing_template_name" : "place_node_slick",
+                "tracing_name": "Kowloon"}
+            ]
+        }
+
+        , undefined, 2);
+
+    // Uses visAPI service to make get the vis_config, then to get the neo4j data
+    $rootScope.get_from_neo4j = function(filename_req, json_req){
+    
+        $rootScope.status = "loading";
+        
+        visAPI.vis_config.save({ filename : filename_req , json: json_req })
+        .$promise.then(function (result) {
+        
+           $rootScope.$broadcast('vis_config_result', result);
+           
+           visAPI.neo4j.save({ json : result }) 
+            .$promise.then(function (result) {
+                $rootScope.$broadcast('neo4j_result', result);
+            });
+        });
+    }
+    
+}]);
+
+
 // AppCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($scope, $interval, $q, elevationService) {
     

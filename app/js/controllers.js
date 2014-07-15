@@ -44,6 +44,18 @@ app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI' , function($rootS
 
 
 app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI' , function($rootScope, visAPI) {
+  
+  
+  /*  
+     var mapOptions = {
+        zoom: 4,
+        center: new google.maps.LatLng(40.0000, -98.0000),
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
+
+    $rootScope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+*/
+
     
     $rootScope.vis_config = "kowloon_vis_config";
     // Model variable for test json

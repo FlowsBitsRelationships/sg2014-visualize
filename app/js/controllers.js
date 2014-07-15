@@ -169,17 +169,14 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     }
     
     $rootScope.search = function(search_pieces){
-
+        
+        $rootScope.vis_config["keyframes"] = [];
         
         console.log(search_pieces)
-       
-        
-        
+
         // TODO: Placeholder to return a single esgfsdfsfgd
         var start = 0;
         var end = 5000;
-        
-
         
         console.log(rel);
         // Make this:
@@ -187,24 +184,29 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c return path
         // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c -[:MENTIONED]->z return path
         
-        if (search_pieces.length == 2){
-            var a = search_pieces[0].label;
-            var rel = $rootScope.get_relationship(0);
-            var b = search_pieces[1].label;
+        var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        var return_ids = ['path', 'a'];
+        
+        var a = search_pieces[0].label;
+        var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a ", a );
+        
+        for (var i = 1; i<search_pieces.length; i++){
+
+            var rel = $rootScope.get_relationship(i-1);
+            var id = alphabet[i];
+            var b = search_pieces[i].label;
             
-            var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a {1} b  WHERE (b:{2}) return [a,path,b]", a, rel, b )
-        } else {
-            var a = search_pieces[0].label;
-            
-            var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a RETURN a", a )
+            return_ids.push(id);
+            query += String.format(" {0} {1}  WHERE ({1}:{2})", rel, id, b );
         }
+        query += (" RETURN ["+return_ids.join(",")+"]");
         
         // var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = n RETURN path", a, rel, b )
         // var query = String.format( "Match (a:{0}){1}(b:{2}) return [a,b]", a, rel, b );
         var template = "traffic";
         
         var keyframe =  {
-            "description": "Tweets that mention Kowloon and some place else:",
+            "description": "Test Query Displaying",
             "start": start,
             "duration": end,
             "queries": [

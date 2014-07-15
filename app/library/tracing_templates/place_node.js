@@ -21,6 +21,11 @@ var tracing_template = function( ){
         
         console.log(queryresult);
       
+        for (var p = 0; p < queryresults.length; p++) {
+            
+            
+        }
+      
       /*
             lon = Number(trace_json.data.lon);
         lat = Number(trace_json.data.lat);
@@ -29,7 +34,6 @@ var tracing_template = function( ){
         x = location.x;
         z = location.y;
       */
-        
         
         /*
         for (var p = 0; p < data.features.length; p++) { //each twitter point

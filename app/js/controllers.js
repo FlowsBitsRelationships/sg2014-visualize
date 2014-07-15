@@ -126,6 +126,9 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
             "Tweets":{
                 "Place": "– [ : MENTIONED ] ->",
                 "Users": "<– [ : TWEETED ] -"
+            },
+            "Traffic":{
+                "Traffic": "–->"
             }
         };
         
@@ -195,7 +198,10 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         }
         query += (" RETURN ["+return_ids.join(",")+"]");
         
-        var template = "place_node";
+        // var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = n RETURN path", a, rel, b )
+        // var query = String.format( "Match (a:{0}){1}(b:{2}) return [a,b]", a, rel, b );
+        //var template = "traffic";
+        var template = "social_place";
         
         var keyframe =  {
             "description": "Test Query Displaying",

@@ -33,7 +33,7 @@ var tracing_template = function( ){
        
         for (var p = 0; p < queryresult.length; p++) {
             
-            trace_json=queryresult[p][0];
+            trace_json=queryresult[p][1];
             
         lon = Number(trace_json.data.lon);
         lat = Number(trace_json.data.lat);

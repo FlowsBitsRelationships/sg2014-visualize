@@ -92,6 +92,93 @@ app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI' , function($rootSc
     
 }]);
 
+app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
+    
+    $rootScope.status_search = "ready";
+    
+    $rootScope.search_pieces = [
+        { type: "Place", label: "City" }, 
+        { type: "Tweets", label: "Social" },
+        { type: "Users", label: "TwitterUsers"}
+        ];
+    
+    $rootScope.node_types = 
+        [
+        "Place",
+        "Users",
+        "Tweets"
+        ];
+
+    $rootScope.node_rels = 
+        {
+            "Place":{
+                "Users" : "",
+                "Tweets" : "<– [ : MENTIONED ] - "
+            },
+            "Users":{
+                "Place":"",
+                "Tweets": "TWEETED"
+            },
+            "Tweets":{
+                "Place": "MENTIONED",
+                "Users": "TWEETED"
+            }
+        };
+        
+    $rootScope.node_labels = 
+        {
+            "Place":[
+                "City",
+                "Suburb",
+                "Mall",
+                "Supermarket"
+            ],
+            "Users":[
+                "TwitterUsers",
+                "FoursquareUsers"
+            ],
+            "Tweets":[
+                "Social"
+            ]
+        };
+        
+     $rootScope.get_relationship = function(i){
+         if (i<$rootScope.search_pieces.length-1){
+             var key = $rootScope.search_pieces[i].type;
+             var next_key = $rootScope.search_pieces[i+1].type;
+             return $rootScope.node_rels[key][next_key]
+         }
+         else{
+             return ""
+         }
+    }
+    
+    $rootScope.addItem = function(){
+         $rootScope.search_pieces[i]
+    }
+    
+    $rootScope.search = function(search_pieces){
+        // Make 
+        // search_pieces.forEach
+        // String.format("MATCH (n:{0}) RETURN DISTINCT n", search_pieces.label);
+        // String.format('{0} is dead, but {1} is alive! {0} {2}', 'ASP', 'ASP.NET');
+        // Update 
+        
+    }
+    
+    if (!String.format) {
+      String.format = function(format) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return format.replace(/{(\d+)}/g, function(match, number) { 
+          return typeof args[number] != 'undefined'
+            ? args[number] 
+            : match
+          ;
+        });
+      };
+    }
+    
+}]);
 
 // AppCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($scope, $interval, $q, elevationService) {

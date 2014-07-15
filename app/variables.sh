@@ -1,3 +1,0 @@
-export DB_PASSWORD=2xtIYlpIGcHuXvOC3tvO
-export DB_USERNAME=sg2014_2
-export MQ_PASSWORD=Fmjtd%7Cluur206z21%2C7s%3Do5-9atwq6

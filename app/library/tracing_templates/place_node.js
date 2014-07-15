@@ -16,15 +16,126 @@ var tracing_template = function( ){
         shading: THREE.FlatShading, 
         vertexColors: THREE.VertexColors 
     });
-        
-    this.get_trace = function(queryresult, duration){
+
+              var materialSelect = new THREE.MeshBasicMaterial({
+                  color: new THREE.Color(0xffffff),
+                  transparent: false,
+                  opacity: .2
+              });
+
+    this.get_trace = function(queryresult, duration,scene){
+      
         
         console.log(queryresult);
       
-        for (var p = 0; p < queryresults.length; p++) {
+      
+       var pGeo = new THREE.Geometry();
+       
+        for (var p = 0; p < queryresult.length; p++) {
+            
+            trace_json=queryresult[p][0];
+            
+        lon = Number(trace_json.data.lon);
+        lat = Number(trace_json.data.lat);
+        
+         location = self.lonLatToScene( lon, lat );
+         
+        x = location.x;
+        z = location.y;
+         
+         var vec3 = new THREE.Vector3(x,0,z);
+         
+           pGeo.vertices.push(vec3);
+        
+        
+    var geometry = new THREE.SphereGeometry( 50, 10, 10 );
+      var material = new THREE.MeshBasicMaterial( );
+      var clicksphere = new THREE.Mesh(geometry,materialSelect);
+      
+      
+       clicksphere.applyMatrix( new THREE.Matrix4().makeTranslation(vec3.x, 0, vec3.z) );
+       
+       
+    //clicksphere.data=cA;
+            
+             clicksphere.geometry.computeBoundingBox ();
+             
+        // This code is not running yet
+        
+        var boundingBox = clicksphere.geometry.boundingBox;
+
+        var x0 = boundingBox.min.x;
+        var x1 = boundingBox.max.x;
+        var y0 = boundingBox.min.y;
+        var y1 = boundingBox.max.y;
+        var z0 = boundingBox.min.z;
+        var z1 = boundingBox.max.z;
+
+
+        var bWidth = ( x0 > x1 ) ? x0 - x1 : x1 - x0;
+        var bHeight = ( y0 > y1 ) ? y0 - y1 : y1 - y0;
+        var bDepth = ( z0 > z1 ) ? z0 - z1 : z1 - z0;
+    
+        var centroidX = x0 + ( bWidth / 2 ) + clicksphere.position.x;
+        var centroidY = y0 + ( bHeight / 2 )+ clicksphere.position.y;
+        var centroidZ = z0 + ( bDepth / 2 ) + clicksphere.position.z;
+        
+        // var centerpt = mesh.geometry.boundingBox.max.clone();
+        var centerpt = new THREE.Vector3(centroidX,centroidZ,-centroidY);
+        
+        // From it is fine
+        clicksphere.geometry.boundingBox.center=centerpt;
+            
+   
+
+   //   clicksphere.position.x += panObjects[0].position.x;
+//      clicksphere.position.z += panObjects[0].position.z;
+
+      scene.add(clicksphere);
+      panObjects.push(clicksphere);
+      
+selectObjects.push(clicksphere);
             
             
         }
+        
+        
+          // var dotSize = 0.025 * scaleMaster;
+      var dotSize = 600;
+
+    var color = new THREE.Color("rgb(255,195,100)");
+ 
+     var pMaterial = new THREE.ParticleBasicMaterial({
+          color: color,
+          size: dotSize,
+          sizeAttenuation: true,
+          map: THREE.ImageUtils.loadTexture(
+          //  "resources/images/particle_white.png"
+          "images/spark_static.png"),
+          blending: THREE.AdditiveBlending,
+          depthTest: false,
+          transparent: true
+      });
+      
+      var pointData = new THREE.ParticleSystem(pGeo, pMaterial);
+      
+                  
+                scene.add(pointData);
+      panObjects.push(pointData);
+      
+      
+      /*
+     // pointData.data=cA;
+      pointData.position.x += panObjects[0].position.x;
+      pointData.position.z += panObjects[0].position.z;
+      pointData.scale.set(scaleMaster, scaleMaster, scaleMaster);
+      */
+      
+  //    return pointData;
+
+
+
+
       
       /*
             lon = Number(trace_json.data.lon);

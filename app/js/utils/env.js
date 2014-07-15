@@ -340,10 +340,18 @@ function add_tracing_recursive(z){
 			cur_tracing_template = new tracing_template();
 
 			//  Set 'class variables'
+try{
 			cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
 			cur_tracing_template.object_lookup_table = self.object_lookup_table; //  Set lookup table
+}catch(err){}
 
-	var trace_objects = cur_tracing_template.get_trace(query.queryresult.data, duration);
+	cur_tracing_template.get_trace(query.queryresult.data, duration,scene);
+
+
+ //   scene.add(trace_objects);
+//	panObjects.push(trace_objects);
+	
+	
 
 /*
 			query.queryresult.data.forEach(function (result_chunk) {

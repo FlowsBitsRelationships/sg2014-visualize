@@ -63,17 +63,17 @@
                 }
          
          
-         /*
+       
                 var selectedPoints = findElements({x: event.clientX, y: event.clientY});
                
-                //console.log(selectedPoints);
-                //  console.log(selectObjects);
-                
+                console.log(selectedPoints);
+         //     console.log(selectObjects);
+                 
                 selectTempNodes = [];
-                */
+            
            
                 
-                /*
+                
                 for (var ii=0;ii<selectObjects.length;ii++){
                 
                     selectObjects[ii].material.visible=false;
@@ -85,16 +85,16 @@
                 
                         selectObjects[ii].material.visible=false;
                 
-                        if (selectedPoints[kk].mesh.n_ID==selectObjects[ii].n_ID){
+                        if (selectedPoints[kk].mesh.id==selectObjects[ii].id){
                         
-                            //selectObjects[ii].material.visible=true;
+                           // selectObjects[ii].material.visible=true;
                     
-                            selectTempNodes.push(selectObjects[ii].n_ID);
+                            selectTempNodes.push(selectObjects[ii]);
                              
                         }
                     }
                 }
-                   */
+                   
             }
             
             
@@ -191,6 +191,8 @@
             }
 */
 
+
+/*
             for (i = 0; i < selectObjects.length; i++) {
                 
                 //console.log(selectObjects[i]);
@@ -201,6 +203,8 @@
                     selBuild.style.display = 'none';
                 }
             }
+
+*/
 
             TEXTcontainer = document.createElement('div');
             TEXTcontainer.style.zIndex = 10;
@@ -448,10 +452,10 @@
                 container.style.cursor = 'auto';
             }
             
-            //console.log(selectTempNodes);
+            console.log(selectTempNodes);
             
             
-            /*
+            
             if (selectTempNodes.length>0) {
                 
                 
@@ -463,20 +467,16 @@
                 
                 for (var ll=0;ll<selectTempNodes.length;ll++) {
                     
-                    selectNodes.push(selectTempNodes[ll]);
+                 // selectTempNodes[ll].material
+                  
                 }
                 
-                for (var ll=0;ll<selectNodes.length;ll++) {
-                    
-                    selectObjects[selectNodes[ll]].material.visible=true;
-                }
-                
+     
                 
                 //console.log(selectNodes);
             }
             selectTempNodes = [];
-            UpdateDataTableElement();
-            */
+        
             
         }
 

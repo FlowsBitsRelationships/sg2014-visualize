@@ -191,6 +191,33 @@
             }
 */
 
+/*
+console.log(selectNodes);
+
+  for (i = 0; i < selectObjects.length; i++) {
+   
+        for (j=0;j<selectNodes.length;j++){
+
+        
+        }
+        
+  }
+  */
+ 
+   /*
+
+   console.log(indexOf.call(selectNodes, selectObjects[i]));
+   
+            if (selectObjects[i] != SELECTED && indexOf.call(selectNodes, selectObjects[i]) < 0) {
+                    selectObjects[i].material.visible = true;
+                    selBuild.style.display = 'none';
+               }
+               
+         }
+         
+         */
+
+
 
 /*
             for (i = 0; i < selectObjects.length; i++) {
@@ -203,8 +230,8 @@
                     selBuild.style.display = 'none';
                 }
             }
-
 */
+
 
             TEXTcontainer = document.createElement('div');
             TEXTcontainer.style.zIndex = 10;
@@ -466,9 +493,9 @@
                 }
                 
                 for (var ll=0;ll<selectTempNodes.length;ll++) {
-                    
-                 // selectTempNodes[ll].material
-                  
+                 
+                  selectTempNodes[ll].material.visible=true;
+                  selectNodes.push(selectTempNodes[ll]);
                 }
                 
      

@@ -220,6 +220,7 @@ selectObjects.push(clicksphere);
       
       
       
+      /*
          var material = new THREE.LineBasicMaterial({
           // color:0x0d8d61,
           color: 0xffffff,
@@ -239,6 +240,7 @@ selectObjects.push(clicksphere);
 
       panObjects.push(line);
       scene.add(line);
+      */
       
       
       /*

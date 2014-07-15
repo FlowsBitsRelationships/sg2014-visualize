@@ -126,6 +126,9 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
             "Tweets":{
                 "Place": "– [ : MENTIONED ] ->",
                 "Users": "<– [ : TWEETED ] -"
+            },
+            "Traffic":{
+                "Traffic": "–->"
             }
         };
         
@@ -198,7 +201,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         
         // var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = n RETURN path", a, rel, b )
         // var query = String.format( "Match (a:{0}){1}(b:{2}) return [a,b]", a, rel, b );
-        var template = "social_place";
+        var template = "traffic";
         
         var keyframe =  {
             "description": "Tweets that mention Kowloon and some place else:",

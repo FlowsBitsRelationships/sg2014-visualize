@@ -4,7 +4,38 @@ var TerrainGen = function(){
     
     this.origin = new THREE.Vector2( 0, 0 );
 
+    // this.terrain_material = new THREE.MeshLambertMaterial({
+        // color: "rgb(202,232,121)",
+        // side: THREE.DoubleSide,
+        // shading : THREE.FlatShading,
+        // vertexColors : THREE.VertexColors
+    // });
+   
+    // this.water_material = new THREE.MeshLambertMaterial({
+        // color:  "rgb(151 , 121 , 232)",
+        // side: THREE.DoubleSide,
+        // shading : THREE.FlatShading,
+        // vertexColors : THREE.VertexColors
+    // });
 
+    this.terrain_material = new THREE.MeshBasicMaterial({
+            color :  "rgb(202,232,121)",
+            opacity : 0.75,
+            transparent : true,
+            wireframe : true,
+            side: THREE.BackSide,
+            shading: THREE.FlatShading
+        });
+   
+    this.water_material = new THREE.MeshBasicMaterial({
+            color :  "rgb(151 , 121 , 232)",
+            opacity : 0.75,
+            transparent : true,
+            wireframe : true,
+            side: THREE.BackSide,
+            shading: THREE.FlatShading
+        });
+    
     this.generate = function(  bbox, x_step, z_step,  scene, callback ){
              
          var min,
@@ -20,26 +51,29 @@ var TerrainGen = function(){
 
         geometry = new THREE.PlaneGeometry(max.x, max.y, x_step-1, z_step-1);
         
+        // Add plane
+        plane = new THREE.Mesh( geometry,  self.terrain_material ); // this.material
+        plane.visible = true;
        var trans = new THREE.Matrix4().makeTranslation( max.x/2, max.y/2, 0 );
 
-       for ( var i = 0, len = geometry.vertices.length; i < len; i++ ) {
-          geometry.vertices[i].applyMatrix4( trans );
-          geometry.vertices[i].z = geometry.vertices[i].y;
-          geometry.vertices[i].y = 0;
+       for ( var i = 0, len = plane.geometry.vertices.length; i < len; i++ ) {
+          plane.geometry.vertices[i].applyMatrix4( trans );
+          plane.geometry.vertices[i].z = plane.geometry.vertices[i].y;
+          plane.geometry.vertices[i].y = 0;
        }
        
-       self.set_Elevations( geometry, scene, x_step, callback );
+       self.set_Elevations( plane, scene, x_step, callback );
    }
     
     //  ******************** Helpers ********************
     
     // Calls the elevation API to get heights of terrain vertices, sets them and adds the object to the scene
-    this.set_Elevations = function( geometry, scene, x_step, callback ){
+    this.set_Elevations = function( plane, scene, x_step, callback ){
 
         var vertex_latLons = [];  
         // Convert all geometry vertices to longitude and latitude
-        for (var i = 0; i < geometry.vertices.length; i++) { 
-            var lonLat = self.sceneToLonLat(geometry.vertices[i]);
+        for (var i = 0; i < plane.geometry.vertices.length; i++) { 
+            var lonLat = self.sceneToLonLat(plane.geometry.vertices[i]);
             vertex_latLons.push(lonLat[1],lonLat[0]);
         }
          
@@ -55,84 +89,17 @@ var TerrainGen = function(){
             
             elevationJSON = self.lintElevations(elevationJSON, x_step);
             
-            for (var i = 0; i < geometry.vertices.length; i++) { 
+            for (var i = 0; i < plane.geometry.vertices.length; i++) { 
                 var elevation = elevationJSON[i];
-                geometry.vertices[i].setY(elevation);
+                plane.geometry.vertices[i].setY(elevation);
             }
-            
-            
-            var faceIndices = [ 'a', 'b', 'c', 'd' ];
-
-			var color, f, n, vertexIndex;
-			
-            for ( var i = 0; i < geometry.faces.length; i ++ ) {
-
-					f  = geometry.faces[ i ];
-
-					n = ( f instanceof THREE.Face3 ) ? 3 : 4;
-
-					for( var j = 0; j < n; j++ ) {
-
-						vertexIndex = f[ faceIndices[ j ] ];
-						
-						if(geometry.vertices[vertexIndex].y > 0){
-    						color = new THREE.Color( 0xffffff );
-    						color.setRGB( 124/255, 124/255, 124/255 );
-						}
-						else{
-						    color = new THREE.Color( 0xffffff );
-					    	color.setRGB( 109/255, 118/255, 189/255 );
-						    
-						}
-
-						f.vertexColors[ j ] = color;
-
-					}
-
-				}
-				
-
-                var materials = [
-
-					new THREE.MeshPhongMaterial( { color: 0xffffff, vertexColors: THREE.VertexColors,transparent:true,opacity:0.5 } ),
-					new THREE.MeshBasicMaterial( { color: 0x000000, shading: THREE.FlatShading, opacity:.3, wireframe: true, transparent: true } )
-
-				];
-				
-				var group1 = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
-				 self.origin = new THREE.Vector2( 0, 0 );
-				
-				scene.add( group1 );
-
-
-            panObjects.push(group1);
-
-
-
-            var terrain_material = new THREE.MeshBasicMaterial({
-                color :  "rgb(202,232,121)",
-                opacity : 0.75,
-                transparent : true,
-                wireframe : true,
-                side: THREE.BackSide,
-                shading: THREE.FlatShading
-            });
-
-            
-            geometry.computeFaceNormals();
-            geometry.computeVertexNormals();  
-            
-            var plane = new THREE.Mesh( geometry,  terrain_material ); // this.material
-            plane.visible = false;
-        
-            
+            plane.geometry.computeFaceNormals();
+            plane.geometry.computeVertexNormals();  
             // Cleanup
             self.origin = new THREE.Vector2( 0, 0 );
             scene.add(plane);
             panObjects.push(plane);
             callback.call( this, plane );
-            
-            
         });
         
     }

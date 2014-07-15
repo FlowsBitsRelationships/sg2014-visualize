@@ -4,7 +4,7 @@ require 'json'
 require 'net/http'
 require 'pp'
 
-set :port, '3025'
+set :port, '3021'
 set :bind, '0.0.0.0'
 set :public_folder, './'
 

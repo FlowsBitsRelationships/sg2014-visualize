@@ -12,6 +12,16 @@ canvas { width: 100%; height: 100%;}
 .control_body {margin-top: 10px;}
 .control_panel {position: relative;}
 
+
+.search_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}
+.search_body {margin-top: 10px;}
+.search_panel {position: relative;}
+.searches {list-style-type: none; padding: 5px;}
+.search_piece_rel { color: white; opacity: 0.5;}
+
+select.search { padding: 5px; }
+input.search {color: white; background-color: rgb(21,21,21); margin-right:5px; border-radius: 0px; padding: 6px;}
+
 .map_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}
 .map_body {margin-top: 10px;}
 .map_panel {position: relative;}

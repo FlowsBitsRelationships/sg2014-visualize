@@ -343,6 +343,9 @@ function add_tracing_recursive(z){
 			cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
 			cur_tracing_template.object_lookup_table = self.object_lookup_table; //  Set lookup table
 
+	var trace_objects = cur_tracing_template.get_trace(query.queryresult.data, duration);
+
+/*
 			query.queryresult.data.forEach(function (result_chunk) {
 				result_chunk.forEach(function (trace_chunk) {
 
@@ -363,16 +366,22 @@ function add_tracing_recursive(z){
                         self.object_lookup_table[type][neoid] = trace_object;
                     }
                     
-                    trace_object.material.visible=false;
+   
+                    
+                 
+                 trace_object.material.visible=false;
                     scene.add(trace_object);
 					panObjects.push(trace_object);
 
 					// Keep track of this tracing's objects, for removal later
 					trace_objects.push(trace_object);
 
+
+
 				});
-			});
+			});*/
 		});
+
 
 //		self.add_tracing_objects(trace_objects, query.tracing_name, duration);
 

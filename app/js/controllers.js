@@ -173,7 +173,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         var start = 0;
         var end = 5000;
         var query = String.format("Match (n:{0}) RETURN n", search_pieces[0].label );
-        var template = "place_node_slick";
+        var template = "place_node";
         
         var keyframe =  {
             "description": "Tweets that mention Kowloon and some place else:",

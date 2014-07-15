@@ -172,6 +172,89 @@ var tracing_template = function() {
             lineGeometry.vertices.push(vec3start);
             lineGeometry.vertices.push(vec3end);
 
+// bezier curves
+
+
+             var midX = ((vec3start.x) + (vec3end.x)) / 2;
+             var midZ = ((vec3start.z) + (vec3end.z)) / 2;
+
+             var elevation=Math.random()*1000;
+             var thickness=Math.random()*1000;
+            // var elevation = Math.sqrt(data[p].duration / 4000);
+             //var thickness = Math.sqrt(data[p].duration / 4000);
+
+             var middle3 = new THREE.Vector3(midX, elevation, midZ);
+
+             var curveQuad = new THREE.QuadraticBezierCurve3(vec3start, middle3, vec3end);
+
+  var cp = new THREE.CurvePath();
+             cp.add(curveQuad);
+
+/*
+   if (data[p].usertype == 'Subscriber') {
+                 if (data[p].gender == 'Male') {
+                     var color = 0x00AAEE;
+                 }
+                 else {
+                     var color = 0xFF4FC3;
+                 }
+             }
+             else if (data[p].usertype == 'Customer') {
+                 var color = 0xFBB040;
+             }
+             else {
+                 var color = 0xcccccc;
+             }
+*/
+
+var color = 0xFBB040;
+
+             var curvedLineMaterial = new THREE.LineBasicMaterial({
+                 color: color,
+                 linewidth: 3,
+                 opacity: 0.75,
+                 transparent: true,
+                 depthTest: false,
+                 depthWrite: false,
+                 blending: THREE.AdditiveBlending
+             });
+
+
+
+             curvedLineMaterial.depthTest = true;
+             curvedLineMaterial.overdraw = true;
+
+             /*    var curvedLineMaterial = new THREE.LineDashedMaterial({
+                  color: color,
+                  //linewidth: thickness,
+                  opacity: 0,
+                  transparent: true,
+                  dashSize: 30,
+                  gapSize: 10,
+                  linewidth: 2,
+                                      depthTest:false,
+          depthWrite:false
+              });*/
+
+             //new THREE.LineDashedMaterial( { color: 0xffaa00, dashSize: 3, gapSize: 1, linewidth: 2 } 
+
+
+
+             //  var line = new THREE.Line(cp.createPointsGeometry(50), curvedLineMaterial, THREE.LinePieces);
+             var line = new THREE.Line(cp.createPointsGeometry(50), curvedLineMaterial);
+
+          //   line.scale.y = 0;
+
+         //    line.position.x += panObjects[0].position.x;
+        //     line.position.z += panObjects[0].position.z;
+        //     line.scale.set(scaleMaster, scaleMaster, scaleMaster)
+             panObjects.push(line);
+             //     mathbox._world._scene.add(line);
+             scene.add(line);
+
+         //    container.add(line);
+//changed=true;
+
 
 
         }
@@ -225,7 +308,7 @@ var tracing_template = function() {
 
 
 
-        
+       /* 
          var material = new THREE.LineBasicMaterial({
           // color:0x0d8d61,
           color: 0xffffff,
@@ -245,7 +328,7 @@ var tracing_template = function() {
 
       panObjects.push(line);
       scene.add(line);
-      
+      */
 
 
         /*

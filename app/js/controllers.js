@@ -109,22 +109,23 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
         [
         "Place",
         "Users",
-        "Tweets"
+        "Tweets",
+        "Traffic"
         ];
 
     $rootScope.node_rels = 
         {
             "Place":{
                 "Users" : "",
-                "Tweets" : "<– [ : MENTIONED ] - "
+                "Tweets" : "<– [ : MENTIONED ] -"
             },
             "Users":{
                 "Place":"",
-                "Tweets": "TWEETED"
+                "Tweets": "– [ : TWEETED ] ->"
             },
             "Tweets":{
-                "Place": "MENTIONED",
-                "Users": "TWEETED"
+                "Place": "– [ : MENTIONED ] ->",
+                "Users": "<– [ : TWEETED ] -"
             }
         };
         
@@ -142,6 +143,9 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
             ],
             "Tweets":[
                 "Social"
+            ],
+             "Traffic":[
+                "Traffic"
             ]
         };
         
@@ -149,6 +153,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
          if (i<$rootScope.search_pieces.length-1){
              var key = $rootScope.search_pieces[i].type;
              var next_key = $rootScope.search_pieces[i+1].type;
+             console.log($rootScope.node_rels[key][next_key]);
              return $rootScope.node_rels[key][next_key]
          }
          else{
@@ -161,19 +166,39 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     }
     
     $rootScope.search = function(search_pieces){
-        // Make 
-        // search_pieces.forEach
-        // String.format("MATCH (n:{0}) RETURN DISTINCT n", search_pieces.label);
-        // String.format('{0} is dead, but {1} is alive! {0} {2}', 'ASP', 'ASP.NET');
-        // Update 
+
         
         console.log(search_pieces)
+       
+        
         
         // TODO: Placeholder to return a single esgfsdfsfgd
         var start = 0;
         var end = 5000;
-        var query = String.format("Match (n:{0}) RETURN n", search_pieces[0].label );
-        var template = "place_node";
+        
+
+        
+        console.log(rel);
+        // Make this:
+        // START n=node(*) WHERE (n:Supermarket) MATCH path = n RETURN path
+        // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c return path
+        // START n=node(*) WHERE (n:Supermarket) MATCH path = n <-[:MENTIONED]- c -[:MENTIONED]->z return path
+        
+        if (search_pieces.length == 2){
+            var a = search_pieces[0].label;
+            var rel = $rootScope.get_relationship(0);
+            var b = search_pieces[1].label;
+            
+            var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a {1} b  WHERE (b:{2}) return [a,path,b]", a, rel, b )
+        } else {
+            var a = search_pieces[0].label;
+            
+            var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a RETURN a", a )
+        }
+        
+        // var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = n RETURN path", a, rel, b )
+        // var query = String.format( "Match (a:{0}){1}(b:{2}) return [a,b]", a, rel, b );
+        var template = "social_place";
         
         var keyframe =  {
             "description": "Tweets that mention Kowloon and some place else:",
@@ -182,7 +207,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
             "queries": [
              {"querystring" : query,
                 "tracing_template_name" : template,
-                "tracing_name": "Kowloon connections"}
+                "tracing_name": "Test Query"}
                 ]
         }
          

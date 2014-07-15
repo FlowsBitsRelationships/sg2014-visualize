@@ -32,8 +32,8 @@
                 var pos1 = {};
                 pos1.x = event.clientX - mousedowncoords.x;
                 pos1.y = event.clientY - mousedowncoords.y;
-              
-              /*  
+             
+          
                 marqueeGet.style.display="";
                 
                 if (pos1.x < 0 && pos1.y < 0) {
@@ -62,14 +62,16 @@
                       marqueeGet.style.top=mousedowncoords.y + 'px';
                 }
          
+         
+         /*
                 var selectedPoints = findElements({x: event.clientX, y: event.clientY});
                
                 //console.log(selectedPoints);
                 //  console.log(selectObjects);
                 
                 selectTempNodes = [];
-                
                 */
+           
                 
                 /*
                 for (var ii=0;ii<selectObjects.length;ii++){
@@ -312,7 +314,7 @@
         function onDocumentMouseout_MCS () {
             
             
-         //   resetMarquee ();
+          resetMarquee ();
         }
 
 
@@ -427,7 +429,7 @@
                 event.stopPropagation();
  
       // reset the marquee selection
-     //           resetMarquee();
+               resetMarquee();
  
       // appending a click marker.
    //   demo.jqContainer.append('<div class="clickMarkers" style="left: ' + event.offsetX + 'px; top: ' + event.offsetY +'px">U</div>' );

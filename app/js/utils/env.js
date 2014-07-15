@@ -60,8 +60,9 @@ THREE.Env = function () {
       panplane = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 20, 20), new THREE.MeshLambertMaterial({
                             color: 0x555555,
                             wireframe: true,
-                            visible: true
+                            visible: false
                          }));
+
         panplane.rotation.x = +90 * Math.PI / 180;
         panplane.rotation.y = -180 * Math.PI / 180;
         panplane.STARTPOSPLANEx=panplane.position.x;

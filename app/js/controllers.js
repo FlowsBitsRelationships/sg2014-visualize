@@ -96,6 +96,21 @@ app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI' , function($rootSc
 // AppCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($scope, $interval, $q, elevationService) {
     
+    
+    keyDrag($scope);
+    
+    $scope.bbox=[114.16 , 22.30,  114.20, 22.36 ];
+    
+    
+    $scope.generateContext=function(){
+        
+        console.log($scope.bbox);
+        
+                env.clear_scene();
+        env.add_context( $scope.bbox , 30, 30, function(){deferred_context.resolve({ status: "OK", data: ''});} )
+        
+    }
+    
     var         
         deferred_neo4J = $q.defer(),
         deferred_context = $q.defer(),
@@ -108,8 +123,8 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q',  function ($
     // Triggered when neo4j_result is returned (must be blocking, as it contains bbox and other config info)
     $scope.$on('vis_config_result', function(event, result) {  
         // Reset scene
-        env.clear_scene();
-        env.add_context( result.bbox , 30, 30, function(){deferred_context.resolve({ status: "OK", data: result});} );
+   //     env.clear_scene();
+    //    env.add_context( result.bbox , 30, 30, function(){deferred_context.resolve({ status: "OK", data: result});} );
     });
     
     $scope.$on('neo4j_result', function(event, result) {   

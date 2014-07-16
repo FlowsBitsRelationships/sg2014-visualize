@@ -12,8 +12,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+   <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
   <link rel="stylesheet" href="css/app.css"/>
   <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/tree.css"/>
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
   
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -56,17 +59,13 @@
   </li>
 </ol>
 </script>
-      
-<!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]-->
 
 
 
 <div id="container" ng-controller="AppCtrl" >
     
     
-<p>CONTROLS: <input type="checkbox" ng-model="checked" style = "float:right;"></p>
+<div  style = "position:absolute; right: 20px; background:none;" >CONTROLS: <input type="checkbox" ng-model="checked"></div>
 <pageslide ps-open="checked" ps-target="#menu" pageslide="left" ps-speed="0.5" ></pageslide>
     
 <div id="menu" ng-cloak>
@@ -74,19 +73,19 @@
     <div class="map_container">
     <div class = "map_panel" ng-controller="MapCtrl"  >
         <div id="map" style="position:relative; height: 200px !important; width: 200px !important; padding: 0 !important; margin-bottom:10px;" ></div>
-         <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; " ng-click="generateContext();"/>
+         <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-click="generateContext();"/>
         </div>
     </div>  
             
     <!--START-->
-      <div class="row" ng-controller="MainCtrl">
-    <div class="col-lg-6">
-      <h3>Draggable Tree</h3>
+    <div ng-controller="MainCtrl">
+    <div style="margin-left: 5%; width:90%">
+      <h3>KEYFRAMES</h3>
       <div ui-tree="options">
         <ol ui-tree-nodes ng-model="list" >
           <li ng-repeat="item in list" ui-tree-node ng-include="'items_renderer.html'"></li>
         </ol>
-    </div>
+        </div>
     </div>
     </div>
         <!--END-->

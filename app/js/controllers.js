@@ -485,35 +485,27 @@ console.log(keyframes);
 app_controllers.controller('MainCtrl', function($scope) {
     $scope.list = [{
       "id": 1,
-      "title": "1. dragon-breath",
+      "title": "a. Place:Supermarket",
       "items": []
     }, {
       "id": 2,
-      "title": "2. moiré-vision",
+      "title": "a. Place:Suburb",
       "items": [{
         "id": 21,
-        "title": "2.1. tofu-animation",
+        "title": "b. Users:TwitterUsers",
         "items": [{
           "id": 211,
-          "title": "2.1.1. spooky-giraffe",
-          "items": []
-        }, {
-          "id": 212,
-          "title": "2.1.2. bubble-burst",
+          "title": "c. Tweets:Mentioned",
           "items": []
         }],
-      }, {
-        "id": 22,
-        "title": "2.2. barehand-atomsplitting",
-        "items": []
       }],
     }, {
       "id": 3,
-      "title": "3. unicorn-zapper",
+      "title": "a. Place:City",
       "items": []
     }, {
       "id": 4,
-      "title": "4. romantic-transclusion",
+      "title": "b. Place:Suburb",
       "items": []
     }];
 

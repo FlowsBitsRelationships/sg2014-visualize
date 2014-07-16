@@ -11,6 +11,7 @@ angular.module('visualizeApp', [
   'visualizeApp.directives',
   'visualizeApp.controllers',
   'visualizeApp.animations',
-  "pageslide-directive"
+  "pageslide-directive",
+  'ui.tree'
 ]);
 

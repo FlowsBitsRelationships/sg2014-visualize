@@ -55,15 +55,15 @@
 
 <div id="menu" >
 
-              <div class="map_container">
+      <div class="map_container">
           
-                <div class = "map_panel" ng-controller="MapCtrl" >
-    
-         
-                <div id="map" ></div>
+            <div class = "map_panel" ng-controller="MapCtrl"  style="position:absolute;" >
+
+     
+            <div id="map" ></div>
  
  
-                <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="generateContext();"/>
+        <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="generateContext();"/>
        
 
 
@@ -73,6 +73,8 @@
     <div class = "search_panel" ng-controller="SearchCtrl" >
          <div class = "search_header" >
             SEARCH
+            <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
+            <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
          </div>
          <div class = "search_body" ng-show="showMenu" >
             <ul >

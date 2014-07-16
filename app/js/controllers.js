@@ -261,7 +261,8 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI',  f
         
         env = new THREE.Env( ); // Class for managing ThreeJS interaction
         
-        $scope.description = "[ Hit run to begin trying things out! ]";
+        $scope.description = "";
+      //  $scope.description = "[ Hit run to begin trying things out! ]";
         $scope.status = "ready";
         
     // Triggered when neo4j_result is returned (must be blocking, as it contains bbox and other config info)

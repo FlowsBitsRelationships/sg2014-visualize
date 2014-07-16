@@ -119,7 +119,7 @@
                <span id="description" class="caption" style = "float: right;margin-bottom:10px;" ng-bind="description"></span>
             </ul>
             
-            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="1000"  ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
+            <input type="range" ng-model="time" min="{{startTime}}" max="{{endTime}}" step="{{step}}"  ng-change="updateSlider();"><div ng-bind="time" ng-style="sliderStyle" style =  "color:white;">0</div>
         </div>
 
 

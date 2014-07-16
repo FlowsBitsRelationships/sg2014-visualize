@@ -13,8 +13,9 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
   <link rel="stylesheet" href="css/app.css"/>
   <link rel="stylesheet" href="css/animations.css">
+  
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
-          <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+      <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
       
     <script type="text/javascript">
         var map;
@@ -35,80 +36,96 @@
     </script>
   
 </head>
+<!-- SLIDING PANE: https://github.com/dpiccone/ng-pageslide-->
+<!-- UI TREE: http://jimliu.github.io/angular-ui-tree/-->
   <body oncontextmenu="return false;" style="overflow:hidden" onload="init()">
 
     <div id="select-marquee" style="left: 336px; width: 0px; top: 266px; height: 0px;display:none"></div>
 
-
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-<div id="container" ng-controller="AppCtrl">
-          
-              <div class="map_container">
-          
-                <div class = "map_panel" ng-controller="MapCtrl" >
+    <div id="container" ng-controller="AppCtrl">
     
-         
-                <div id="map" ></div>
- 
- 
-                <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="generateContext();"/>
-       
-         
-         <div class = "map_body" ng-show="showMenu" >
         
-        </div>
-    </div>
     
-    <div class = "search_panel" ng-controller="SearchCtrl" >
-         <div class = "search_header" >
-            SEARCH
-            <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
-            <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
-         </div>
-         <div class = "search_body" ng-show="showMenu" >
-            <ul >
-                <li ng-repeat ="query_piece in query_pieces" class="searches" >
-                    <select class = "search" ng-model="query_piece.type" data-ng-options="type for type in node_types"> </select>
-                    <select class = "search" ng-model="query_piece.label" data-ng-options="label for label in node_labels[query_piece.type]"> </select>
-                    [<input id="remove"  value="-" ng-click="query_pieces.splice($index, 1)" style = "display:inline;padding:5px 10px; width:10px"></input>]
-                    <div class = "query_piece_rel" ng-bind="get_relationship($index);"></div>
-                </li>
-                [<input id="add" value="+" ng-click="query_pieces.push({ type: 'Place', value: '' })" style = "display:inline;padding:5px 10px; width:10px"></input>]
-            </ul>
-            <ul class="menu">
-                <input id="start" type="text" ng-model="start"> START
-                <input id="duration" type="text" ng-model="duration"> DURATION
-                 <input id="template" type="text" ng-model="template"> TEMPLATE
-                <input id="add"  type="submit" value="ADD" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="add(query_pieces);"/>
-                <input id="show"  type="submit" value="SHOW" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="run();"/>
-                <span id="loading_search" class="highlight" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-bind="status_search"></span>
-            </ul>
+<input value="show controls" type="submit" class="button" pageslide="left" ps-speed="0.5" href="#menu" style = "float:right;"></input>
+
+
+<div id="ng-pageslide" style="transition: width 0.5s, height; -webkit-transition: width 0.5s, height; z-index: 1000; position: fixed; width: 300px; height: 100%; top: 0px; bottom: 0px; left: 0px;">
+
+<div id="menu" ng-cloak>
+
+<!--<a  id="menu-close" class="tiny button" pageslide="left" ps-speed="0.5" href="#menu" style = "float:left;">Go West-hide</a>-->
+<input id="menu-close" value="hide controls" type="submit" class="button" pageslide="left" ps-speed="0.5" href="#menu" style = "float:left;"></input>
+
+
+
+<!--              <div class="map_container">-->
+          
+<!--                <div class = "map_panel" ng-controller="MapCtrl" >-->
+    
+         
+<!--                <div id="map" ></div>-->
+ 
+ 
+<!--                <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="generateContext();"/>-->
+       
+
+<!--         <div class = "map_body" ng-show="showMenu" >-->
+<!--        </div>-->
+<!--    </div>-->
+    
+<!--    <div class = "search_panel" ng-controller="SearchCtrl" >-->
+<!--         <div class = "search_header" >-->
+<!--            SEARCH-->
+<!--            <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>-->
+<!--            <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>-->
+<!--         </div>-->
+<!--         <div class = "search_body" ng-show="showMenu" >-->
+<!--            <ul >-->
+<!--                <li ng-repeat ="query_piece in query_pieces" class="searches" >-->
+<!--                    <select class = "search" ng-model="query_piece.type" data-ng-options="type for type in node_types"> </select>-->
+<!--                    <select class = "search" ng-model="query_piece.label" data-ng-options="label for label in node_labels[query_piece.type]"> </select>-->
+<!--                    [<input id="remove"  value="-" ng-click="query_pieces.splice($index, 1)" style = "display:inline;padding:5px 10px; width:10px"></input>]-->
+<!--                    <div class = "query_piece_rel" ng-bind="get_relationship($index);"></div>-->
+<!--                </li>-->
+<!--                [<input id="add" value="+" ng-click="query_pieces.push({ type: 'Place', value: '' })" style = "display:inline;padding:5px 10px; width:10px"></input>]-->
+<!--            </ul>-->
+<!--            <ul class="menu">-->
+<!--                <input id="start" type="text" ng-model="start"> START-->
+<!--                <input id="duration" type="text" ng-model="duration"> DURATION-->
+<!--                 <input id="template" type="text" ng-model="template"> TEMPLATE-->
+<!--                <input id="add"  type="submit" value="ADD" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="add(query_pieces);"/>-->
+<!--                <input id="show"  type="submit" value="SHOW" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="run();"/>-->
+<!--                <span id="loading_search" class="highlight" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-bind="status_search"></span>-->
+<!--            </ul>-->
             
-        </div>
-    </div>
+<!--        </div>-->
+<!--    </div>-->
     
-    <div class = "control_panel" ng-controller="MenuCtrl" >
+<!--    <div class = "control_panel" ng-controller="MenuCtrl" >-->
 
-         <div class = "control_header" >
-            DETAIL
-            <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>
-            <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>
-         </div>
-         <div class = "control_body" ng-show="showMenu" >
-            <textarea id = "query" cols="110" rows="12" ng-model="testjson" style = "margin-bottom:10px;" ></textarea>
-            <ul class="menu">
-                <input id="query" type="submit" value="&#x21B3; RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>
-                <input id="load" type="text" ng-model="vis_config">
-                <input id="load" type="submit" value="&#x2192; LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( vis_config, null );"/>
-                <span id="loading" class="highlight" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-bind="status"></span>
-            </ul>
-        </div>
-    </div>
+<!--         <div class = "control_header" >-->
+<!--            DETAIL-->
+<!--            <input id="min"  type="submit" value="-" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = false"/>-->
+<!--            <input id="max" type="submit" value="+" style = "display:inline; float: right;padding:5px 10px;" ng-click="showMenu = true"/>-->
+<!--         </div>-->
+<!--         <div class = "control_body" ng-show="showMenu" >-->
+<!--            <textarea id = "query" cols="110" rows="12" ng-model="testjson" style = "margin-bottom:10px;" ></textarea>-->
+<!--            <ul class="menu">-->
+<!--                <input id="query" type="submit" value="&#x21B3; RUN" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="get_from_neo4j( nul , testjson );"/>-->
+<!--                <input id="load" type="text" ng-model="vis_config">-->
+<!--                <input id="load" type="submit" value="&#x2192; LOAD" style =  "display:inline; float: center; margin-bottom:10px;"ng-click="get_from_neo4j( vis_config, null );"/>-->
+<!--                <span id="loading" class="highlight" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-bind="status"></span>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
 
+<!--</div>-->
+<!--</div>-->
 </div>
-
+<!--End pageslide-->
     <div id="webglContainer" material-type="materialType"  tracing-template="tracingTemplate"></div>
     
         <div class='player'>            
@@ -134,6 +151,8 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-pageslide-directive/src/angular-pageslide-directive.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
     <script src="bower_components/threejs/build/three.min.js"></script>
     <script src="bower_components/tween.js/src/Tween.js"></script>
     <script src="bower_components/osmthree/bin/osmthree.js"></script>

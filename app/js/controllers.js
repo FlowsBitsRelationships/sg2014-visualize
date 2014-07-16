@@ -228,14 +228,26 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
     
 }]);
 
+
 // AppCtrl is a controller for managing visualization functionality
 app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI',  function ($scope, $interval, $q, visAPI) {
     
     
+    
+
+
+
+
+        $scope.checked; // This will be binded using the ps-open attribute
+        
+        
+        
     keyDrag($scope);
     
+    // $scope.checked; 
+    
     $scope.bbox=[114.16 , 22.30,  114.20, 22.36 ];
-
+    
     
     $scope.generateContext=function(){
         
@@ -329,3 +341,5 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI',  f
      }
       
   }]);
+  
+  

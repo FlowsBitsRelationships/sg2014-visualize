@@ -8,42 +8,43 @@ canvas { width: 100%; height: 100%;}
 .caption {font-size: 1.4em; color: steelblue;  font-family: "Lucida Console", Monaco, monospace; }
 
 /* UI Styles */
-.control_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; padding: 5px; font-weight:bold; min-width: 180px;}
-.control_body {margin-top: 10px;}
-.control_panel {position: relative;}
+/*.control_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; padding: 5px; font-weight:bold; min-width: 180px;}*/
+/*.control_body {margin-top: 10px;}*/
+/*.control_panel {position: relative;}*/
 
 
-.search_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}
-.search_body {margin-top: 10px;}
-.search_panel {position: relative;}
-.searches {list-style-type: none; padding: 5px;}
-.search_piece_rel { color: white; opacity: 0.5;}
+/*.search_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}*/
+/*.search_body {margin-top: 10px;}*/
+/*.search_panel {position: relative;}*/
+/*.searches {list-style-type: none; padding: 5px;}*/
+/*.search_piece_rel { color: white; opacity: 0.5;}*/
 
-select.search { padding: 5px; }
-input.search {color: white; background-color: rgb(21,21,21); margin-right:5px; border-radius: 0px; padding: 6px;}
+/*select.search { padding: 5px; }*/
+/*input.search {color: white; background-color: rgb(21,21,21); margin-right:5px; border-radius: 0px; padding: 6px;}*/
 
-.map_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}
-.map_body {margin-top: 10px;}
-.map_panel {position: relative;}
+/*.map_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}*/
+/*.map_body {margin-top: 10px;}*/
+/*.map_panel {position: relative;}*/
 
-.map_container {max-width:80%;position:absolute; margin: -5px -5px -5px -5px; padding: 5px; margin-left: 20px;top:20px;}
-.menu_container {max-width:80%;position:absolute; margin: 200px -5px -5px -5px; padding: 5px; margin-left: 20px;top:20px;}
+/*.map_container {max-width:80%;position:absolute; margin: -5px -5px -5px -5px; padding: 5px; margin-left: 20px;top:20px;}*/
+/*.menu_container {max-width:80%;position:absolute; margin: 200px -5px -5px -5px; padding: 5px; margin-left: 20px;top:20px;}*/
 
-.bottom_menu {position: absolute; bottom: 4em; color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; padding: 5px; min-width: 180px; float:right;}
+/*.bottom_menu {position: absolute; bottom: 4em; color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em; padding: 5px; min-width: 180px; float:right;}*/
 
-          #map {
-          position:relative;width:175px;height:150px; border:4px solid #000; padding: 5px;
-          }
+/*          #map {*/
+/*          position:relative;width:175px;height:150px; border:4px solid #000; padding: 5px;*/
+/*          }*/
           
-          #map img {
-    width:auto;
-}
+/*          #map img {*/
+/*    width:auto;*/
+/*}*/
 
 /* UI Widget Styles */
 
 .menu {list-style: none; padding: 0 0 0 0px; margin: 0px;}
 .menu > li {display: inline; color: white }
 .menu > li > a {color: white }
+.ng-pageslide { background: #eee; background-color: rgb(21,21,21);}
 
 .player {
     position:absolute;
@@ -56,7 +57,7 @@ textarea {background-color: rgba(0, 0, 0, 0.75);color: white;resize:both; overfl
 
 button  {background-color: rgba(0, 0, 0, 0.75); border: border:1px solid  rgba(0, 0, 0, 0.75); color: white;}
 
-input{
+input.button{
 cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
 padding:5px 25px; /*add some padding to the inside of the button*/
 background: rgba(50,50, 50, 0.75);  /*the colour of the button*/

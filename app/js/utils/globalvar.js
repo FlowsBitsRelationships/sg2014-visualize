@@ -6,6 +6,8 @@
     var panplanes = [];
     var panObjects=[];
 
+var viewObjects = [];
+
 var camera;
 
     var projector = new THREE.Projector();

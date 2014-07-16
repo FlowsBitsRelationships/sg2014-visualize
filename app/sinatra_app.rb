@@ -75,7 +75,7 @@ post '/neo4j' do
         keyframe["queries"].each_with_index do |query, j|
                 
                 queryresult = execute_query(query["querystring"])
-                
+ 
                 contents["keyframes"][i]["queries"][j]["queryresult"] = JSON.parse(queryresult)
         end
     end
@@ -86,7 +86,7 @@ end
 def execute_query(q)
     return status 403 if !verify_querystring(q) # Check for naughty query words...
     
-    uri = URI( "http://#{ENV['DB_USERNAME']}:#{ENV['DB_PASSWORD']}@sg20142.sb02.stations.graphenedb.com:24789/db/data/cypher/" )
+    uri = URI( "http://#{ENV['DB_USERNAME']}:#{ENV['DB_PASSWORD']}@sg20143.sb02.stations.graphenedb.com:24789/db/data/cypher/" )
     
     req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
     req.basic_auth ENV['DB_USERNAME'],ENV['DB_PASSWORD']

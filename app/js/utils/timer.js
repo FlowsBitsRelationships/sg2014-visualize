@@ -7,11 +7,16 @@ var Timer = function($scope, $interval, startup_callback,update_callback){
      _keyframe_callback,
     _timer_step = null;
     
+    
+    console.log($scope.step);
+    
+    /*
     $scope.time =0;
     $scope.startTime = 0;
     $scope.endTime = 240000;
     
     $scope.step = 1000;
+    */
         
     $scope.state_table = [];    
         
@@ -20,10 +25,10 @@ var Timer = function($scope, $interval, startup_callback,update_callback){
         _keyframe_hash = _self.hashify_keyframes( keyframes );
         //_keyframe_callback = keyframe_callback;
         
-        var _timer_step = null;
-        $scope.get_endTime() ;
-        $scope.resetTimer();
-      //  $scope.startTimer() ;
+        var _timer_step = $scope.step;
+   //     $scope.get_endTime() ;
+    //    $scope.resetTimer();
+      // $scope.startTimer() ;
       
       _self.populate_state_table(keyframes);
       
@@ -63,12 +68,15 @@ var Timer = function($scope, $interval, startup_callback,update_callback){
     
     // Resets _timer_step to beginning
     $scope.resetTimer = function(){
-        $scope.time=0;
+        $scope.time=$scope.minTime;
        $interval.cancel(_timer_step);
     }
     
      // Begins/Resumes advancing _timer_step
     $scope.startTimer = function(){
+        
+        console.log('start');
+        
     startup_callback.call();
     _timer_step = $interval(function(){
         // If there is a keyframe set to occur at this $scope.time, fire it off

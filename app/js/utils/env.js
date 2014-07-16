@@ -314,7 +314,7 @@ callbackCount=callbackCount+1;
 
 
 
-this.add_tracings=function(obj,callback){
+this.add_tracings=function(obj,scope,callback){
 	
 	console.log(obj)
 
@@ -329,6 +329,8 @@ function add_tracing_recursive(z){
 	
 	var query=obj.keyframes[z].queries[0];
 	var duration=obj.keyframes[z].duration;
+	
+
 	
 		var trace_objects = [];
 
@@ -345,7 +347,8 @@ try{
 			cur_tracing_template.object_lookup_table = self.object_lookup_table; //  Set lookup table
 }catch(err){}
 
-	cur_tracing_template.get_trace(query.queryresult.data, duration,scene);
+
+	cur_tracing_template.get_trace(obj.keyframes[z],scope,scene);
 
 
  //   scene.add(trace_objects);
@@ -421,9 +424,8 @@ add_tracing_recursive(0);
 
 
 this.update_state = function(current_state){
-	
-	 console.log(current_state);
-	
+
+
 	
 for(var name in current_state){
 

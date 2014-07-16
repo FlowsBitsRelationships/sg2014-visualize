@@ -41,9 +41,9 @@ canvas { width: 100%; height: 100%;}
 
 /* UI Widget Styles */
 
-.menu {list-style: none; padding: 0 0 0 0px; margin: 0px;}
-.menu > li {display: inline; color: white }
-.menu > li > a {color: white }
+/*.menu {list-style: none; padding: 0 0 0 0px; margin: 0px;}*/
+/*.menu > li {display: inline; color: white }*/
+/*.menu > li > a {color: white }*/
 .ng-pageslide { background: #eee; background-color: rgb(21,21,21);}
 
 .player {
@@ -57,7 +57,7 @@ textarea {background-color: rgba(0, 0, 0, 0.75);color: white;resize:both; overfl
 
 button  {background-color: rgba(0, 0, 0, 0.75); border: border:1px solid  rgba(0, 0, 0, 0.75); color: white;}
 
-input.button{
+input {
 cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
 padding:5px 25px; /*add some padding to the inside of the button*/
 background: rgba(50,50, 50, 0.75);  /*the colour of the button*/

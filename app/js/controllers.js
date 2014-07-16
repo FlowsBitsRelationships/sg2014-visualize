@@ -92,7 +92,6 @@ app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI' , function($rootSc
 }]);
 
 app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
-    
     $rootScope.status_search = "ready";
     
     $rootScope.vis_config =  {

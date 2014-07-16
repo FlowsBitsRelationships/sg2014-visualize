@@ -83,17 +83,23 @@ var Timer = function($scope, $interval, startup_callback,update_callback){
         if ( $scope.time in _keyframe_hash ){
            // _keyframe_callback(_keyframe_hash[$scope.time]);
         }
+
         var next_time = parseInt($scope.time)+$scope.step;
+
         // If there is time remaining, update
         if (next_time < $scope.endTime+$scope.step){
             $scope.time =  parseInt($scope.time)+$scope.step;
             $scope.updateSlider();
         }
         else{
-        startup_callback.call();
-        $scope.stopTimer();
+       // startup_callback.call();
+      //  $scope.stopTimer();
+      console.log('complete');
+                $scope.time=$scope.startTime;
+                  $scope.updateSlider();
         }
-        }, $scope.step);
+        }, 300);
+        
     }
     
     // Pauses _timer_step

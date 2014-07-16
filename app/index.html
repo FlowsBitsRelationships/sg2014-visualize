@@ -69,16 +69,20 @@
          </div>
          <div class = "search_body" ng-show="showMenu" >
             <ul >
-                <li ng-repeat ="search_piece in search_pieces" class="searches" >
-                    <select class = "search" ng-model="search_piece.type" data-ng-options="type for type in node_types"> </select>
-                    <select class = "search" ng-model="search_piece.label" data-ng-options="label for label in node_labels[search_piece.type]"> </select>
-                    [<input id="remove"  value="-" ng-click="search_pieces.splice($index, 1)" style = "display:inline;padding:5px 10px; width:10px"></input>]
-                    <div class = "search_piece_rel" ng-bind="get_relationship($index);"></div>
+                <li ng-repeat ="query_piece in query_pieces" class="searches" >
+                    <select class = "search" ng-model="query_piece.type" data-ng-options="type for type in node_types"> </select>
+                    <select class = "search" ng-model="query_piece.label" data-ng-options="label for label in node_labels[query_piece.type]"> </select>
+                    [<input id="remove"  value="-" ng-click="query_pieces.splice($index, 1)" style = "display:inline;padding:5px 10px; width:10px"></input>]
+                    <div class = "query_piece_rel" ng-bind="get_relationship($index);"></div>
                 </li>
-                [<input id="add" value="+" ng-click="search_pieces.push({ type: 'Place', value: '' })" style = "display:inline;padding:5px 10px; width:10px"></input>]
+                [<input id="add" value="+" ng-click="query_pieces.push({ type: 'Place', value: '' })" style = "display:inline;padding:5px 10px; width:10px"></input>]
             </ul>
             <ul class="menu">
-                <input id="search"  type="submit" value="SEARCH" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="search(search_pieces);"/>
+                <input id="start" type="text" ng-model="start"> START
+                <input id="duration" type="text" ng-model="duration"> DURATION
+                 <input id="template" type="text" ng-model="template"> TEMPLATE
+                <input id="add"  type="submit" value="ADD" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="add(query_pieces);"/>
+                <input id="show"  type="submit" value="SHOW" style =  "display:inline; float: center; margin-bottom:10px;" ng-click="run();"/>
                 <span id="loading_search" class="highlight" style = "float: right;padding-top: 5px;padding-right: 5px;" ng-bind="status_search"></span>
             </ul>
             

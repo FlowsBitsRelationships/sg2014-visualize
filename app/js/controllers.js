@@ -111,7 +111,7 @@ app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
 
     $rootScope.start = 0;
     $rootScope.duration = 5000;
-    $rootScope.template = "generic";
+    $rootScope.template = "cleaner";
 
     $rootScope.query_pieces = [{
         type: "Place",
@@ -282,6 +282,8 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI', fu
 console.log(result);
 
 
+/*
+
 //- we should change this in the API to make the data response cleaner
 var baseData=result.keyframes[0].queries[0].queryresult.data;
 
@@ -290,8 +292,12 @@ function parseTwitterDate(text) {
 }
 
 var rawObjects = [];
+
+
 for (var i=0;i<baseData.length;i++){
-    var time = baseData[i][0].data.time;
+
+        var time = baseData[i][0].data.time; // must be a single request
+
     var epochTime = parseTwitterDate(time);
     var nodeID = baseData[i][0].self.split("/")[baseData[i][0].self.split("/").length-1];
     var object = {
@@ -300,18 +306,13 @@ for (var i=0;i<baseData.length;i++){
     }
     rawObjects.push(object);
 }
-console.log(rawObjects);
 
 // scott's deep clone trick
 var sortObjects = JSON.parse(JSON.stringify(rawObjects));
-
 // sort the array by the epoch element here
 sortObjects.sort(function(a,b) {return a.epoch - b.epoch});
-
-console.log(sortObjects);
-
-
 // now that we have the sorted epoch times and node ids, we can bin into hours
+
 
 var minTime=sortObjects[0].epoch;
 var maxTime=sortObjects[sortObjects.length-1].epoch;
@@ -326,42 +327,9 @@ console.log(binStep);
     $scope.time =minTime;
     $scope.startTime = minTime;
     $scope.endTime = Math.floor((maxTime-minTime)/binStep)*binStep+minTime;
-    
-    /*$scope.time=0;
-    $scope.startTime=0;
-    $scope.endTime=maxTime-minTime;*/
-    
-    $scope.step = binStep;
-
-
-    /*
-    $scope.time =0;
-    $scope.startTime = 0;
-    $scope.endTime = 240000;
-    
-    $scope.step = 1000;
-    */
-
-
-/*
-var test =  $scope.get_endTime();
-console.log(test);
-*/
-
-/*
-$scope.Timer.resetTimer;
-
-$scope.Timer.time=minTime
-
-  $scope.time =minTime;
-    $scope.startTime = minTime;
-    $scope.endTime = maxTime;
-    
-    $scope.step = binStep;
-*/
   
-        
-
+    
+    $scope.step = binStep;
 
 
 var binnedObjects=[];
@@ -400,6 +368,8 @@ result.keyframes[0].time=binnedObjects;
 
 console.log(result.keyframes);
 
+*/
+
                 $scope.begin_keyframes(result.keyframes); // Start!
 
 
@@ -430,12 +400,15 @@ console.log(result.keyframes);
     });
 
 
-  $scope.update_callback = function(current_state) {
+  $scope.update_callback = function() {
 
-            env.update_state(current_state);
+
+
+//            env.update_state(current_state);
  
            var tick = ($scope.time-$scope.startTime)/$scope.step;
         
+        console.log(tick);
             
             for (var i=0;i<viewObjects.length;i++){
                 
@@ -472,10 +445,12 @@ console.log(result.keyframes);
             });
         } */
 
-console.log('trace down');
-console.log(keyframes);
+//console.log('trace down');
+//console.log(keyframes);
 
-        timer.start(keyframes); // Run visualization
+     //   timer.start(keyframes); // Run visualization
+     
+     
     }
 
 }]);

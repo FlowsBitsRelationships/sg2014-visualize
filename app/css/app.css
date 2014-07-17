@@ -41,13 +41,39 @@ canvas { width: 100%; height: 100%;}
 
 /* UI Widget Styles */
 
-.ng-pageslide { background: #eee; background-color: rgba(21,21,21, 0.5); max-width: 260px;}
+
+.ng-pageslide { height:80%!important;background: #eee; background-color: rgba(21,21,21, 0); max-width: 260px;}
 
 .map_header {color: white; background-color: rgba(0, 0, 0, 0.2); height: 2em;padding: 5px; font-weight:bold; min-width: 180px;}
 .map_body {margin-top: 10px;}
 .map_panel {position: relative;}
-.map_container {max-width:80%; padding: 5px; margin-left: 20px; margin-top:20px;}
+.map_container {position:absolute;width:211px; padding: 5px; margin-left: 20px; margin-top:20px;}
 
+body{
+    background-color:transparent !important;
+    width:100% !important;
+    height:100% !important;
+    
+}
+
+
+.btn-danger {
+background-color: #622D2D;
+border-color: border-color;
+margin-right: 7px;
+
+}
+.btn-success {
+background-color: #373A33;
+border-color: #77b300;
+
+
+/* text-align: right; */
+}
+.pull-right {
+float: left !important;
+
+}
 
 
 .player {
@@ -63,7 +89,15 @@ button  {background-color: rgba(0, 0, 0, 0.75); border: border:1px solid  rgba(0
 
 ol{ line-height:40px!important;}
 ul{line-height:40px!important;}
-li {font-size:7pt; }
+li {font-size:9pt; }
+
+.container-fluid {
+/* margin-right: auto; */
+/* margin-left: auto; */
+/* padding-left: 15px; */
+/* padding-right: 15px; */
+/* height: 20px; */
+}
 
 input {
 cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
@@ -80,6 +114,7 @@ border-radius: 0;
 box-shadow: 0 0 4px rgba(0,0,0, .75);
 /*style the text*/
 color:#f3f3f3;
+
 font-size:1 em;
 vertical-align:top;
 }

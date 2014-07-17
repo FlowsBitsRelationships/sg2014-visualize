@@ -6,7 +6,7 @@ var app_controllers = angular.module('visualizeApp.controllers', [])
 
 // MenuCtrl is a controller for managing all Menu functionality - Handles requests to API
 app_controllers.controller('MenuCtrl', ['$rootScope', 'visAPI', function($rootScope, visAPI) {
-
+    
     // Model variable for test json
     $rootScope.testjson = JSON.stringify(
 
@@ -496,25 +496,90 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     $rootScope.duration = 5000;
     $rootScope.template = "generic";
     
+    // *** ACTUAL SCOPE.LIST ***
+    // $scope.list = [{
+    //   "id": 1,
+    //   "label": "Supermarket",
+    //   "items": []
+    // }, {
+    //   "id": 2,
+    //   "label": "Suburb",
+    //   "items": [{
+    //     "id": 21,
+    //     "label": "Tweets",
+    //     "items": [{
+    //       "id": 211,
+    //       "label": "Users",
+    //       "items": []
+    //     }],
+    //   }],
+    // }, {
+    //   "id": 3,
+    //   "label": "City",
+    //   "items": []
+    // }];
+    
+    // *** PRESENTATION SCOPE.LIST ***
     $scope.list = [{
       "id": 1,
-      "label": "Supermarket",
-      "items": []
+      "label": "Mentions",
+      "query": "MATCH (n) RETURN n LIMIT 50",
+      "qconfig": {configKeyframeID : 1, 
+                configType : ["sphere","point"], 
+                configNode : ["Suburb","Twitter"] , 
+                configColR : [255,255] , 
+                configColG : [255,195] , 
+                configColB : [255,100], 
+                configSize : [600,150]},
+      "items": [{
+          "id": 11,
+          "label": "Unmentionables",
+           "query":  "MATCH (n) RETURN n LIMIT 150",
+          "qconfig": {configKeyframeID : 1, 
+                    configType : ["sphere","point"], 
+                    configNode : ["Suburb","Twitter"] , 
+                    configColR : [255,255] , 
+                    configColG : [255,195] , 
+                    configColB : [255,100], 
+                    configSize : [600,150]},
+           
+          "items": []
+        }]
     }, {
       "id": 2,
-      "label": "Suburb",
+      "label": "Confetti",
+       "query":  "MATCH (n) RETURN n LIMIT 250",
+      "qconfig": {configKeyframeID : 1, 
+                configType : ["sphere","point"], 
+                configNode : ["Suburb","Twitter"] , 
+                configColR : [255,255] , 
+                configColG : [255,195] , 
+                configColB : [255,100], 
+                configSize : [600,150]},
       "items": [{
         "id": 21,
-        "label": "Tweets",
-        "items": [{
-          "id": 211,
-          "label": "Users",
-          "items": []
-        }],
+        "label": "Confetti2",
+         "query":  "MATCH (n) RETURN n LIMIT 350",
+         "qconfig": {configKeyframeID : 1, 
+                configType : ["sphere","point"], 
+                configNode : ["Suburb","Twitter"] , 
+                configColR : [255,255] , 
+                configColG : [255,195] , 
+                configColB : [255,100], 
+                configSize : [600,150]},
+        "items": [],
       }],
     }, {
       "id": 3,
-      "label": "City",
+      "label": "Routes",
+      "query":  "MATCH (n) RETURN n LIMIT 450",
+      "qconfig": {configKeyframeID : 1, 
+                configType : ["sphere","point"], 
+                configNode : ["Suburb","Twitter"] , 
+                configColR : [255,255] , 
+                configColG : [255,195] , 
+                configColB : [255,100], 
+                configSize : [600,150]},
       "items": []
     }];
     
@@ -563,8 +628,39 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
             }
         } // Should I return empty strings or nulls if the rel doesn't exist?
     }
+    
+    // TEMPORARILY COMMENTED OUT FOR DEMO
+    // $rootScope.run = function() {
+    //     $rootScope.$broadcast('run', $rootScope.vis_config);
+    // }
+    
+    // FOR PRESENTATION
+    
+        // var configKeyframeID = 1;
+        // var configType = ["sphere","point"];
+        // var configNode = ["Suburb","Twitter"];
+        // var configColR = [255,255];
+        // var configColG = [255,195];
+        // var configColB = [255,100];
+        // var configSize = [600,150];
+        
 
-    $rootScope.run = function() {
+    
+    $rootScope.run = function(query, qconfig) {
+        // console.log(query);
+         var keyframe = {
+        "description": "Test Query Displaying",
+        "start": $rootScope.start,
+        "duration": $rootScope.duration,
+        "qconfig": qconfig,
+        "queries": [{
+            "querystring": query,
+            "tracing_template_name": $rootScope.template,
+            "tracing_name": name
+        }]
+        }
+        
+        $rootScope.vis_config["keyframes"].push(keyframe);
         $rootScope.$broadcast('run', $rootScope.vis_config);
     }
     

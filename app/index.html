@@ -52,7 +52,32 @@
 
 <div id="select-marquee" style="left: 336px; width: 0px; top: 266px; height: 0px;display:none"></div>
 
+<!--TEMPORARILY COMMENTED OUT FOR PRESENTATION-->
 <!-- Nested list template -->
+<!--<script type="text/ng-template" id="items_renderer.html">-->
+<!--<div ui-tree-handle data-nodrag>-->
+  
+
+<!-- <a class="btn btn-primary btn-xs" data-nodrag ng-init="details = true" ng-click="toggle(this); details = !details" ><span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span></a>
+<!--  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this); remove_query(this);"><span class="glyphicon glyphicon-remove"></span></a>-->
+  
+<!--  <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="newSubItem(this); get_nodes(item, [], add_query );" style="margin-right: 8px;" ng-show="item.items.length <1" ><span class="glyphicon glyphicon-plus" ></span></a>-->
+<!---->-->
+ 
+<!--    <div class=''>-->
+<!--        <input type="text" ng-model="item.label" typeahead="suggestion for suggestion in labels($viewValue)" style="width:92%; margin-left:7px;height:20px">-->
+<!--    </div>-->
+<!--      <div ng-show="details" class="details" style = "margin-left:18px;">-->
+<!--      <span class = "query_piece_rel" ng-model="item.rel" ng-bind="item.rel = get_relationship(item);"></span>-->
+<!--  </div>-->
+<!--</div>-->
+<!--<ol ui-tree-nodes="options" ng-model="item.items" ng-class="{hidden: collapsed}">-->
+<!--  <li ng-repeat="item in item.items" ui-tree-node ng-cloak ng-include="'items_renderer.html'">-->
+<!--  </li>-->
+<!--</ol>-->
+<!--</script>-->
+
+<!--DEMO TEMPLATE-->
 <script type="text/ng-template" id="items_renderer.html">
 <div ui-tree-handle data-nodrag>
   
@@ -64,7 +89,7 @@
 -->
  
     <div class=''>
-        <input type="text" ng-model="item.label" typeahead="suggestion for suggestion in labels($viewValue)" style="width:92%; margin-left:7px;height:20px">
+        <input type="text" ng-click="run(item.query, item.qconfig);"  ng-model="item.label" typeahead="suggestion for suggestion in labels($viewValue)" style="width:92%; margin-left:7px;height:20px">
     </div>
       <div ng-show="details" class="details" style = "margin-left:18px;">
       <span class = "query_piece_rel" ng-model="item.rel" ng-bind="item.rel = get_relationship(item);"></span>
@@ -77,8 +102,6 @@
 </script>
 
 
-
-
 <div id="container" ng-controller="AppCtrl" >
     
     
@@ -86,8 +109,9 @@
    <!-- <div class = "map_panel" ng-controller="MapCtrl"  >-->
         <div id="map" style="border:4px solid #000;position:relative; height: 200px !important; width: 200px !important; padding: 0 !important; margin-bottom:10px;" ></div>
          <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-click="generateContext();"/>
-       <div  style = "position:absolute; top:50px background:none;" >KEYFRAME MENU: <input type="checkbox" ng-model="checked"></div>
-
+       <!--COMMENTED OUT FOR PRESENTATION:-->
+       <!--<div  style = "position:absolute; top:50px background:none;" >KEYFRAME MENU: <input type="checkbox" ng-model="checked"></div>-->
+<div  style = "position:absolute; top:50px background:none;" >VISUALIZATION MENU: <input type="checkbox" ng-model="checked"></div>
     </div>  
 <pageslide  ps-open="checked" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide>
     
@@ -98,7 +122,10 @@
     <!--START-->
     <div ng-controller="SearchCtrl">
     <div style="margin-left: 5%; width:90%">
-      <h3 style="font-size:16px;">KEYFRAMES</h3>
+    <!--TEMPORARILY COMMENTED OUT-->
+      <!--<h3 style="font-size:16px;">KEYFRAMES</h3>-->
+      <!--PRESENTATION-->
+      <h3 style="font-size:16px;">VISUALIZATION</h3>
       <div ui-tree="options">
         <ol ui-tree-nodes ng-model="list" >
           <li ng-repeat="item in list" ui-tree-node ng-include="'items_renderer.html'"></li>

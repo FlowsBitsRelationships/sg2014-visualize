@@ -119,6 +119,9 @@ end
 
 def execute_query(q)
     url = ENV['GRAPHENEDB_URL'] || "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780"
+
+    #printf("%s",q)
+    
     neo = Neography::Rest.new( url )
     return neo.execute_query(q).to_json
 end

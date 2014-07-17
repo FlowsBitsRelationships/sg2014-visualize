@@ -158,6 +158,9 @@
       ws.onclose   = function()  { console.log('websocket closed'); }
       ws.onmessage = function(m) {
         console.log("Got a message.");
+        
+        console.log(JSON.parse( m.data ));
+        
         buildGraph( JSON.parse( m.data ) );
       };
       

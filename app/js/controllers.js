@@ -414,7 +414,7 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     $scope.list = [{
       "id": 1,
       "label": "Mentioned Regions",
-      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
+      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 100",
       "qconfig": {configKeyframeID : 1, 
                 configType : ["sphere","point"], 
                 configNode : ["Suburb","Twitter"] , 

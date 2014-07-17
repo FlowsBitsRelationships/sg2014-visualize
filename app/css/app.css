@@ -88,7 +88,7 @@ textarea {background-color: rgba(0, 0, 0, 0.75);color: white;resize:both; overfl
 button  {background-color: rgba(0, 0, 0, 0.75); border: border:1px solid  rgba(0, 0, 0, 0.75); color: white;}
 
 ol{ line-height:40px!important;}
-ul{line-height:40px!important;}
+ul{margin-left:-39px;}
 li {font-size:9pt; }
 
 .container-fluid {

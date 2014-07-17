@@ -10,6 +10,9 @@
   <title>Visualize</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+      
+  
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
     
@@ -27,6 +30,8 @@
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
       
+
+      
     <script type="text/javascript">
         var map;
         function init() {
@@ -43,12 +48,28 @@
 
           map.enableKeyDragZoom();
         }
+        
+                   
+           window.onload=function(){
+               
+               init();
+               
+               document.getElementById('spinner').style.display="none";
+               
+           }
+        
     </script>
   
 </head>
 <!-- SLIDING PANE: https://github.com/dpiccone/ng-pageslide-->
 <!-- UI TREE: http://jimliu.github.io/angular-ui-tree/-->
-  <body oncontextmenu="return false;" style="overflow:hidden" onload="init()">
+  <body oncontextmenu="return false;" style="overflow:hidden">
+
+<div id="spinner"  style="text-align:center;position:absolute;background-color:transparent;height:300px;width:300px;left:50%;margin-left:-150px;top:45%;margin-top:-150px;">
+    <span id="loadingText" style="position: relative; width: 0px; z-index: 2000000000; margin-left: auto; top: 220px;">
+        loading flowbits...
+    </span>
+</div>
 
 <div id="select-marquee" style="left: 336px; width: 0px; top: 266px; height: 0px;display:none"></div>
 
@@ -108,7 +129,7 @@
     <div class="map_container" ng-cloak>
    <!-- <div class = "map_panel" ng-controller="MapCtrl"  >-->
         <div id="map" style="border:4px solid #000;position:relative; height: 200px !important; width: 200px !important; padding: 0 !important; margin-bottom:10px;" ></div>
-         <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-click="generateContext();"/>
+         <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-click="menu_open = !menu_open;generateContext();"/>
                <input type="submit" value="&nbsp;TOGGLE MENU&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-init="menu_open=false" ng-click="menu_open = !menu_open"/>
 
        <!--COMMENTED OUT FOR PRESENTATION:-->
@@ -118,7 +139,6 @@
 <pageslide  ps-open="menu_open" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide>
     
 <div id="menu" ng-cloak style="display:block !important">
-
 
     <!--START-->
     <div ng-controller="SearchCtrl">
@@ -195,6 +215,8 @@
     <script src="js/directives.js"></script>
     <script src="js/animations.js"></script>
     
+       <script src="js/utils/spin.js"></script>
+    
        <script type="text/javascript" src="js/utils/keydragzoom.js"></script>
     
 <!--     CUSTOM SHADERS: Is there another way to handle this besides declaring it in HTML?
@@ -223,6 +245,36 @@
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     }
     </script>
+      <script>
+           
+
+           
+           var opts = {
+  lines: 13, // The number of lines to draw
+  length: 20, // The length of each line
+  width: 8, // The line thickness
+  radius: 20, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#FFFFFF', // #rgb or #rrggbb or array of colors
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: true, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: 'auto', // Top position relative to parent in px
+  left: 'auto', // Left position relative to parent in px
+};
+var target1 = document.getElementById('spinner');
+var spinner = new Spinner(opts).spin(target1);
+
+       //    console.log(spinner);
+       
+       
+       
+       </script>   
     
    
  </div>   

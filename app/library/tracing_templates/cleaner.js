@@ -477,6 +477,7 @@ console.log(result.keyframes);
 
     }
     
+    document.getElementById('spinner').style.display="none";
 
     return this;
 }

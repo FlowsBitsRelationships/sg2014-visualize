@@ -3,10 +3,15 @@ require 'sinatra'
 require 'json'
 require 'net/http'
 require 'pp'
+require 'neography'
+require 'sinatra-websocket'
 
 set :port, '3010'
 set :bind, '0.0.0.0'
 set :public_folder, './'
+set :server, 'thin' 
+
+set :sockets, []
 
 get '/' do
 	response.headers['Access-Control-Allow-Origin'] = '*'
@@ -64,7 +69,8 @@ end
 
 post '/neo4j' do
 	response.headers['Access-Control-Allow-Origin'] = '*'
-    
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+
     contents = params[:json]
     
     return status 400 if contents.nil? || contents == ""
@@ -73,31 +79,73 @@ post '/neo4j' do
     # Preloading ensures that the visualization has no timing hiccups
     contents["keyframes"].each_with_index do | keyframe, i |
         keyframe["queries"].each_with_index do |query, j|
-                
                 queryresult = execute_query(query["querystring"])
- 
                 contents["keyframes"][i]["queries"][j]["queryresult"] = JSON.parse(queryresult)
         end
     end
-    
-    contents.to_json
+    settings.sockets.each do | ws |
+       ws.send( contents.to_json ) 
+    end
+    return contents.to_json
 end
 
+get '/graph' do
+    if !request.websocket?
+        File.open( './index_graph.html') do | f |
+		    f.read
+	    end
+	else
+	  request.websocket do |ws|
+      ws.onopen do
+        #ws.send("Hello World!")
+        settings.sockets << ws
+      end
+      ws.onmessage do | msg |
+        # Not really needed here...
+        EM.next_tick { 
+            settings.sockets.each do |s| 
+                s.send( msg )
+            end
+        }
+      end
+      ws.onclose do
+        warn("websocket closed")
+        settings.sockets.delete(ws)
+      end
+    end 
+	end
+end
+
+
 def execute_query(q)
+    url = ENV['GRAPHENEDB_URL'] || "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780"
+    neo = Neography::Rest.new( url )
+    return neo.execute_query(q).to_json
+end
+
+
+def execute_query_OLD(q)
     return status 403 if !verify_querystring(q) # Check for naughty query words...
     
-    uri = URI( "http://#{ENV['DB_USERNAME']}:#{ENV['DB_PASSWORD']}@sg20143.sb02.stations.graphenedb.com:24789/db/data/cypher/" )
-    
-    req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
-    req.basic_auth ENV['DB_USERNAME'],ENV['DB_PASSWORD']
+    uri = URI( "https://#{ENV['DB_USERNAME']}:#{ENV['DB_PASSWORD']}@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780/db/data/cypher/" )
+
+    #req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
+    #req.basic_auth ENV['DB_USERNAME'],ENV['DB_PASSWORD']
+    #req.body = {'query' =>q}.to_json
+        
+    https = Net::HTTP.new(uri.host,uri.port)
+    https.use_ssl = true
+    req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
     req.body = {'query' =>q}.to_json
+
+    res = https.request(req)
     
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-        http.request(req)
-    }
+    return  res.body
+    
     
     return  res.body
 end
+
 
 def verify_querystring(q)
     case q

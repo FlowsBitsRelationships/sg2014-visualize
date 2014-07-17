@@ -237,10 +237,18 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI', fu
     // function to generate OSM geometry based on the currently set bounding box    
     $scope.generateContext = function() {
 
+ document.getElementById('loadingText').innerText="loading geometry...";
+document.getElementById('spinner').style.display="block";
+
         console.log($scope.bbox);
 
         env.clear_scene();
         env.add_context($scope.bbox, 30, 30, function() {
+            
+           
+            
+             document.getElementById('spinner').style.display="none";
+            
             deferred_context.resolve({
                 status: "OK",
                 data: ''
@@ -272,6 +280,9 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI', fu
 
     $scope.$on('run', function(event, vis_config) {
         console.log("RUNNING!");
+
+ document.getElementById('loadingText').innerText="loading data...";
+document.getElementById('spinner').style.display="block";
 
         $scope.status = "loading";
 
@@ -356,6 +367,8 @@ console.log('trace down');
 console.log(keyframes);
 
         timer.start(keyframes); // Run visualization
+        
+        
     }
 
 }]);
@@ -400,8 +413,8 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     // *** PRESENTATION SCOPE.LIST ***
     $scope.list = [{
       "id": 1,
-      "label": "Mentions",
-      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b]",
+      "label": "Mentioned Regions",
+      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
       "qconfig": {configKeyframeID : 1, 
                 configType : ["sphere","point"], 
                 configNode : ["Suburb","Twitter"] , 
@@ -412,7 +425,7 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
       "items": [{
           "id": 11,
           "label": "Unmentionables",
-           "query":  "MATCH (n) RETURN n LIMIT 150",
+           "query":  'MATCH (t:Tweets) WHERE t.content=~".*dinner.*" OR t.content=~".*food.*" OR t.content=~".*restaurant.*" OR t.content=~".*delicious.*" OR t.content=~".*yum.*" OR t.content=~".*dim sum.*" OR t.content=~".*noodle.*" OR t.content=~".*congee.*" OR t.content=~".*dumpling.*" OR t.content=~".*canteen.*" OR t.content=~".*餐廳.*" OR t.content=~".*飯堂.*" OR t.content=~".*野食.*" OR t.content=~".*餸.*" OR t.content=~".*好味.*" OR t.content=~".*好食.*" OR t.content=~".*飲茶.*" OR t.content=~".*西餐.*" OR t.content=~".*中餐.*" OR t.content=~".*茶餐廳.*" OR t.content=~".*大排檔.*" OR t.content=~".*掃街.*"  RETURN DISTINCT t LIMIT 1000',
           "qconfig": {configKeyframeID : 1, 
                     configType : ["sphere","point"], 
                     configNode : ["Suburb","Twitter"] , 
@@ -540,6 +553,12 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
         
         $rootScope.vis_config["keyframes"].push(keyframe);
         $rootScope.$broadcast('run', $rootScope.vis_config);
+        
+        $rootScope.menu_open=false;
+    
+        
+        console.log($rootScope.menu_open);
+        
     }
     
     $rootScope.get_nodes = function(item, array, callback){

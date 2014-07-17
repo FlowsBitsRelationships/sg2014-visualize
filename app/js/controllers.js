@@ -280,130 +280,9 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI', fu
         }).$promise.then(function(result) {
             env.add_tracings(result, $scope, function() {   // how do i pass the scope variable here
      
-console.log(result);
-
-
-//- we should change this in the API to make the data response cleaner
-var baseData=result.keyframes[0].queries[0].queryresult.data;
-
-function parseTwitterDate(text) {
-    return new Date(Date.parse(text.replace(/( +)/, ' UTC$1')));
-}
-
-var rawObjects = [];
-for (var i=0;i<baseData.length;i++){
-    var time = baseData[i][0].data.time;
-    var epochTime = parseTwitterDate(time);
-    var nodeID = baseData[i][0].self.split("/")[baseData[i][0].self.split("/").length-1];
-    var object = {
-        id:nodeID,
-        epoch:epochTime.getTime()/1000
-    }
-    rawObjects.push(object);
-}
-console.log(rawObjects);
-
-// scott's deep clone trick
-var sortObjects = JSON.parse(JSON.stringify(rawObjects));
-
-// sort the array by the epoch element here
-sortObjects.sort(function(a,b) {return a.epoch - b.epoch});
-
-console.log(sortObjects);
-
-
-// now that we have the sorted epoch times and node ids, we can bin into hours
-
-var minTime=sortObjects[0].epoch;
-var maxTime=sortObjects[sortObjects.length-1].epoch;
-
-var binStep=3600*24;  // should be global var - set binning timestep in seconds - adjustable
-
-console.log(minTime);
-console.log(maxTime);
-console.log(binStep);
-
-// I can probably readjust the scope timeline variables here
-    $scope.time =minTime;
-    $scope.startTime = minTime;
-    $scope.endTime = Math.floor((maxTime-minTime)/binStep)*binStep+minTime;
-    
-    /*$scope.time=0;
-    $scope.startTime=0;
-    $scope.endTime=maxTime-minTime;*/
-    
-    $scope.step = binStep;
-
-
-    /*
-    $scope.time =0;
-    $scope.startTime = 0;
-    $scope.endTime = 240000;
-    
-    $scope.step = 1000;
-    */
-
-
-/*
-var test =  $scope.get_endTime();
-console.log(test);
-*/
-
-/*
-$scope.Timer.resetTimer;
-
-$scope.Timer.time=minTime
-
-  $scope.time =minTime;
-    $scope.startTime = minTime;
-    $scope.endTime = maxTime;
-    
-    $scope.step = binStep;
-*/
-  
-        
-
-
-
-var binnedObjects=[];
-
-for (var j=0;j<(maxTime-minTime)/binStep;j++){
-    
-    console.log(j);
-    
-    var binCollect=[];
-    
-    for (var k=0;k<sortObjects.length;k++){
-    
-        if (sortObjects[k].epoch<(binStep*(j+1))+minTime && sortObjects[k].epoch>=(binStep*j)+minTime){
-            binCollect.push(sortObjects[k]);
-        }
-    
-    }
-    
-    binnedObjects.push(binCollect);
-    
-}
-
-console.log(binnedObjects);
-
-
-result.keyframes[0].viz_config={
-     configType:["sphere","point"],
-     configColR:[255,255],
-     configColG:[255,195],
-     configColB:[255,100],
-     configSize:[600,150],
-     configTime :[false,true]
-}
-
-result.keyframes[0].time=binnedObjects;
-
-console.log(result.keyframes);
+            console.log(result);
 
                 $scope.begin_keyframes(result.keyframes); // Start!
-
-
 
             });
         });
@@ -437,7 +316,6 @@ console.log(result.keyframes);
  
            var tick = ($scope.time-$scope.startTime)/$scope.step;
         
-            
             for (var i=0;i<viewObjects.length;i++){
                 
                 if (viewObjects[i].time == tick){
@@ -494,7 +372,7 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
 
     $rootScope.start = 0;
     $rootScope.duration = 5000;
-    $rootScope.template = "generic";
+    $rootScope.template = "cleaner";
     
     // *** ACTUAL SCOPE.LIST ***
     // $scope.list = [{
@@ -523,7 +401,7 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     $scope.list = [{
       "id": 1,
       "label": "Mentions",
-      "query": "MATCH (n) RETURN n LIMIT 50",
+      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b]",
       "qconfig": {configKeyframeID : 1, 
                 configType : ["sphere","point"], 
                 configNode : ["Suburb","Twitter"] , 

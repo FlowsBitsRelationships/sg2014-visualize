@@ -348,7 +348,7 @@ try{
 }catch(err){}
 
 
-	cur_tracing_template.get_trace(obj.keyframes[z],scope,scene);
+	cur_tracing_template.get_trace(obj.keyframes[z].queries[0].queryresult.data,scope,scene);
 
 
  //   scene.add(trace_objects);

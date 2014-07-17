@@ -62,7 +62,7 @@
 <!--  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this); remove_query(this);"><span class="glyphicon glyphicon-remove"></span></a>-->
   
 <!--  <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="newSubItem(this); get_nodes(item, [], add_query );" style="margin-right: 8px;" ng-show="item.items.length <1" ><span class="glyphicon glyphicon-plus" ></span></a>-->
-<!---->-->
+<!---->
  
 <!--    <div class=''>-->
 <!--        <input type="text" ng-model="item.label" typeahead="suggestion for suggestion in labels($viewValue)" style="width:92%; margin-left:7px;height:20px">-->
@@ -102,23 +102,24 @@
 </script>
 
 
-<div id="container" ng-controller="AppCtrl" >
+<div id="container" ng-controller="AppCtrl" ng-cloak>
     
     
-    <div class="map_container">
+    <div class="map_container" ng-cloak>
    <!-- <div class = "map_panel" ng-controller="MapCtrl"  >-->
         <div id="map" style="border:4px solid #000;position:relative; height: 200px !important; width: 200px !important; padding: 0 !important; margin-bottom:10px;" ></div>
          <input id="query" type="submit" value="&nbsp;GENERATE AREA&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-click="generateContext();"/>
+               <input type="submit" value="&nbsp;TOGGLE MENU&nbsp;" style =  "display:inline; float: center; margin-bottom:10px; width:100%" ng-init="menu_open=false" ng-click="menu_open = !menu_open"/>
+
        <!--COMMENTED OUT FOR PRESENTATION:-->
-       <!--<div  style = "position:absolute; top:50px background:none;" >KEYFRAME MENU: <input type="checkbox" ng-model="checked"></div>-->
-<div  style = "position:absolute; top:50px background:none;" >VISUALIZATION MENU: <input type="checkbox" ng-model="checked"></div>
+       <!--<div  style = "position:absolute; top:50px background:none;" >KEYFRAME MENU: <input type="checkbox" ng-model="checked"></div>
+<div ng-cloak style = "position:absolute; top:50px background:none;" >VISUALIZATION MENU: <input type="checkbox" ng-model="checked"></div>-->
     </div>  
-<pageslide  ps-open="checked" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide>
+<pageslide  ps-open="menu_open" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide>
     
-<div id="menu" ng-cloak>
+<div id="menu" ng-cloak style="display:block !important">
 
 
-            
     <!--START-->
     <div ng-controller="SearchCtrl">
     <div style="margin-left: 5%; width:90%">

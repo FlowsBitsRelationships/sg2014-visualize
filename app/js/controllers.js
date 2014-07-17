@@ -99,127 +99,127 @@ app_controllers.controller('MapCtrl', ['$rootScope', 'visAPI', function($rootSco
 
 }]);
 
-app_controllers.controller('SearchCtrl', ['$rootScope', function($rootScope) {
+app_controllers.controller('SearchCtrl_deprecated', ['$rootScope', function($rootScope) {
 
-    $rootScope.status_search = "ready";
+//     $rootScope.status_search = "ready";
 
-    $rootScope.vis_config = {
-        "title": "SG2014 Sample Visualization",
-        "author": "Capt. James T. Kirk",
-        "keyframes": []
-    };
+//     $rootScope.vis_config = {
+//         "title": "SG2014 Sample Visualization",
+//         "author": "Capt. James T. Kirk",
+//         "keyframes": []
+//     };
 
-    $rootScope.start = 0;
-    $rootScope.duration = 5000;
-    $rootScope.template = "generic";
+//     $rootScope.start = 0;
+//     $rootScope.duration = 5000;
+//     $rootScope.template = "generic";
 
-    $rootScope.query_pieces = [{
-        type: "Place",
-        label: "City"
-    }];
+//     $rootScope.query_pieces = [{
+//         type: "Place",
+//         label: "City"
+//     }];
 
-    $rootScope.node_types = ["Place", "Users", "Tweets", "Traffic"];
+//     $rootScope.node_types = ["Place", "Users", "Tweets", "Traffic"];
 
-    $rootScope.node_rels = {
-        "Place": {
-            "Users": "",
-            "Tweets": "<– [ : MENTIONED ] -"
-        },
-        "Users": {
-            "Place": "",
-            "Tweets": "– [ : TWEETED ] ->"
-        },
-        "Tweets": {
-            "Place": "– [ : MENTIONED ] ->",
-            "Users": "<– [ : TWEETED ] -"
-        },
-        "Traffic": {
-            "Traffic": "–->"
-        }
-    };
+//     $rootScope.node_rels = {
+//         "Place": {
+//             "Users": "",
+//             "Tweets": "<– [ : MENTIONED ] -"
+//         },
+//         "Users": {
+//             "Place": "",
+//             "Tweets": "– [ : TWEETED ] ->"
+//         },
+//         "Tweets": {
+//             "Place": "– [ : MENTIONED ] ->",
+//             "Users": "<– [ : TWEETED ] -"
+//         },
+//         "Traffic": {
+//             "Traffic": "–->"
+//         }
+//     };
 
-    $rootScope.node_labels = {
-        "Place": ["City", "Suburb", "Mall", "Supermarket"],
-        "Users": ["TwitterUsers", "FoursquareUsers"],
-        "Tweets": ["Social"],
-        "Traffic": ["Traffic"]
-    };
+//     $rootScope.node_labels = {
+//         "Place": ["City", "Suburb", "Mall", "Supermarket"],
+//         "Users": ["TwitterUsers", "FoursquareUsers"],
+//         "Tweets": ["Social"],
+//         "Traffic": ["Traffic"]
+//     };
 
-    $rootScope.get_relationship = function(i) {
-        if (i < $rootScope.query_pieces.length - 1) {
-            var key = $rootScope.query_pieces[i].type;
-            var next_key = $rootScope.query_pieces[i + 1].type;
-            console.log($rootScope.node_rels[key][next_key]);
-            return $rootScope.node_rels[key][next_key]
-        }
-        else {
-            return ""
-        }
-    }
+//     $rootScope.get_relationship = function(i) {
+//         if (i < $rootScope.query_pieces.length - 1) {
+//             var key = $rootScope.query_pieces[i].type;
+//             var next_key = $rootScope.query_pieces[i + 1].type;
+//             console.log($rootScope.node_rels[key][next_key]);
+//             return $rootScope.node_rels[key][next_key]
+//         }
+//         else {
+//             return ""
+//         }
+//     }
 
-    $rootScope.addItem = function() {
-        $rootScope.query_pieces[i]
-    }
+//     $rootScope.addItem = function() {
+//         $rootScope.query_pieces[i]
+//     }
 
-    $rootScope.run = function() {
-        $rootScope.$broadcast('run', $rootScope.vis_config);
-    }
+//     $rootScope.run = function() {
+//         $rootScope.$broadcast('run', $rootScope.vis_config);
+//     }
 
-    // Generate a query from the UI query_pieces
-    $rootScope.add = function(query_pieces) {
+//     // Generate a query from the UI query_pieces
+//     $rootScope.add = function(query_pieces) {
 
-if (query_pieces.length==1){
+// if (query_pieces.length==1){
     
-     var a = query_pieces[0].label;
-          var query = String.format("START a=node(*) WHERE (a:{0}) RETURN a LIMIT 100", a);
+//      var a = query_pieces[0].label;
+//           var query = String.format("START a=node(*) WHERE (a:{0}) RETURN a LIMIT 100", a);
     
-}else{
-    var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
-        var return_ids = ['path', 'a'];
+// }else{
+//     var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+//         var return_ids = ['path', 'a'];
 
-        var a = query_pieces[0].label;
-        var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a ", a);
+//         var a = query_pieces[0].label;
+//         var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a ", a);
 
-        for (var i = 1; i < query_pieces.length; i++) {
+//         for (var i = 1; i < query_pieces.length; i++) {
 
-            var rel = $rootScope.get_relationship(i - 1);
-            var id = alphabet[i];
-            var b = query_pieces[i].label;
+//             var rel = $rootScope.get_relationship(i - 1);
+//             var id = alphabet[i];
+//             var b = query_pieces[i].label;
 
-            return_ids.push(id);
-            query += String.format(" {0} {1}  WHERE ({1}:{2})", rel, id, b);
-        }
-        query += (" RETURN [" + return_ids.join(",") + "]");
-}
+//             return_ids.push(id);
+//             query += String.format(" {0} {1}  WHERE ({1}:{2})", rel, id, b);
+//         }
+//         query += (" RETURN [" + return_ids.join(",") + "]");
+// }
 
-console.log(query);
+// console.log(query);
 
-        // TODO: Right now, name is just the query 
-        // .... provide a better way of generating descriptive name
-        var name = query;
+//         // TODO: Right now, name is just the query 
+//         // .... provide a better way of generating descriptive name
+//         var name = query;
 
-        var keyframe = {
-            "description": "Test Query Displaying",
-            "start": $rootScope.start,
-            "duration": $rootScope.duration,
-            "queries": [{
-                "querystring": query,
-                "tracing_template_name": $rootScope.template,
-                "tracing_name": name
-            }]
-        }
-        $rootScope.start += $rootScope.duration
-        $rootScope.vis_config["keyframes"].push(keyframe);
-    }
+//         var keyframe = {
+//             "description": "Test Query Displaying",
+//             "start": $rootScope.start,
+//             "duration": $rootScope.duration,
+//             "queries": [{
+//                 "querystring": query,
+//                 "tracing_template_name": $rootScope.template,
+//                 "tracing_name": name
+//             }]
+//         }
+//         $rootScope.start += $rootScope.duration
+//         $rootScope.vis_config["keyframes"].push(keyframe);
+//     }
 
-    if (!String.format) {
-        String.format = function(format) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            return format.replace(/{(\d+)}/g, function(match, number) {
-                return typeof args[number] != 'undefined' ? args[number] : match;
-            });
-        };
-    }
+//     if (!String.format) {
+//         String.format = function(format) {
+//             var args = Array.prototype.slice.call(arguments, 1);
+//             return format.replace(/{(\d+)}/g, function(match, number) {
+//                 return typeof args[number] != 'undefined' ? args[number] : match;
+//             });
+//         };
+//     }
 
 }]);
 
@@ -280,7 +280,7 @@ app_controllers.controller('AppCtrl', ['$scope', '$interval', '$q', 'visAPI', fu
         }).$promise.then(function(result) {
             env.add_tracings(result, $scope, function() {   // how do i pass the scope variable here
      
-console.log(result);
+// console.log(result);
 
 
 //- we should change this in the API to make the data response cleaner
@@ -482,38 +482,178 @@ console.log(keyframes);
 
 }]);
 
-app_controllers.controller('MainCtrl', function($scope) {
+app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limitToFilter',  function($scope, $rootScope, $http, limitToFilter) {
+    
+    $rootScope.status_search = "ready";
+    
+    $rootScope.vis_config = {
+        "title": "SG2014 Sample Visualization",
+        "author": "Capt. James T. Kirk",
+        "keyframes": []
+    };
+
+    $rootScope.start = 0;
+    $rootScope.duration = 5000;
+    $rootScope.template = "generic";
+    
     $scope.list = [{
       "id": 1,
-      "title": "a. Place:Supermarket",
+      "label": "Supermarket",
       "items": []
     }, {
       "id": 2,
-      "title": "a. Place:Suburb",
+      "label": "Suburb",
       "items": [{
         "id": 21,
-        "title": "b. Users:TwitterUsers",
+        "label": "Tweets",
         "items": [{
           "id": 211,
-          "title": "c. Tweets:Mentioned",
+          "label": "Users",
           "items": []
         }],
       }],
     }, {
       "id": 3,
-      "title": "a. Place:City",
-      "items": []
-    }, {
-      "id": 4,
-      "title": "b. Place:Suburb",
+      "label": "City",
       "items": []
     }];
+    
+    $rootScope.query_pieces = [{
+        type: "Place",
+        label: "City"
+    }];
+    
+    // TODO - Get from neo4j and store statically
+    $rootScope.node_types = ["Place", "Users", "Tweets", "Traffic"];
+    
+    $scope.selectedItem = {}; // TODO: 
 
-    $scope.selectedItem = {};
-
-    $scope.options = {
+    $scope.options = {}; // TODO: Pass object params
+    
+    // TODO - Get from neo4j and store statically
+    $rootScope.node_rels = {
+        "Place": {
+            "Users": "",
+            "Tweets": "<– [ : MENTIONED ] -"
+        },
+        "Users": {
+            "Place": "",
+            "Tweets": "– [ : TWEETED ] ->"
+        },
+        "Tweets": {
+            "Place": "– [ : MENTIONED ] ->",
+            "Users": "<– [ : TWEETED ] -"
+        },
+        "Traffic": {
+            "Traffic": "–->"
+        }
     };
 
+    $rootScope.get_relationship = function(item) {
+        var key = item.label;
+        if (item.items && $rootScope.node_rels[key] ) {
+            if (item.items.length>0) {
+                var next_key = item.items[0].label;
+                if ( (next_key in  $rootScope.node_rels[key]) ){
+                    return $rootScope.node_rels[key][next_key]
+                }
+                
+                }
+            }
+            else {
+                return "–->"
+            }
+        } // Should I return empty strings or nulls if the rel doesn't exist?
+
+    $rootScope.run = function() {
+        $rootScope.$broadcast('run', $rootScope.vis_config);
+    }
+    
+    $rootScope.make_query = function(item){
+        var root_id = parseInt(item.id.toString()[0]-1);
+        $rootScope.get_query_pieces($scope.list[root_id], []);
+    }
+    // TODO: add type as well, and then access this in add_query
+    $rootScope.get_query_pieces = function(item, array){
+        if (item.label){
+            array.push({label: item.label});
+        }else{
+            array.push({label: "*"}) // If no node is defined, match all nodes
+        }
+        
+         if (item.items) {
+             if (item.items.length >0){
+                 array.push($rootScope.get_query_pieces( item.items[0], array ));
+             }
+         }
+
+        $rootScope.add_query(array);
+
+    }
+    
+    // Generate a query from the UI query_pieces
+    $rootScope.add_query = function(query_pieces) {
+    
+    // console.log(query_pieces);
+    // Generate query
+     if (query_pieces.length==1){
+    
+         var a = query_pieces[0].label;
+          var query = String.format("START a=node(*) WHERE (a:{0}) RETURN a LIMIT 100", a);
+    
+    }else{
+        var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+        var return_ids = ['path', 'a'];
+    
+        var a = query_pieces[0].label;
+        var query = String.format("START a=node(*) WHERE (a:{0}) MATCH path = a ", a);
+    
+        for (var i = 1; i < query_pieces.length-1; i++) {
+    
+            var rel = $rootScope.get_relationship(query_pieces[i].label);
+            var id = alphabet[i];
+            var b = query_pieces[i].label;
+    
+            return_ids.push(id);
+            query += String.format(" {0} {1}  WHERE ({1}:{2})", rel, id, b);
+        }
+        query += (" RETURN [" + return_ids.join(",") + "]");
+    }
+        
+    // console.log(query);
+
+    // TODO: Right now, name is just the query 
+    // .... provide a better way of generating descriptive name
+    var name = query;
+
+    var keyframe = {
+        "description": "Test Query Displaying",
+        "start": $rootScope.start,
+        "duration": $rootScope.duration,
+        "queries": [{
+            "querystring": query,
+            "tracing_template_name": $rootScope.template,
+            "tracing_name": name
+        }]
+        }
+        $rootScope.start += $rootScope.duration
+        $rootScope.vis_config["keyframes"].push(keyframe);
+    }
+    
+
+    
+     // TODO: Remove query in real time when it is removed from UI
+    $rootScope.remove_query = function(params) {
+        
+    }
+    
+    // BEGIN UI-TREE
+    
+    $scope.is_first = function(item){
+        // console.log(item);
+        return item.id.toString().length<2;
+    }
+    
     $scope.remove = function(scope) {
       scope.remove();
     };
@@ -530,4 +670,60 @@ app_controllers.controller('MainCtrl', function($scope) {
         items: []
       });
     };
-  });
+    
+    
+    // Syntactic sugar....
+    Array.prototype.getUnique = function(){
+       var u = {}, a = [];
+       for(var i = 0, l = this.length; i < l; ++i){
+          if(u.hasOwnProperty(this[i])) {
+             continue;
+          }
+          a.push(this[i]);
+          u[this[i]] = 1;
+       }
+       return a;
+    }
+    
+   var flatten = function(arr) {
+    return arr.reduce(function flatten(res, a) { 
+        Array.isArray(a) ? a.reduce(flatten, res) : res.push(a);
+        return res;
+    }, []);
+    
+    
+}
+
+    
+if (!String.format) {
+    String.format = function(format) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return format.replace(/{(\d+)}/g, function(match, number) {
+            return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+    };
+}
+    
+  //http://www.geobytes.com/free-ajax-cities-jsonp-api.htm
+
+  $scope.labels = function(labelName) {
+    // TODO: Create a sinatra regex search function for labels and get the labels dynamically from a cypher query
+    // Pass an argument to regex only the relevant ones
+    return $http.get("/public/labels.json").then(function(response){
+        
+        
+
+        var flatter= response.data.data.reduce(function(a, b){
+            return a.concat(b);
+        });
+        var flattened= flatter.reduce(function(a, b){
+            return a.concat(b);
+        });
+        var uniq = flattened.getUnique();
+
+
+      return limitToFilter(uniq, 10);
+    });
+  };
+  
+  }]);

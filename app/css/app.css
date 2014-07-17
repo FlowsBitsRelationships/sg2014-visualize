@@ -63,7 +63,7 @@ button  {background-color: rgba(0, 0, 0, 0.75); border: border:1px solid  rgba(0
 
 ol{ line-height:40px!important;}
 ul{line-height:40px!important;}
-li {font-size:7pt; }
+li {font-size:9pt; }
 
 input {
 cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/

@@ -38,7 +38,7 @@ var tracing_template = function() {
             //Loop through each database record
             for (var q = 1; q < keyframe[p][0].length; q++)
             {
-                if(keyframe[p][0].length > 1)
+                if(keyframe[p][0].length > 1 )
                 {
                     //q++;
                 }
@@ -251,8 +251,54 @@ for (var kk=0;kk<binnedObjects[k].length;kk++){
             pCol.push(binnedObjects[k][kk].color);
             
             if(binnedObjects[k][kk].link > 0){
-                lGeo.vertices.push( meta[binnedObjects[k][kk].id].point);
-                lGeo.vertices.push( meta[binnedObjects[k][kk].link].point);
+                
+                var p1 = meta[binnedObjects[k][kk].id].point;
+                var p2 = meta[binnedObjects[k][kk].link].point;
+                
+                lGeo.vertices.push( p1);
+                lGeo.vertices.push( p2);
+                
+                
+             var midX = ((p1.x) + (p2.x)) / 2;
+             var midZ = ((p1.z) + (p2.z)) / 2;
+
+             var elevation=Math.random()*1000;
+             var thickness=Math.random()*1000;
+            // var elevation = Math.sqrt(data[p].duration / 4000);
+             //var thickness = Math.sqrt(data[p].duration / 4000);
+
+             var middle3 = new THREE.Vector3(midX, elevation, midZ);
+
+             var curveQuad = new THREE.QuadraticBezierCurve3(p1, middle3, p2);
+
+  var cp = new THREE.CurvePath();
+             cp.add(curveQuad);
+
+
+var color = 0xFBB040;
+
+             var curvedLineMaterial = new THREE.LineBasicMaterial({
+                 color: color,
+                 linewidth: 3,
+                 opacity: 0.75,
+                 transparent: true,
+                 depthTest: false,
+                 depthWrite: false,
+                 blending: THREE.AdditiveBlending
+             });
+
+             curvedLineMaterial.depthTest = true;
+             curvedLineMaterial.overdraw = true;
+
+             var line = new THREE.Line(cp.createPointsGeometry(50), curvedLineMaterial);
+
+line.time=k;
+
+             panObjects.push(line);
+             scene.add(line);
+viewObjects.push(line);
+
+                
             }
 
     }

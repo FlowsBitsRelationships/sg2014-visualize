@@ -51,7 +51,7 @@
         // which allow you to step through the actual node objects but also pass an
         // x,y point in the screen's coordinate system
         // 
-        ctx.fillStyle = "white"
+        ctx.fillStyle = "black"
         ctx.fillRect(0,0, canvas.width, canvas.height)
         
         particleSystem.eachEdge(function(edge, pt1, pt2){
@@ -60,7 +60,7 @@
           // pt2:  {x:#, y:#}  target position in screen coords
 
           // draw a line from pt1 to pt2
-          ctx.strokeStyle = "rgba(0,0,0, .333)"
+          ctx.strokeStyle = "rgb(245,245,245)"
           ctx.lineWidth = 1
           ctx.beginPath()
           ctx.moveTo(pt1.x, pt1.y)
@@ -78,9 +78,9 @@
           ctx.fill();
           
           // Add a text label
-          ctx.fillStyle = "rgb(180,180,180);"
-          ctx.font = "6pt sans-serif";
-          ctx.fillText( node.data.type || "unknown", pt.x+(w*2), pt.y+(w*2));
+          // ctx.fillStyle = "rgb(230,230,230);"
+          // ctx.font = "6pt sans-serif";
+          // ctx.fillText( node.data.type || "unknown", pt.x+(w*2), pt.y+(w*2));
           
         })    			
       },
@@ -127,8 +127,9 @@
 
           dropped:function(e){
             if (dragged===null || dragged.node===undefined) return
-            if (dragged.node !== null) dragged.node.fixed = false
-            dragged.node.tempMass = 1000
+            //if (dragged.node !== null) dragged.node.fixed = false
+            dragged.node.tempMass = 10000;
+            dragged.node.fixed = true;
             dragged = null
             $(canvas).unbind('mousemove', handler.dragged)
             $(window).unbind('mouseup', handler.dropped)
@@ -158,9 +159,7 @@
       ws.onclose   = function()  { console.log('websocket closed'); }
       ws.onmessage = function(m) {
         console.log("Got a message.");
-        
-        console.log(JSON.parse( m.data ));
-        
+        console.log( JSON.parse( m.data ));
         buildGraph( JSON.parse( m.data ) );
       };
       
@@ -179,7 +178,7 @@
       })
       
       // Setup -- Maybe this only should be done once when the page loads
-      sys = arbor.ParticleSystem(900, 300, 0.5) // create the system with sensible repulsion/stiffness/friction
+      sys = arbor.ParticleSystem(1000, 70, 0.5) // create the system with sensible repulsion/stiffness/friction
       sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
       sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
     
@@ -203,13 +202,74 @@
       console.log( "Got a query that returned no data." )
     }
     
+    var x,
+        nodeCount = 0,
+        relCount = 0,
+        nodesRels = { nodes:{}, rels:{} };
+    
     for ( var i = 0, len = data.length; i < len; i++ ) {
-        processDataSet( sys, data[i] );
+        if ( data[i][0] instanceof Array ) {
+          x = processDataSet( nodesRels, data[i] );
+        } else {
+          x = processSimpleDataSet( sys, data[i] );          
+        }
     }
     
+    for ( var node in nodesRels.nodes ) {
+        sys.addNode( node, nodesRels.nodes[ node ] );
+        nodeCount++;
+    }
+    for ( var rel in nodesRels.rels ) {
+        sys.addEdge( nodesRels.rels[ rel ][0], nodesRels.rels[ rel ][1] );
+        relCount++;
+    }
+    
+    $("#info_container").text( "Displaying " + nodeCount.toString() + " nodes and " + relCount.toString() + " edges." );
+    
+  }
+
+  
+  function processDataSet( nodesRels, dataSet ) {
+      var d, relSig,
+          dataSet = dataSet[0];
+      for ( var i = 0, len = dataSet[0].nodes.length; i < len; i++ ) {
+          d = dataSet[0].nodes[i];
+          if ( !nodesRels.nodes[ d ] ) {
+              nodesRels.nodes[ d ] = { type: getDataType( dataSet[i+1] ) };
+          }
+      }
+      for ( var i = 1, len = dataSet[0].nodes.length; i < len; i++ ) {
+          relSig = dataSet[0].nodes[i-1] + dataSet[0].nodes[i];
+          if ( !nodesRels.rels[ relSig ] ) {
+            nodesRels.rels[ relSig ] = [ dataSet[0].nodes[i-1], dataSet[0].nodes[i]  ];
+          }      
+      }
+      return nodesRels;
   }
   
-  function processDataSet( system, dataSet ) {
+  
+  // For processing results from 'path' queries
+  function processDataSetOLD( system, dataSet ) {
+      var d, 
+          rels = 0,
+          nodes = [];
+      dataSet = dataSet[0];
+      
+      for ( var i = 0, len = dataSet[0].nodes.length; i < len; i++ ) {
+          d = dataSet[0].nodes[i];
+          system.addNode( d, { type: getDataType( dataSet[i+1] ) } );
+          nodes.push( d );
+      }
+      
+      for ( var i = 1, len = nodes.length; i < len; i++ ) {
+          system.addEdge( nodes[i-1], nodes[i]  );
+          rels++;
+      }
+      return { nodeCount: nodes.length, relCount: rels }
+  }
+  
+  // For processing results from basic multiple element queries
+  function processSimpleDataSet( system, dataSet ) {
       var d;
       for ( var i = 0, len = dataSet.length; i < len; i++ ) {
           d = dataSet[i];
@@ -221,7 +281,7 @@
       }
   }
   
-  
+  // START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 100
   
   
   function getDataType( item ) {

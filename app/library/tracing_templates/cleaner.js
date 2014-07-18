@@ -219,6 +219,8 @@ for (var kk=0;kk<staticBin.length;kk++){
             scene.add(pointData);
             panObjects.push(pointData);
          
+         
+         console.log(pointData);
 
 // loop through the binnedObjects - and add geometry
 
@@ -324,8 +326,6 @@ viewObjects.push(line);
       
       console.log(line);
       
-      
-    
             pGeo.colors=pCol;
             
             var col = new THREE.Color(0xffffff);

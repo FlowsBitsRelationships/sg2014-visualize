@@ -316,8 +316,6 @@ document.getElementById('spinner').style.display="block";
             $scope.begin_keyframes(results.first.data.keyframes); // Start!
 
         });
-
-
     });
 
 
@@ -413,8 +411,8 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     // *** PRESENTATION SCOPE.LIST ***
     $scope.list = [{
       "id": 1,
-      "label": "Mentioned Regions",
-      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 100",
+      "label": "Regional Tweets",
+      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
       "qconfig": {configKeyframeID : 1, 
                 configType : ["sphere","point"], 
                 configNode : ["Suburb","Twitter"] , 
@@ -422,10 +420,10 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
                 configColG : [255,195] , 
                 configColB : [255,100], 
                 configSize : [600,150]},
-      "items": [{
+     /* "items": [{
           "id": 11,
           "label": "Unmentionables",
-           "query":  'MATCH (t:Tweets) WHERE t.content=~".*dinner.*" OR t.content=~".*food.*" OR t.content=~".*restaurant.*" OR t.content=~".*delicious.*" OR t.content=~".*yum.*" OR t.content=~".*dim sum.*" OR t.content=~".*noodle.*" OR t.content=~".*congee.*" OR t.content=~".*dumpling.*" OR t.content=~".*canteen.*" OR t.content=~".*餐廳.*" OR t.content=~".*飯堂.*" OR t.content=~".*野食.*" OR t.content=~".*餸.*" OR t.content=~".*好味.*" OR t.content=~".*好食.*" OR t.content=~".*飲茶.*" OR t.content=~".*西餐.*" OR t.content=~".*中餐.*" OR t.content=~".*茶餐廳.*" OR t.content=~".*大排檔.*" OR t.content=~".*掃街.*"  RETURN DISTINCT t LIMIT 1000',
+           "query":  'MATCH (p:FlickrPhoto)-[:TAGGED]->(ft:FlickrTag) WHERE ft.text=~".*dinner.*" RETURN DISTINCT p LIMIT 1000',
           "qconfig": {configKeyframeID : 1, 
                     configType : ["sphere","point"], 
                     configNode : ["Suburb","Twitter"] , 
@@ -435,8 +433,8 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
                     configSize : [600,150]},
            
           "items": []
-        }]
-    }, {
+        }]*/
+    }, /*{
       "id": 2,
       "label": "Confetti",
        "query":  "MATCH (n) RETURN n LIMIT 250",
@@ -472,7 +470,7 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
                 configColB : [255,100], 
                 configSize : [600,150]},
       "items": []
-    }];
+    }*/];
     
     $rootScope.query_pieces = [{
         type: "Place",

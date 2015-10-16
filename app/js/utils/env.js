@@ -8,7 +8,6 @@ THREE.Env = function () {
 	terraingen,
 	selection_manager,
 	scene,
-	camera,
 	renderer,
 	geometry,
 	material,
@@ -29,6 +28,8 @@ THREE.Env = function () {
 
 		scene = new THREE.Scene();
 		camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000);
+
+
 		renderer = new THREE.WebGLRenderer({
 				alpha : true,
 				antialias : true
@@ -41,12 +42,42 @@ THREE.Env = function () {
 		renderer.setClearColor(color, 1);
 		container.appendChild(renderer.domElement);
 
+/*
 		camera.position.z = 400;
 		camera.position.x = -400;
 		camera.position.y = 800;
+*/
 
-		controls = new THREE.OrbitControls(camera, container);
-		controls.target = new THREE.Vector3(2500, 0, -2500);
+      camera.position.x = radious * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
+      camera.position.y = radious * Math.sin(phi * Math.PI / 360);
+      camera.position.z = radious * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
+      camera.updateMatrix();
+      camera.target = new THREE.Vector3(0, 0, 0);
+
+//		controls = new THREE.OrbitControls(camera, container);
+//		controls.target = new THREE.Vector3(2500, 0, -2500);
+
+      panplane = new THREE.Mesh(new THREE.PlaneGeometry(50000, 50000, 20, 20), new THREE.MeshLambertMaterial({
+                            color: 0x555555,
+                            wireframe: true,
+                            visible: false
+                         }));
+
+        panplane.rotation.x = +90 * Math.PI / 180;
+        panplane.rotation.y = -180 * Math.PI / 180;
+        panplane.STARTPOSPLANEx=panplane.position.x;
+        panplane.STARTPOSPLANEz=panplane.position.z;
+       
+       scene.add(panplane);
+     panplane.name = "xz-plane";
+        panplanes.push(panplane);
+    
+        // initialize the pan controls
+        PanControls(camera, [], panplanes, renderer.domElement);
+    
+    
+    
+
 
 		self.materials.lambert = new THREE.MeshLambertMaterial({
 				color : "rgb(255,112,255)",
@@ -81,12 +112,14 @@ THREE.Env = function () {
 					wireframe : true
 				}));
 		plane.visible = true;
-		plane.position.x = 5000 / 2;
+	//	plane.position.x = 5000 / 2;
         plane.position.y = -10;
-		plane.position.z = -5000 / 2;
+	//	plane.position.z = -5000 / 2;
 		plane.rotation.x = Math.PI / 2;
 		plane.name = "xz-plane";
 		scene.add(plane);
+		
+		panObjects.push(plane);
 
 		// create terrain generator
 		terraingen = new TerrainGen();
@@ -107,7 +140,18 @@ THREE.Env = function () {
 		renderer.domElement.addEventListener('mousedown', selection_manager.onDocumentMouseDown, false);
 		renderer.domElement.addEventListener('mouseup', selection_manager.onDocumentMouseUp, false);
 
+      renderer.domElement.addEventListener('mousemove', onDocumentMouseMove_MCS, false);
+      renderer.domElement.addEventListener('mousedown', onDocumentMouseDown_MCS, false);
+      renderer.domElement.addEventListener('mouseup', onDocumentMouseUp_MCS, false);
+      renderer.domElement.addEventListener('mousewheel', onDocumentMouseWheel_MCS, false);
+      renderer.domElement.addEventListener('dblclick', onDblClick_MCS, false);
+      document.addEventListener('keydown', onDocumentKeyDown_MCS, false);
+      document.addEventListener('keyup', onDocumentKeyUp_MCS, false);
+      document.addEventListener('mouseout', onDocumentMouseout_MCS, false);
+ 
 		window.addEventListener('resize', this.onWindowResize, false);
+		
+		
 	}
 
 	this.add_context = function (bbox, x_step, z_step, final_callback) {
@@ -148,6 +192,7 @@ THREE.Env = function () {
 				var rayEl = self.getElevationRay( mesh.geometry.vertices, plane )
 				mesh.position.y = ( rayEl < 10000 ) ? rayEl : mesh.position.y;
 				scene.add(mesh);
+				panObjects.push(mesh);
                 final_callback.call();
 			}, bldgs, {
 				scale : 1.0,
@@ -186,10 +231,12 @@ THREE.Env = function () {
     }
     
 	// Called externally, turns a query_response into threeJS geometry
-	this.add_tracing = function (query, duration) {
+	this.add_tracing = function (query, duration,callbackCount,callback) {
 		var trace_objects = [];
 
-		$.getScript("library/tracing_templates/" + query.tracing_template_name + ".js", function (script) {
+console.log(callbackCount);
+
+	$.getScript("library/tracing_templates/" + query.tracing_template_name + ".js", function (script) {
 
 			// 'tracing_template' is the name of the main function in each tracing template that gets loaded
 			// 'as_tracing_template' is a mixin of functionality shared by multiple templates
@@ -220,6 +267,10 @@ THREE.Env = function () {
                         self.object_lookup_table[type][neoid] = trace_object;
                     }
                     
+                    trace_object.material.visible=true;
+                    scene.add(trace_object);
+					panObjects.push(trace_object);
+
 					// Keep track of this tracing's objects, for removal later
 					trace_objects.push(trace_object);
 
@@ -228,6 +279,8 @@ THREE.Env = function () {
 		});
 
 		self.add_tracing_objects(trace_objects, query.tracing_name, duration);
+
+callbackCount=callbackCount+1;
 
 	};
 
@@ -239,29 +292,241 @@ THREE.Env = function () {
 			self.objects[tracing_name] = trace_objects;
 
 			trace_objects.forEach(function (obj) {
-				scene.add(obj);
+			//	scene.add(obj);
+			//	panObjects.push(obj);
+			console.log(obj);
+			obj.material.visible=true;
+			
 			});
 
 			window.setTimeout(function () {
 				self.objects[tracing_name].forEach(function (obj) {
-					scene.remove(obj);
+		//			scene.remove(obj);
+					obj.material.visible=false;
 				});
 			}, duration);
 
 		}, 100);
 
+
 	}
+
+
+
+
+this.add_tracings=function(obj,scope,callback){
+	
+	console.log(obj)
+
+//var callbackCount=0;
+//for (var i=0;i<obj.keyframes.length;i++){
+//for (var j=0;j<obj.keyframes[i].queries.length;j++){
+//               self.add_tracing(obj.keyframes[i].queries[j], obj.keyframes[i].duration,callbackCount,callback);
+//}
+//}
+
+function add_tracing_recursive(z){
+	
+	var query=obj.keyframes[z].queries[0];
+	var duration=obj.keyframes[z].duration;
+	
+
+	
+		var trace_objects = [];
+
+	$.getScript("library/tracing_templates/" + query.tracing_template_name + ".js", function (script) {
+
+			// 'tracing_template' is the name of the main function in each tracing template that gets loaded
+			// 'as_tracing_template' is a mixin of functionality shared by multiple templates
+			as_tracing_template.call(tracing_template.prototype);
+			cur_tracing_template = new tracing_template();
+
+			//  Set 'class variables'
+try{
+			cur_tracing_template.set_origin(origin[0], origin[1]); //  Set the origin
+			cur_tracing_template.object_lookup_table = self.object_lookup_table; //  Set lookup table
+}catch(err){}
+
+
+	cur_tracing_template.get_trace(obj.keyframes[z].queries[0].queryresult.data,scope,scene);
+
+
+ //   scene.add(trace_objects);
+//	panObjects.push(trace_objects);
+	
+	
+
+/*
+			query.queryresult.data.forEach(function (result_chunk) {
+				result_chunk.forEach(function (trace_chunk) {
+
+					// Generate the object from the template
+					var trace_object = cur_tracing_template.get_trace(trace_chunk, duration);
+                    
+                    // FIXME: How to track ids of objects in trace_chunks as arrays
+                    // This is a  messy way to handle this exception...
+                    // split up id property into 'type' and 'id'
+                    if ( trace_chunk.self != undefined ){
+                        var id_url = trace_chunk.self.split("/");
+                        var type = id_url[id_url.length - 2]; // node or relationship
+                        var neoid = id_url[id_url.length - 1]; // id
+                        
+                        //  Add the neoid and type to the object and add the object to the lookup table for future reference by other tracings,
+                        trace_object.neoid = neoid;
+                        trace_object.type = type;
+                        self.object_lookup_table[type][neoid] = trace_object;
+                    }
+                    
+   
+                    
+                 
+                 trace_object.material.visible=false;
+                    scene.add(trace_object);
+					panObjects.push(trace_object);
+
+					// Keep track of this tracing's objects, for removal later
+					trace_objects.push(trace_object);
+
+
+
+				});
+			});*/
+		});
+
+
+//		self.add_tracing_objects(trace_objects, query.tracing_name, duration);
+
+
+self.objects[query.tracing_name] = trace_objects;
+
+if (z<obj.keyframes.length-1){
+	
+	add_tracing_recursive(z+1);
+	
+}else{
+	console.log('finished');
+		
+		console.log(self.objects)
+		
+	callback();
+}
+
+	
+}
+
+
+add_tracing_recursive(0);
+
+
+	
+}
+
+
+
+this.update_state = function(current_state){
+
+
+	
+for(var name in current_state){
+
+			var trace_objects=self.objects[name];
+
+	trace_objects.forEach(function (obj) {
+
+	if (current_state[name]==1){
+		// material true
+	
+		
+			obj.material.visible=true;
+			
+		
+	}else{
+		// material false
+		
+			obj.material.visible=false;
+	}
+
+			
+});
+            
+        }
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+// ** these are matthew's dirty functions ** //
+// probably should go into another place
+
+function updateCameraRotation() {
+
+    camera.position.x = distance * Math.sin(rotation.x) * Math.cos(rotation.y);
+    camera.position.y = distance * Math.sin(rotation.y);
+    camera.position.y = camera.position.y < 10? 10 : camera.position.y;
+    camera.position.z = distance * Math.cos(rotation.x) * Math.cos(rotation.y);
+
+}
+
+function updateCameraPan() {
+    
+    var ii;
+
+    pan.x += (panTarget.x - pan.x) * 0.08;
+    pan.z += (panTarget.z - pan.z) * 0.08;
+
+/*
+    for (ii = 0; ii < planeObjects.length; ii++) {
+        planeObjects[ii].position.x += pan.x + panTarget.x;
+        planeObjects[ii].position.z += pan.z + panTarget.z;
+    }
+    */
+    
+    for (ii = 0; ii < panObjects.length; ii++) {
+        panObjects[ii].position.x += pan.x + panTarget.x;
+        panObjects[ii].position.z += pan.z + panTarget.z;
+    }
+    
+    if (panHOLDmove !== true) {
+        panTarget.x = 0;
+        panTarget.z = 0;
+    }
+
+}
+
+
+
 
 	// **** Helper Functions***
 
 	// Animate the scene
 	this.animate = function () {
-		controls.update();
+		
+	//	controls.update();
+	
 		requestAnimationFrame(self.animate);
 
 		TWEEN.update();
 
+		camera.lookAt(camera.target);
+		zoom(zoomSpeed);
+
+		rotation.x += (target.x - rotation.x) * 0.1;
+		rotation.y += (target.y - rotation.y) * 0.1;
+
+		distance += (distanceTarget - distance) * 0.8;
+
+		updateCameraPan();
+
+		updateCameraRotation();
+		
 		renderer.render(scene, camera);
+		
 	}
 
     	// Clear the scene geometry

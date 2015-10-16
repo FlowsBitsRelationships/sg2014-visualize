@@ -8,28 +8,23 @@ Set environment variables DB_USERNAME, DB_PASSWORD, and MQ_PASSWORD
 
 ### Install Dependencies
 
-Install [/Ruby 2.X.X/](https://www.ruby-lang.org/en/downloads/). then install the Sinatra gem
+Install [/Ruby 2.X.X/](https://www.ruby-lang.org/en/downloads/).
+Install nodejs/npm
+
+Install bundler, the package manager for Ruby
 ```
-gem install sinatra
-gem install json
-```
-Run the node package manager to install the angular dependencies
-```
-cd sg2014-visualize
-npm install
+gem install bundler
 ```
 
 ### Run the Application
 
-Run the sinatra_app
-(ed note: Perhaps these routes could be moved to the node app that angular uses, removing the ruby dependency?)
+Run the sinatra_app - this will also run bower, bundler, and npm to install other dependencies
 
 ```
-cd app
-ruby sinatra_app.rb
+npm start
 ```
 
-Open Chrome and go to [/localhost:1111/](http://localhost:1111/)
+Open Chrome and go to [/localhost:3010/](http://localhost:3010/)
 
 ### Usage
 

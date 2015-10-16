@@ -132,7 +132,8 @@ end
 
 def execute_query(q)
 
-    url = "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780/db/data/cypher/"
+    # url = "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780/db/data/cypher/"
+    url = ENV['DB_URL']
     uri = URI.parse( url )
     
     p "it works"

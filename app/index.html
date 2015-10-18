@@ -21,7 +21,7 @@
  
   
 <link rel="stylesheet" href="css/bootstrap.min.css"/>
-<link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+<!-- <link rel="stylesheet" href="css/bootstrap-theme.min.css"/> -->
 <link rel="stylesheet" href="css/tree.css"/>
 
  <link rel="stylesheet" href="css/app.css"/>
@@ -31,34 +31,6 @@
       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
       
 
-      
-    <script type="text/javascript">
-        var map;
-        function init() {
-          var myOptions = {
-            zoom: 12,
-            center: new google.maps.LatLng(22.288339, 114.171982),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            streetViewControl: false,
-            mapTypeControl: false,
-            styles: [	{	stylers:[			{hue:'#ff1a00'},			{invert_lightness:true},			{saturation:-100},			{lightness:33},			{gamma:0.5}	]	},{		featureType:'water',		elementType:'geometry',		stylers:[			{color:'#2D333C'}		]	}]
-
-          }
-          map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-          map.enableKeyDragZoom();
-        }
-        
-                   
-           window.onload=function(){
-               
-               init();
-               
-               document.getElementById('spinner').style.display="none";
-               
-           }
-        
-    </script>
   
 </head>
 <!-- SLIDING PANE: https://github.com/dpiccone/ng-pageslide-->
@@ -136,7 +108,7 @@
        <!--<div  style = "position:absolute; top:50px background:none;" >KEYFRAME MENU: <input type="checkbox" ng-model="checked"></div>
 <div ng-cloak style = "position:absolute; top:50px background:none;" >VISUALIZATION MENU: <input type="checkbox" ng-model="checked"></div>-->
     </div>  
-<pageslide  ps-open="menu_open" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide>
+<!-- <pageslide  ps-open="menu_open" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide> -->
     
 <div id="menu" ng-cloak style="display:block !important">
 
@@ -218,6 +190,37 @@
        <script src="js/utils/spin.js"></script>
     
        <script type="text/javascript" src="js/utils/keydragzoom.js"></script>
+
+        <script type="text/javascript">
+        var map;
+        function init() {
+          var myOptions = {
+            zoom: 12,
+            center: new google.maps.LatLng(22.288339, 114.171982),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            streetViewControl: false,
+            mapTypeControl: false,
+            styles: [ { stylers:[     {hue:'#ff1a00'},      {invert_lightness:true},      {saturation:-100},      {lightness:33},     {gamma:0.5} ] },{   featureType:'water',    elementType:'geometry',   stylers:[     {color:'#2D333C'}   ] }]
+
+          }
+          map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+          // FIXME: Temporarily commented out - perhaps google deprecated it?
+          // may be able to download a script to restore this.
+          map.enableKeyDragZoom();
+          // google.maps.Map.enableKeyDragZoom()
+        }
+        
+                   
+           window.onload=function(){
+               
+               init();
+               
+               document.getElementById('spinner').style.display="none";
+               
+           }
+        
+    </script>
     
 <!--     CUSTOM SHADERS: Is there another way to handle this besides declaring it in HTML?
     It would be nice to have a Materials/Shaders  Library... -->

@@ -15,8 +15,8 @@ set :server, 'thin'
 
 set :sockets, []
 
-
-
+GRAPHENEDB_URL = ENV['GRAPHENEDB_URL'].gsub("/db/data", "")
+MAPQUEST_KEY = ENV['MAPQUEST_KEY']
 
 get '/' do
 	response.headers['Access-Control-Allow-Origin'] = '*'
@@ -39,7 +39,7 @@ post '/elevation' do
     
     req_chunks.each do | chunk |
         
-        uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ENV['MQ_PASSWORD']}&shapeFormat=raw&latLngCollection=#{chunk.join(",")}" )
+        uri = URI(  "http://open.mapquestapi.com/elevation/v1/profile?key=#{ MAPQUEST_KEY }&shapeFormat=raw&latLngCollection=#{chunk.join(",")}" )
         req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
         
         res = Net::HTTP.start(uri.hostname, uri.port) {|http|
@@ -132,31 +132,31 @@ end
 
 def execute_query(q)
 
-    # url = "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780/db/data/cypher/"
-    url = ENV['DB_URL']
-    uri = URI.parse( url )
+    # # url = "https://sg2014_prod:L0qLQBOqr87W0iQ53zi9@db-qtursgrzj61yznnzc8ny.graphenedb.com:24780/db/data/cypher/"
+    # url = ENV['DB_URL']
+    # uri = URI.parse( url )
+    # p uri
+    # p "it works"
     
-    p "it works"
-    
-    # https request
-    https = Net::HTTP.new(uri.host,uri.port)
-    https.use_ssl = true
-    req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
-    req.basic_auth ENV['DB_USERNAME'],ENV['DB_PASSWORD']
-    req.body = {'query' =>q}.to_json
+    # # https request
+    # https = Net::HTTP.new(uri.host,uri.port)
+    # https.use_ssl = true
+    # req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
+    # # req.basic_auth ENV['DB_USERNAME'],ENV['DB_PASSWORD']
+    # req.body = {'query' =>q}.to_json
 
-    p req
+    # p req
 
-    res = https.request(req)
+    # res = https.request(req)
     
-    return  res.body
+    # return  res.body
     
     
     
     # this has a timeout issue and cannot fix it
-    #neo = Neography::Rest.new( url )
-    #neo.execute_query(q).to_json
-    #return neo.execute_query(q).to_json
+    # neo = Neography::Rest.new( url )
+    neo = Neography::Rest.new( GRAPHENEDB_URL )
+    neo.execute_query(q).to_json
     
 
     # THIS WILL NOT WORK

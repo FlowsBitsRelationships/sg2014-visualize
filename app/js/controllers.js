@@ -407,15 +407,27 @@ app_controllers.controller('SearchCtrl', ['$scope', '$rootScope', '$http', 'limi
     //   "label": "City",
     //   "items": []
     // }];
-    
+
+     // $scope.list = [{
+     //  "id": 1,
+     //  "label": "Regional Tweets",
+     //  "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
+     //  "qconfig": {configKeyframeID : 1, 
+     //            configType : ["sphere","point"], 
+     //            configNode : ["Suburb","Twitter"] , 
+     //            configColR : [255,255] , 
+     //            configColG : [255,195] , 
+     //            configColB : [255,100], 
+     //            configSize : [600,150]},   
+
     // *** PRESENTATION SCOPE.LIST ***
     $scope.list = [{
       "id": 1,
-      "label": "Regional Tweets",
-      "query": "START a=node(*) WHERE (a:Suburb) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
+      "label": "Tweets Mentioned",
+      "query": "START a=node(*) MATCH path = a  <– [ : MENTIONED ] - b  WHERE (b:Social) RETURN [path,a,b] LIMIT 1000",
       "qconfig": {configKeyframeID : 1, 
                 configType : ["sphere","point"], 
-                configNode : ["Suburb","Twitter"] , 
+                configNode : ["*","Twitter"] , 
                 configColR : [255,255] , 
                 configColG : [255,195] , 
                 configColB : [255,100], 

@@ -71,16 +71,9 @@
 <!--</script>-->
 
 <!--DEMO TEMPLATE-->
-<script type="text/ng-template" id="items_renderer.html">
+<!-- **************************** commented 2016 **************************** -->
+<!-- <script type="text/ng-template" id="items_renderer.html">
 <div ui-tree-handle data-nodrag>
-  
-
-<!-- <a class="btn btn-primary btn-xs" data-nodrag ng-init="details = true" ng-click="toggle(this); details = !details" ><span class="glyphicon" ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span></a>
-  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this); remove_query(this);"><span class="glyphicon glyphicon-remove"></span></a>
-  
-  <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="newSubItem(this); get_nodes(item, [], add_query );" style="margin-right: 8px;" ng-show="item.items.length <1" ><span class="glyphicon glyphicon-plus" ></span></a>
--->
- 
     <div class=''>
         <input type="text" ng-click="run(item.query, item.qconfig);"  ng-model="item.label" typeahead="suggestion for suggestion in labels($viewValue)" style="width:92%; margin-left:7px;height:20px">
     </div>
@@ -92,7 +85,8 @@
   <li ng-repeat="item in item.items" ui-tree-node ng-cloak ng-include="'items_renderer.html'">
   </li>
 </ol>
-</script>
+</script> -->
+<!-- **************************** /commented 2016 **************************** -->
 
 
 <div id="container" ng-controller="AppCtrl" ng-cloak>
@@ -109,15 +103,13 @@
 <div ng-cloak style = "position:absolute; top:50px background:none;" >VISUALIZATION MENU: <input type="checkbox" ng-model="checked"></div>-->
     </div>  
 <!-- <pageslide  ps-open="menu_open" ps-target="#menu" pageslide="right" ps-speed="0.5" ></pageslide> -->
-    
-<div id="menu" ng-cloak style="display:block !important">
 
-    <!--START-->
+<!-- **************************** commented 2016 **************************** -->
+<!-- <div id="menu" ng-cloak style="display:block !important">
+
     <div ng-controller="SearchCtrl">
     <div style="margin-left: 5%; width:90%">
-    <!--TEMPORARILY COMMENTED OUT-->
-      <!--<h3 style="font-size:16px;">KEYFRAMES</h3>-->
-      <!--PRESENTATION-->
+
       <h3 style="font-size:16px;"></h3>
       <div ui-tree="options">
         <ol ui-tree-nodes ng-model="list" >
@@ -126,9 +118,11 @@
         </div>
     </div>
     </div>
-        <!--END-->
+
     
-</div>
+</div> -->
+<!-- **************************** /commented 2016 **************************** -->
+
 <!--End pageslide-->
 
     <div id="webglContainer" material-type="materialType"  tracing-template="tracingTemplate"></div>

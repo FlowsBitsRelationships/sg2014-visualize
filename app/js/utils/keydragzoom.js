@@ -731,8 +731,9 @@ var keyDrag = function (scope) {
       var bnds = new google.maps.LatLngBounds(sw, ne);
       
       // NOTE: This line added to make bnds available in angular app
-      scope.bbox = [bnds.La.j , bnds.Pa.I, bnds.La.I, bnds.Pa.j];
-
+      // scope.bbox = [bnds.La.j , bnds.Pa.I, bnds.La.I, bnds.Pa.j];
+      // Google maps has updated their bnds object..
+      scope.bbox = [bnds.j.j , bnds.H.H, bnds.j.H, bnds.H.j];
 
       // Sometimes fitBounds causes a zoom OUT, so restore original zoom level if this happens.
       z = this.map_.getZoom();
